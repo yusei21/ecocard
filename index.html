@@ -23,7 +23,7 @@ footer{border-top:1px solid var(--edge);display:flex;align-items:center;justify-
 </style>
 <link rel="stylesheet" href="./solo-v2.css">
 <link rel="stylesheet" href="./identity-v3.css">
-<link rel="stylesheet" href="./game-v4.css">
+<link rel="stylesheet" href="./game-v4.css?v=20261114-guide2">
 <link rel="stylesheet" href="./mobile-v5.css">
 
 <link rel="stylesheet" href="./landing-v6.css">
@@ -66,7 +66,7 @@ footer{border-top:1px solid var(--edge);display:flex;align-items:center;justify-
 <div class="scene-bottom"><span>UMA EXPERIÊNCIA DE EDUCAÇÃO AMBIENTAL</span><a href="https://www.instagram.com/ecoresiduariosacademy/" target="_blank" rel="noopener noreferrer">ECORESIDUÁRIOS ACADEMY ↗</a></div>
 </div>
 </section>
-<section id="solo" class="hidden"><div class="game-top"><div><span class="eyebrow">Modo 01 · Estratégia solo</span><h1>Salve o Mundo</h1></div><div class="game-top-actions"><button class="btn secondary" data-view="home">← Voltar</button><button class="btn secondary" id="resetEcoCard" type="button" aria-label="Recomeçar Salve o Mundo do zero">↻ Reiniciar</button></div></div><div class="game-layout"><div class="surface" id="soloMain"></div><aside class="sidepanel" id="soloSide"></aside></div></section>
+<section id="solo" class="hidden"><div class="game-top"><div><span class="eyebrow">Modo 01 · Estratégia solo</span><h1>Salve o Mundo</h1></div><div class="game-top-actions"><button class="btn secondary" data-view="home">← Voltar</button><button class="btn secondary" id="helpEcoCard" type="button">? Como jogar</button><button class="btn secondary" id="resetEcoCard" type="button" aria-label="Recomeçar Salve o Mundo do zero">↻ Reiniciar</button></div></div><div class="game-layout"><div class="surface" id="soloMain"></div><aside class="sidepanel" id="soloSide"></aside></div></section>
 
 </main>
 <footer><span>EcoCard · Uma experiência de educação ambiental</span><span>IFMA · Universo IFMA · <a href="https://www.instagram.com/ecoresiduariosacademy/" target="_blank" rel="noopener noreferrer">EcoResiduários Academy ↗</a></span><span>Feito para jogar, pensar e transformar.</span></footer>
@@ -104,10 +104,11 @@ solo.phase==='shop'?'<h2>Mercado de soluções</h2><p class="hint">Você pode co
 main.querySelectorAll('[data-card]').forEach(el=>el.addEventListener('click',()=>selectSolo(el.dataset.card)));main.querySelector('#playCards')?.addEventListener('click',()=>playSolo(false));main.querySelector('#discardCards')?.addEventListener('click',()=>playSolo(true));main.querySelector('#nextStage')?.addEventListener('click',nextSolo);main.querySelector('#restartSolo')?.addEventListener('click',startSolo);main.querySelectorAll('[data-buy]').forEach(el=>el.addEventListener('click',()=>buyJoker(el.dataset.buy)))}
 </script>
 <script>
-function view(id){for(const s of ['home','solo'])$('#'+s).classList.toggle('hidden',s!==id);if(id==='solo'&&!solo)startSolo();window.scrollTo({top:0,behavior:'smooth'})}
+function view(id){for(const s of ['home','solo'])$('#'+s).classList.toggle('hidden',s!==id);if(id==='solo'&&!solo){if(window.EcoCardSolo?.showHandGuide)window.EcoCardSolo.showHandGuide();else startSolo();}window.scrollTo({top:0,behavior:'smooth'})}
 document.querySelectorAll('[data-view]').forEach(el=>el.addEventListener('click',()=>view(el.dataset.view)));
+document.querySelector('#helpEcoCard')?.addEventListener('click',()=>{if(solo&&!window.confirm('Abrir o guia e sair da partida atual? O progresso desta jornada será perdido.'))return;if(window.EcoCardSolo?.showHandGuide)window.EcoCardSolo.showHandGuide();else startSolo();});
 document.querySelector('#resetEcoCard')?.addEventListener('click',()=>{if(window.confirm('Reiniciar Salve o Mundo? Todos os pontos, coringas e fichas desta jornada serão perdidos.')){solo=null;startSolo();}});$('#homeBrand').addEventListener('click',e=>{e.preventDefault();view('home')});
 </script>
 <script src="./hand-order.js"></script>
-<script src="./solo-v2.js"></script>
+<script src="./solo-v2.js?v=20261114-guide2"></script>
 </body></html>
