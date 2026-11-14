@@ -22,7 +22,8 @@ assert.equal(double.events.filter(e=>e.label==='Reduzir').length,2,'Coringa must
 assert.equal(evaluate(set,0,[jokers.find(j=>j.id==='circular')]).score,zero.score,'Circular alone has no effect');
 const {BOSS_RULES,drawBossRule,bossInvalidReason}=sandbox.window.EcoCardSolo;
 const boss=id=>BOSS_RULES.find(x=>x.id===id);
-assert.equal(BOSS_RULES.length,9);
+assert.equal(BOSS_RULES.length,10);
+assert(BOSS_RULES.some(r=>r.id==='double_hp'&&r.kind==='double_hp'));
 assert.equal(drawBossRule(0),null,'first crisis has no restriction');
 assert.equal(drawBossRule(1,null,()=>0).id,'ban_azul','random index must be deterministic under stub');
 assert.notEqual(drawBossRule(2,boss('ban_azul'),()=>0).id,'ban_azul','no consecutive duplicate');
@@ -65,8 +66,13 @@ for(let stage=0;stage<7;stage++){
  assert(goals.every((value,i)=>i===0||value>goals[i-1]),'goals must increase by difficulty');
 }
 assert.equal(stages.map(s=>s.tier).join(','),'FÁCIL,MÉDIO,MÉDIO,DIFÍCIL,DIFÍCIL,EXTREMO,FINAL');
-assert.equal(stages.map(s=>s.goal).join(','),'850,2200,4000,7600,12000,18500,28000');
+assert.equal(stages.map(s=>s.goal).join(','),'850,2200,4000,7600,12000,18500,150000');
 assert.equal(difficultyRules('normal',0).hands,5,'intro gives additional hand');
+assert.equal(difficultyRules('normal',6).goal,150000,'last boss has over 100k life');
+assert.equal(difficultyRules('facil',6).goal,120000,'last boss remains above 100k even in apprentice mode');
+assert.equal(difficultyRules('normal',6,'normal',boss('double_hp')).goal,300000,'double life applies to final boss');
+assert.equal(difficultyRules('normal',2,'normal',boss('double_hp')).goal,8000,'double life applies to other crises');
+assert.equal(difficultyRules('normal',2).goal,4000,'normal goal unaffected');
 assert.equal(difficultyRules('normal',6).hands,3,'climate finale limits plays');
 assert.equal(difficultyRules('extremo',6).hands,2,'extreme finale is more restrictive');
 const climateCards=[make('azul',10),make('verde',11),make('amarelo',12)];
@@ -83,4 +89,10 @@ assert.equal(difficultyRules('dificil',0).discards,1);
 assert.equal(difficultyRules('extremo',3,'short').hands,2);
 sandbox.solo={rerolls:0,difficulty:'extremo'};
 assert.equal(rerollCost(),6);
-console.log('✓ Seven stages, randomized boss restrictions, difficulty and economic checks passed');
+const {HAND_GUIDE}=sandbox.window.EcoCardSolo;
+assert.equal(HAND_GUIDE.length,7,'tutorial covers seven playable hand examples');
+assert(HAND_GUIDE.some(h=>h.name==='Ciclo Completo'));
+assert(HAND_GUIDE.some(h=>h.name==='Materiais Equivalentes'));
+assert(HAND_GUIDE.some(h=>h.name==='Fluxo Circular'));
+assert.equal(bossInvalidReason([make('azul',1)],boss('double_hp')),null,'double HP never annuls a hand');
+console.log('✓ Seven stages, 150k finale, double boss HP, tutorial and economy tests passed');
