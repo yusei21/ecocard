@@ -72,3 +72,9 @@ Interface editorial inspirada em sinalização de triagem, papel e tipografia im
 A marca institucional exibida é o SVG horizontal do **IFMA (manual de 2015)** disponível no Wikimedia Commons: https://commons.wikimedia.org/wiki/File:Instituto_Federal_do_Maranhão_-_Marca_Horizontal_2015.svg . Para impressão ou ações institucionais, confirmar a versão da marca com comunicação do IFMA.
 
 Referências usadas na revisão: https://www.reddit.com/r/SoloDevelopment/comments/1tf84yf/ ; https://www.reddit.com/r/IndieDev/comments/1wt9lwn/ ; https://www.reddit.com/r/godot/comments/1u5flj3/ ; https://www.reddit.com/r/BoardgameDesign/comments/12qj22f/ .
+
+## Controles e uso no celular
+
+Os dois modos permitem **reorganizar manualmente a mão** sem alterar quais cartas pertencem ao jogador: no computador, arraste uma carta até outra posição; no celular, toque em **Organizar cartas**, toque na carta que deseja mover e depois na carta que representa a posição de destino. Toque em **Concluir organização** para voltar às ações de jogo. A ordem escolhida permanece durante a compra e descarte das cartas. Na Trinca Circular, a organização é individual por dispositivo e não é transmitida aos adversários.
+
+O cabeçalho mobile-first prioriza a identidade do EcoCard, o acesso à EcoResiduários Academy e a marca vetorial do IFMA em uma área institucional com contraste controlado. A nova folha `mobile-v5.css` ajusta o topo e as mãos roláveis para dispositivos menores.
