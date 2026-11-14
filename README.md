@@ -4,9 +4,9 @@ Plataforma web de jogo de cartas ambiental para demonstração em estande. A exp
 
 **[Abrir o jogo pelo GitHub Pages](https://yusei21.github.io/ecocard/)** (funciona após habilitar Pages para a branch `main`, pasta raiz).
 
-## Jogos
+## Jogo atual
 
-### 1. Salve o Mundo (solo)
+### Salve o Mundo (solo)
 
 Roguelike de pontuação com cartas de cinco categorias de resíduos: **azul/papel**, **vermelho/plástico**, **verde/vidro**, **amarelo/metal**, **marrom/orgânicos**. São **65 cartas**, com **A, 2–10, J, Q, K** por categoria. A=1, J=11, Q=12, K=13 para sequências e pontuação. As combinações de 1–5 cartas recebem pontos base e multiplicadores, com ajustes dos coringas e dos chefes.
 
@@ -27,14 +27,14 @@ As quatro opções de dificuldade (**Aprendiz, Normal, Difícil e Extremo**) apl
 
 ## Como executar
 
-Não há build nem dependências locais: abra `index.html` num navegador moderno. Para multiplayer, sirva sobre HTTPS (recomendado: GitHub Pages). Para publicar: **Settings > Pages > Deploy from a branch > main > /(root)**. O endereço acima estará disponível somente após a publicação ser concluída.
+Não há build nem dependências locais: abra `index.html` num navegador moderno. Para o estande, use HTTPS (recomendado: GitHub Pages). Para publicar: **Settings > Pages > Deploy from a branch > main > /(root)**. O endereço acima estará disponível somente após a publicação ser concluída.
 
 ## Design
 
 - Linguagem visual original inspirada em materiais naturais, impressão editorial e jogos de mesa.
 - Paleta verde-floresta, lima e rosa, combinada com as cinco cores normativas da coleta seletiva. **A paleta exata do Instagram não pôde ser validada**; deve ser substituída por tokens oficiais caso o projeto forneça seu guia de marca.
 - Cartas usam **cor, nome da categoria e símbolo** (não apenas cor), identificação do valor, seleção visível e efeito hover discreto. Respeita preferência por movimento reduzido.
-- Identificação IFMA/Universo IFMA está **provisoriamente em texto e pictograma estilizado**, não no logotipo institucional oficial. Antes da apresentação formal, substituir pela arte oficial licenciada da instituição.
+- A interface exibe a marca vetorial horizontal do IFMA; confirmar junto à comunicação institucional sua versão autorizada para o estande.
 - Link oficial do projeto: https://www.instagram.com/ecoresiduariosacademy/
 
 ## Precisão ambiental
@@ -51,11 +51,10 @@ A **Resolução CONAMA 275/2001** estabelece o código de cores usado. O jogo tr
 
 ## Próximos passos recomendados
 
-1. Testar a partida em **2, 3 e 4 celulares reais**, inclusive em rede móvel e Wi-Fi do estande.
-2. Implementar reconexão, temporizador de turno e testes automatizados de regras.
-3. Validar paleta oficial do Instagram e obter arquivos vetoriais autorizados do IFMA.
-4. Fazer revisão técnica ambiental com equipe do projeto antes de publicação institucional.
-5. Para alto tráfego, substituir sinalização pública por backend próprio.
+1. Testar uma jornada completa do Salve o Mundo em celulares reais, incluindo chefes que anulam cartas.
+2. Medir taxas de vitória e ajustar a curva de dificuldade das cinco crises.
+3. Validar a identidade visual e os textos ambientais com a equipe do IFMA.
+4. Decidir separadamente um segundo jogo infantil de partidas rápidas para o estande.
 
 Licença: consultar o arquivo `LICENSE` do repositório.
 
@@ -66,15 +65,6 @@ Interface editorial inspirada em sinalização de triagem, papel e tipografia im
 A marca institucional exibida é o SVG horizontal do **IFMA (manual de 2015)** disponível no Wikimedia Commons: https://commons.wikimedia.org/wiki/File:Instituto_Federal_do_Maranhão_-_Marca_Horizontal_2015.svg . Para impressão ou ações institucionais, confirmar a versão da marca com comunicação do IFMA.
 
 Referências usadas na revisão: https://www.reddit.com/r/SoloDevelopment/comments/1tf84yf/ ; https://www.reddit.com/r/IndieDev/comments/1wt9lwn/ ; https://www.reddit.com/r/godot/comments/1u5flj3/ ; https://www.reddit.com/r/BoardgameDesign/comments/12qj22f/ .
-
-## Feedback visual da Trinca Circular
-
-- Cada jogador tem **9 cartas** e precisa fechar **3 combinações de 3 cartas**; a tela mostra um contador **0/3, 1/3, 2/3 ou 3/3** e destaca com cores diferentes as cartas de cada trinca reconhecida.
-- As trincas válidas são três valores idênticos ou sequências consecutivas da mesma categoria (incluindo **A–2–3** e **Q–K–A**).
-- Ao completar uma trinca, há indicação visual e um sinal sonoro, sujeito às permissões de áudio do navegador. A primeira interação do usuário pode ser necessária para liberar sons no dispositivo.
-- Ao fechar três combinações, aparece uma tela de vitória com animação, partículas e opção de nova rodada para o anfitrião. A verificação de vitória continua a cargo do anfitrião, e a organização manual da mão é preservada.
-- Em uma mão temporária de 10 cartas, o contador pode mostrar 3/3, mas é necessário descartar a carta extra e terminar com exatamente 9 para ganhar.
-- Animações respeitam `prefers-reduced-motion`.
 
 ## Controles e uso no celular
 
