@@ -149,13 +149,20 @@ function animateScore(result,onDone){
  if(!zone||!board){onDone?.();return}
  clearQueue();busy=true;board.classList.add('scoring');
  const reduce=window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
- const duration=reduce?0:Math.min(420,240);
+ const duration=reduce?0:240;
+ const startPoints=solo.score-result.score,goal=stages[solo.stage].goal;
  const events=result.events.map(e=>({name:e.label,detail:e.chips!==0?(e.chips>0?'+':'')+fmt(e.chips)+' fichas':e.factor!==1?'×'+e.factor.toFixed(2):e.mult!==0?(e.mult>0?'+':'')+e.mult.toFixed(2)+' MULT':'EFEITO'}));
  const frames=[{name:result.type,detail:'COMBINAÇÃO'},...events,{name:'+'+fmt(result.score),detail:'PONTOS NA RODADA'}];
  frames.forEach((frame,i)=>{
   queue.push(setTimeout(()=>{
    zone.textContent=frame.name+' · '+frame.detail;
    zone.classList.remove('score-step');void zone.offsetWidth;zone.classList.add('score-step');
+   const animated=startPoints+Math.floor(result.score*(i+1)/frames.length);
+   const scoreboard=board.querySelector('.table-score strong');if(scoreboard)scoreboard.textContent=fmt(animated);
+   const missing=board.querySelector('.table-score-left strong');if(missing)missing.textContent=fmt(Math.max(0,goal-animated));
+   const sideScore=document.querySelector('#soloSide .arcade-sticky-score strong');if(sideScore)sideScore.innerHTML=fmt(animated)+' <span>/ '+fmt(goal)+'</span>';
+   const sideMissing=document.querySelector('#soloSide .arcade-sticky-score p');if(sideMissing)sideMissing.innerHTML=animated>=goal?'<b>META ATINGIDA ✓</b>':'FALTAM <b>'+fmt(goal-animated)+'</b> PONTOS';
+   const progress=document.querySelector('#soloSide .arcade-sticky-score .progress div');if(progress)progress.style.width=Math.min(100,100*animated/goal)+'%';
    const b=board.querySelector('.score-chip.total b');
    if(b)b.textContent=fmt(Math.floor(result.score*(i+1)/frames.length));
    if(!reduce)beep(370+i*65,.075,'triangle',.018);
@@ -181,14 +188,14 @@ function render(){
  if(!solo)return;
  const main=document.querySelector('#soloMain'),side=document.querySelector('#soloSide');
  if(!main||!side)return;
- const stage=stages[solo.stage],goal=stage.goal,remaining=Math.max(0,goal-solo.score);
+ const stage=stages[solo.stage],goal=stage.goal,shownScore=solo.phase==='scoring'?solo.score-(lastBurst?.score||0):solo.score,remaining=Math.max(0,goal-shownScore);
  const selected=solo.hand.filter(c=>solo.selected.includes(c.id));
  const scoring=solo.phase==='scoring';
  const preview=selected.length?evaluate(selected,solo.stage,solo.jokers,solo.modifier):null;
- const progress=Math.min(100,Math.round(100*solo.score/goal));
+ const progress=Math.min(100,Math.round(100*shownScore/goal));
  const headline=solo.phase==='won'?'JORNADA VENCIDA':solo.phase==='clear'?'CRISE SUPERADA':solo.phase==='lost'?'FIM DA JORNADA':'MISSÃO '+(solo.stage+1)+' DE '+stages.length;
  side.classList.add('arcade-side');
- side.innerHTML='<div class="arcade-sticky-score"><small>PLACAR DA RODADA</small><strong>'+fmt(solo.score)+' <span>/ '+fmt(goal)+'</span></strong><p>'+(remaining?'FALTAM <b>'+fmt(remaining)+'</b> PONTOS':'<b>META ATINGIDA ✓</b>')+'</p><div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="'+goal+'" aria-valuenow="'+Math.min(goal,solo.score)+'"><div style="width:'+progress+'%"></div></div></div>'+
+ side.innerHTML='<div class="arcade-sticky-score"><small>PLACAR DA RODADA</small><strong>'+fmt(shownScore)+' <span>/ '+fmt(goal)+'</span></strong><p>'+(remaining?'FALTAM <b>'+fmt(remaining)+'</b> PONTOS':'<b>META ATINGIDA ✓</b>')+'</p><div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="'+goal+'" aria-valuenow="'+Math.min(goal,shownScore)+'"><div style="width:'+progress+'%"></div></div></div>'+
  '<div class="arcade-level"><span class="label">'+headline+'</span><b>'+esc(stage.title)+'</b><p>'+esc(stage.desc)+'</p><small>'+esc(stage.hint)+'</small></div>'+
  '<div class="arcade-modifier"><span class="label">CONDIÇÃO DO DESAFIO</span><b>'+esc(solo.modifier.name)+'</b><small>'+esc(solo.modifier.desc)+'</small></div>'+
  '<div class="arcade-counters"><span>Fichas <b>'+fmt(solo.coins)+' ✦</b></span><span>Juros previstos <b>+'+Math.min(5,Math.floor(solo.coins/5))+' ✦</b></span><span>Jogadas restantes <b>'+solo.hands+'</b></span><span>Descartes <b>'+solo.discards+'</b></span><span>Monte <b>'+solo.deck.length+' cartas</b></span></div>'+
@@ -200,7 +207,7 @@ function render(){
   const base=scoring?lastBurst?.base:preview?.base;
   const mult=scoring?lastBurst?.mult:preview?.mult;
   area='<div class="arcade-tabletop"><div class="arena-header"><span class="eyebrow">SALVE O MUNDO / MESA DE TRIAGEM</span><span class="arena-round">CRISE '+(solo.stage+1)+' / '+stages.length+'</span></div>'+
-  '<div class="table-score"><div><small>SEUS PONTOS</small><strong>'+fmt(solo.score)+'</strong></div><div><small>META</small><strong>'+fmt(goal)+'</strong></div><div class="table-score-left"><small>FALTAM</small><strong>'+fmt(remaining)+'</strong></div></div>'+
+  '<div class="table-score"><div><small>SEUS PONTOS</small><strong>'+fmt(shownScore)+'</strong></div><div><small>META</small><strong>'+fmt(goal)+'</strong></div><div class="table-score-left"><small>FALTAM</small><strong>'+fmt(remaining)+'</strong></div></div>'+
   '<div class="arena-scores"><div class="score-chip"><small>BASE</small><b>'+fmt(base||0)+'</b></div><div class="score-times">×</div><div class="score-chip magenta"><small>MULT</small><b>'+((mult||1).toFixed(2))+'</b></div><div class="score-equals">=</div><div class="score-chip total"><small>'+(scoring?'PONTUANDO':'PRÉVIA')+'</small><b>'+fmt(scoring?0:total||0)+'</b></div></div>'+
   '<div class="combo-readout">'+esc(scoring?lastBurst.type:preview?.type||'SELECIONE SUAS CARTAS')+'</div>'+
   '<div class="score-performance" id="scorePerformance" aria-live="polite">'+(scoring?'CALCULANDO COMBO…':'')+'</div>'+
