@@ -8,13 +8,13 @@ Plataforma web com dois jogos de cartas ambientais, pensada para demonstração 
 
 ### 1. Salve o Mundo (solo)
 
-Roguelike de pontuação com cartas de cinco categorias de resíduos: **azul/papel**, **vermelho/plástico**, **verde/vidro**, **amarelo/metal**, **marrom/orgânicos**. São 30 cartas, seis valores por cor. As combinações de 1–5 cartas recebem pontos base e multiplicadores, com ajustes dos coringas e dos chefes.
+Roguelike de pontuação com cartas de cinco categorias de resíduos: **azul/papel**, **vermelho/plástico**, **verde/vidro**, **amarelo/metal**, **marrom/orgânicos**. São **65 cartas**, com **A, 2–10, J, Q, K** por categoria. A=1, J=11, Q=12, K=13 para sequências e pontuação. As combinações de 1–5 cartas recebem pontos base e multiplicadores, com ajustes dos coringas e dos chefes.
 
-- Etapas: Contaminação Cruzada, Descarte Irregular, Desperdício de Recursos e Crise dos Aterros.
+- Etapas: Contaminação Cruzada, Descarte Irregular, Desperdício de Recursos, Crise dos Aterros e Mudanças Climáticas.
 - Cada desafio tem meta crescente; o jogador dispõe de jogadas e descartes limitados.
 - Entre desafios, recebe ecofichas para adquirir coringas, até cinco simultâneos.
 - Coringas **Reduzir**, **Reutilizar** e **Reciclar** representam os 3 Rs; também existem Compostagem Viva, Força Coletiva e Educação Ambiental.
-- **Aventura Circular** é lendária: executa **duas vezes os efeitos de cada outro coringa equipado**, sem autorrecursão. O peso relativo de aparição na loja é `0.003` contra `1` de cada coringa comum elegível; portanto, a chance exata depende do conjunto restante. É a menor chance individual da lista.
+- **Aventura Circular** é lendária: executa **duas vezes os efeitos de cada outro coringa equipado**, sem autorrecursão. O peso relativo de aparição na loja é `0.002` contra `1` de cada coringa comum elegível; portanto, a chance exata depende do conjunto restante. É a menor chance individual da lista.
 
 As regras de pontuação são originais para este projeto. O jogo usa o conceito geral de construção de combinações e progressão roguelike, sem reutilizar assets de Balatro.
 
@@ -22,9 +22,9 @@ As regras de pontuação são originais para este projeto. O jogo usa o conceito
 
 Partida em rede via código de seis caracteres. O anfitrião cria a sala; os demais entram com o código, em dispositivos separados.
 
-- Cada pessoa recebe **7 cartas**.
+- O modo usa **2 baralhos ambientais completos**, totalizando **130 cartas** (inclusive cópias físicas de valores e cores). Cada pessoa recebe **7 cartas**.
 - Em seu turno, compra do monte fechado ou da pilha de descarte, e descarta uma carta.
-- **Trinca válida:** três cartas do **mesmo valor** e **cores diferentes**, ou três cartas de **valores consecutivos** e da **mesma cor**.
+- **Trinca válida:** três cartas do **mesmo valor** e **cores diferentes**, ou três cartas de **valores consecutivos** e da **mesma cor**. A vale 1, J vale 11, Q vale 12 e K vale 13. A não vem após K.
 - Ganha quem tiver **duas trincas disjuntas** entre as sete cartas, sobrando uma, e clicar em **Bater!** no começo do turno.
 - O anfitrião valida compras, descartes, turnos e vitória, mantendo as cartas de outros jogadores ocultas.
 
@@ -63,3 +63,11 @@ A **Resolução CONAMA 275/2001** estabelece o código de cores usado. O jogo tr
 5. Para alto tráfego, substituir sinalização pública por backend próprio.
 
 Licença: consultar o arquivo `LICENSE` do repositório.
+
+## Identidade visual (v3)
+
+Interface editorial inspirada em sinalização de triagem, papel e tipografia impressa. Família **Barlow Condensed** para grandes títulos e valores, **IBM Plex Sans** para leitura e **IBM Plex Mono** para identificação técnica. Layout mantém a cor e um símbolo/texto em cada carta. Arquivo principal de tema: `identity-v3.css`.
+
+A marca institucional exibida é o SVG horizontal do **IFMA (manual de 2015)** disponível no Wikimedia Commons: https://commons.wikimedia.org/wiki/File:Instituto_Federal_do_Maranhão_-_Marca_Horizontal_2015.svg . Para impressão ou ações institucionais, confirmar a versão da marca com comunicação do IFMA.
+
+Referências usadas na revisão: https://www.reddit.com/r/SoloDevelopment/comments/1tf84yf/ ; https://www.reddit.com/r/IndieDev/comments/1wt9lwn/ ; https://www.reddit.com/r/godot/comments/1u5flj3/ ; https://www.reddit.com/r/BoardgameDesign/comments/12qj22f/ .
