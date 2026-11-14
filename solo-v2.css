@@ -63,3 +63,29 @@
 @media(max-width:1030px){#solo .game-layout{grid-template-columns:1fr}#solo .arcade-side{grid-row:1}#solo .arcade-side .jokers{display:flex}}
 @media(max-width:570px){#solo .arcade-solo{min-height:600px;padding:11px}#solo .arena-orbit{height:95px;font-size:42px}#solo .arena-orbit span{font-size:11px;max-width:120px}#solo .arena-scores{gap:3px}#solo .score-chip{min-width:0;padding:7px 6px;flex:1}#solo .score-chip small{font-size:8px}#solo .score-chip b{font-size:21px}#solo .score-times,#solo .score-equals{font-size:17px}#solo .arcade-hand .playing-card{width:calc(12.5% - 3px);padding:4px;min-height:126px;border-radius:7px}#solo .arcade-hand .playing-card .rank{font-size:18px}#solo .arcade-hand .playing-card .rank small{font-size:8px!important}#solo .arcade-hand .playing-card .symbol{font-size:19px}#solo .arcade-hand .playing-card .name{font-size:9px;overflow-wrap:anywhere}#solo .arcade-hand .playing-card .category{font-size:8px;overflow-wrap:anywhere}#solo .arena-hand-title{font-size:10px}}
 @media(prefers-reduced-motion:reduce){#solo .burst,#solo .arcade-side .joker.legend,#solo .arcade-solo.impact{animation:none!important}}
+
+/* Feedback, legibilidade e risco: edição arcade de alta energia. */
+#solo .arcade-sticky-score{position:sticky;top:12px;z-index:3;border:2px solid #d6ff71;border-radius:14px;padding:16px;background:linear-gradient(130deg,#273d26,#0b211c);box-shadow:0 0 23px #baff4a33}
+#solo .arcade-sticky-score small{display:block;font-size:11px;font-weight:900;letter-spacing:.12em;color:#c9fca4}
+#solo .arcade-sticky-score strong{display:block;font:900 clamp(24px,3vw,34px) 'Space Grotesk';font-variant-numeric:tabular-nums;color:#e4ff90}
+#solo .arcade-sticky-score strong span{font-size:18px;color:#c5d4c4}
+#solo .arcade-sticky-score p{margin:5px 0;font-size:12px;letter-spacing:.04em}
+#solo .arcade-sticky-score p b{font-size:17px;color:#fff}
+#solo .arcade-modifier{border:1px solid #e3b673;border-radius:13px;padding:13px;background:linear-gradient(135deg,#463628,#252a26)}
+#solo .arcade-modifier b{display:block;color:#ffdc95;font:800 19px 'Space Grotesk'}
+#solo .arcade-modifier small{color:#f3dac1;font-size:12px}
+#solo .arena-goal-line{margin:16px auto 5px;padding:11px 12px;width:fit-content;border-radius:12px;border:1px solid #8eb69c;background:#0b2728;font:800 clamp(13px,1.7vw,18px) 'Space Grotesk'}
+#solo .arena-goal-line b{color:#d9ff71;font-size:1.3em}
+#solo .score-performance{min-height:52px;display:grid;place-items:center;color:#faffad;font:900 clamp(19px,2.5vw,33px) 'Space Grotesk';text-shadow:0 0 20px #d9ff86aa}
+#solo .score-performance.score-step{animation:score-step .24s cubic-bezier(.2,1.4,.45,1)}
+#solo .score-performance.score-finish{color:#fff8a8;font-size:clamp(24px,3.2vw,46px);text-shadow:0 0 30px #ffca5f,0 0 60px #e6ff82}
+#solo .arcade-tabletop.scoring .arena-scores{filter:drop-shadow(0 0 14px #f7ff9a88)}
+#solo .arcade-tabletop.scoring .score-chip{animation:chip-pulse .26s ease-out}
+#solo .arcade-tabletop .playing-card{transition:transform .17s cubic-bezier(.2,1.4,.4,1),filter .17s,box-shadow .17s;transform-origin:50% 90%}
+#solo .arcade-tabletop .playing-card:hover{transform:translateY(-12px) rotate(2deg) scale(1.06);z-index:2;filter:saturate(1.18)}
+#solo .arcade-tabletop .playing-card.selected:hover{transform:translateY(-18px) rotate(-2deg) scale(1.05)}
+#solo .arcade-play:not(:disabled){animation:soft-glow 2s ease-in-out infinite alternate}
+@keyframes score-step{0%{transform:scale(.5) rotate(-4deg);opacity:.3}65%{transform:scale(1.14) rotate(2deg)}100%{transform:scale(1);opacity:1}}
+@keyframes chip-pulse{0%{transform:scale(.95)}50%{transform:scale(1.08)}100%{transform:scale(1)}}
+@keyframes soft-glow{from{filter:drop-shadow(0 0 0 #baff4a)}to{filter:drop-shadow(0 0 12px #baff4a70)}}
+@media(prefers-reduced-motion:reduce){#solo .score-performance,#solo .arcade-tabletop .playing-card,#solo .arcade-play{animation:none!important;transition:none!important}}
