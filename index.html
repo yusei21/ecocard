@@ -24,10 +24,15 @@ footer{border-top:1px solid var(--edge);display:flex;align-items:center;justify-
 <link rel="stylesheet" href="./solo-v2.css">
 <link rel="stylesheet" href="./identity-v3.css">
 <link rel="stylesheet" href="./game-v4.css">
+<link rel="stylesheet" href="./mobile-v5.css">
 </head>
 <body>
 <div class="shell">
-<header><a href="#inicio" class="brand" id="homeBrand"><span class="mark">↻</span> eco<span style="color:var(--lime)">card</span></a><div class="header-right"><span class="tag">JOGOS PARA REPENSAR O PLANETA</span><div class="ifma" title="Marca oficial do IFMA — versão horizontal 2015"><img class="ifma-logo" src="https://upload.wikimedia.org/wikipedia/commons/d/d0/Instituto_Federal_do_Maranh%C3%A3o_-_Marca_Horizontal_2015.svg" alt="Instituto Federal do Maranhão — IFMA"><span class="ifma-universo">UNIVERSO IFMA</span></div><a class="mini-link" href="https://www.instagram.com/ecoresiduariosacademy/" target="_blank" rel="noopener noreferrer">EcoResiduários ↗</a></div></header>
+<header class="site-header">
+<a href="#inicio" class="brand" id="homeBrand" aria-label="EcoCard — página inicial"><span class="mark" aria-hidden="true">↻</span><span class="brand-lettering"><span>eco</span><span>card</span></span></a>
+<a class="project-link" href="https://www.instagram.com/ecoresiduariosacademy/" target="_blank" rel="noopener noreferrer">EcoResiduários <span aria-hidden="true">↗</span></a>
+<div class="institutional-wrap"><div class="institutional-plate"><div class="ifma" title="Identidade institucional IFMA"><img class="ifma-logo" src="https://upload.wikimedia.org/wikipedia/commons/d/d0/Instituto_Federal_do_Maranh%C3%A3o_-_Marca_Horizontal_2015.svg" alt="Instituto Federal do Maranhão — IFMA"><span class="ifma-universo">UNIVERSO IFMA</span></div></div></div>
+</header>
 <main>
 <section id="home">
 <div class="home-hero"><div><div class="eyebrow">EcoResiduários Academy apresenta</div><h1 class="hero-title">CARTAS.<br>COMBOS.<br><i>IMPACTO.</i></h1><p class="intro">Um jogo solo de estratégia e uma Trinca para até quatro pessoas. Cinco categorias de resíduos, dezenas de combinações e decisões que fazem a diferença.</p><div class="actions"><button class="btn" data-view="solo">Jogar agora ↗</button><a class="btn secondary" href="https://www.instagram.com/ecoresiduariosacademy/" target="_blank" rel="noopener noreferrer">Conhecer o projeto ↗</a></div></div><div class="hero-art hero-deck" aria-hidden="true"><div class="showcase-label">BARALHO AMBIENTAL · EDIÇÃO 01</div><div class="showcase-card showcase-blue"><span class="showcase-rank">A</span><b>▤</b><span>PAPEL <small>AZUL / 01</small></span></div><div class="showcase-card showcase-gold"><span class="showcase-rank">K</span><b>✦</b><span>METAL <small>AMARELO / 13</small></span></div><div class="showcase-card showcase-brown"><span class="showcase-rank">Q</span><b>✿</b><span>ORGÂNICOS <small>MARROM / 12</small></span></div><div class="showcase-footer">65 CARTAS · 5 CATEGORIAS · A–K</div></div></div>
@@ -76,6 +81,7 @@ main.querySelectorAll('[data-card]').forEach(el=>el.addEventListener('click',()=
 // Multiplayer uses PeerJS data channels; the host is the authoritative state owner.
 // PeerJS public signaling is for a stand demonstration, not guaranteed production uptime.
 let peer=null,connections=new Map(),host=false,room=null,clientId=null,multiMessage='',myName='Visitante',joinedCode='';
+let multiOrder=[],multiArranging=false,multiFrom=null;
 const roomId=code=>'ecocard-trinca-'+code.toLowerCase();
 function randomCode(){const a='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';return Array.from({length:6},()=>a[Math.floor(Math.random()*a.length)]).join('')}
 // Trinca Circular: 9 cartas = 3 trincas independentes. Ás é baixo (A-2-3)
@@ -106,7 +112,7 @@ function winningGroups(cards){
  return null;
 }
 function hasWin(cards){return winningGroups(cards)!==null}
-function cleanMulti(){try{connections.forEach(c=>c.close());peer?.destroy()}catch(e){}connections.clear();peer=null;host=false;room=null;clientId=null;joinedCode='';multiMessage=''}
+function cleanMulti(){multiOrder=[];multiArranging=false;multiFrom=null;try{connections.forEach(c=>c.close());peer?.destroy()}catch(e){}connections.clear();peer=null;host=false;room=null;clientId=null;joinedCode='';multiMessage=''}
 function showMulti(){renderMulti()}
 function createRoom(){if(typeof Peer==='undefined'){multiMessage='Rede indisponível: não foi possível carregar o serviço de salas.';renderMulti();return}const name=$('#playerName')?.value.trim().slice(0,22)||'Visitante';myName=name;cleanMulti();host=true;const code=randomCode();joinedCode=code;peer=new Peer(roomId(code));peer.on('open',id=>{clientId=id;room={code,players:[{id,name,hand:[],selected:[]}],deck:[],discard:[],turn:0,drawn:false,started:false,winner:null};multiMessage='Sala criada. Compartilhe o código com até três pessoas.';renderMulti()});peer.on('connection',conn=>{connections.set(conn.peer,conn);conn.on('data',data=>handleHost(conn.peer,data));conn.on('close',()=>removePlayer(conn.peer));conn.on('error',()=>removePlayer(conn.peer));conn.on('open',()=>sendState())});peer.on('error',e=>{multiMessage=e.type==='unavailable-id'?'Código em uso. Tente criar outra sala.':'Erro de conexão: '+e.type;renderMulti()});renderMulti()}
 function joinRoom(){if(typeof Peer==='undefined'){multiMessage='Rede indisponível: não foi possível carregar o serviço de salas.';renderMulti();return}const code=($('#roomInput')?.value||'').trim().toUpperCase();if(!/^[A-Z2-9]{6}$/.test(code)){multiMessage='Informe um código de seis caracteres.';renderMulti();return}myName=$('#playerName')?.value.trim().slice(0,22)||'Visitante';cleanMulti();joinedCode=code;peer=new Peer();peer.on('open',id=>{clientId=id;const conn=peer.connect(roomId(code),{reliable:true});connections.set('host',conn);conn.on('open',()=>conn.send({type:'join',name:myName}));conn.on('data',data=>{if(data.type==='state'){room=data.state;multiMessage=data.message||'';renderMulti()}else if(data.type==='error'){multiMessage=data.message;renderMulti()}});conn.on('close',()=>{multiMessage='A pessoa que hospedava a sala desconectou. A partida terminou.';room=null;renderMulti()})});peer.on('error',e=>{multiMessage='Não foi possível entrar. Confirme o código e a conexão ('+e.type+').';renderMulti()});multiMessage='Conectando à sala '+code+'…';renderMulti()}
@@ -120,7 +126,23 @@ else if(data.type==='discard'){if(!room.drawn||p.hand.length!==10)return;let idx
 else if(data.type==='win'){if(room.drawn||!hasWin(p.hand))return;room.winner=p.id;multiMessage=p.name+' completou três trincas e venceu!'}
 else return;sendState()}
 function sendAction(data){if(host)actionMulti(clientId,data);else connections.get('host')?.send(data)}
-function cardMultiClick(id){if(!room)return;let p=room.players.find(p=>p.id===clientId);if(!p)return;if(!room.drawn||room.players[room.turn].id!==clientId)return;sendAction({type:'discard',cardId:id})}
+function moveMulti(from,to){
+ const my=room?.players.find(p=>p.id===clientId);if(!my)return;
+ multiOrder=window.EcoHandOrder.move(window.EcoHandOrder.ordered(my.hand,multiOrder),from,to).map(c=>c.id);
+ multiFrom=null;renderMulti();
+}
+function toggleMultiOrder(){multiArranging=!multiArranging;multiFrom=null;renderMulti()}
+function cardMultiClick(id){
+ if(!room)return;
+ const p=room.players.find(p=>p.id===clientId);if(!p)return;
+ if(multiArranging){
+  if(!multiFrom){multiFrom=id;renderMulti();return}
+  if(multiFrom===id){multiFrom=null;renderMulti();return}
+  moveMulti(multiFrom,id);return;
+ }
+ if(!room.drawn||room.players[room.turn].id!==clientId)return;
+ sendAction({type:'discard',cardId:id});
+}
 function renderMulti(){const main=$('#multiMain'),side=$('#multiSide');if(!main)return;let local=room?.players.find(p=>p.id===clientId),isTurn=room?.started&&room.players[room.turn]?.id===clientId&&!room.winner;
 side.innerHTML='<h3>Como jogar</h3><div class="rulebox"><strong>Objetivo:</strong> forme 3 trincas de 3 cartas, usando exatamente 9 cartas. Ex.: 3–3–3, 2–2–2 e K–K–K. Também vale uma sequência da mesma cor (ex.: A–2–3). O Ás é baixo em A–2–3 ou alto em Q–K–A; K–A–2 não vale. Três cartas de mesmo valor podem ter qualquer cor.</div><div class="rulebox"><strong>Turno:</strong> compre uma carta do monte ou descarte e depois descarte uma carta da sua mão. Quando fechar 3 trincas, a vitória é automática após descartar a décima carta. Se já começar o turno com 3 trincas, clique em “Bater!”.</div><p class="hint">2 a 4 pessoas, cada uma em seu dispositivo. A pessoa que cria a sala deve permanecer conectada. A rede usa sinalização pública PeerJS e exige internet; não há persistência de partidas.</p><p class="hint">Padrão de cores: Resolução CONAMA 275/2001. Os valores A, 2–10, J, Q e K são recursos de jogo, não classificações reais de reciclabilidade.</p>';
 if(!room){main.innerHTML='<div class="label">Lobby · 2 a 4 pessoas</div><h2>Juntos, a mudança ganha força.</h2><p>Crie uma sala (2 baralhos, 130 cartas) ou entre usando o código de quem está no estande.</p><div class="room-form"><label class="sr-only" for="playerName">Seu nome</label><input id="playerName" placeholder="Seu nome" maxlength="22" value="'+esc(myName==='Visitante'?'':myName)+'"></div><div class="actions"><button class="btn" id="createRoom">Criar sala</button></div><div class="room-form"><label class="sr-only" for="roomInput">Código da sala</label><input id="roomInput" placeholder="CÓDIGO" maxlength="6" value="'+esc(joinedCode)+'"><button class="btn secondary" id="joinRoom">Entrar na sala ↗</button></div><div class="notice roomstatus" role="status">'+esc(multiMessage||'O código da sala será gerado automaticamente.')+'</div>';main.querySelector('#createRoom').onclick=createRoom;main.querySelector('#joinRoom').onclick=joinRoom;return}
@@ -129,13 +151,16 @@ main.innerHTML='<div class="label">Sala compartilhada</div><div class="room-code
 '<h3 class="field-title">'+(room.winner?'Partida encerrada':isTurn?'Sua vez de jogar':'Aguardando '+esc(room.players[room.turn].name))+'</h3>'+
 '<div class="label">Descarte visível</div><div class="cards">'+(room.discard.length?cardHTML(room.discard.at(-1),false,true):'Nenhuma carta')+'</div>'+
 (isTurn&&!room.drawn?'<div class="actions"><button class="btn" id="drawDeck">Comprar do monte</button><button class="btn secondary" id="drawDiscard" '+(!room.discard.length?'disabled':'')+'>Comprar descarte</button></div>':'')+
-'<div class="field-title">Sua mão <span class="hint">· '+(local?.hand.length||0)+' / 9 cartas</span></div><div class="cards">'+(local?.hand||[]).map(c=>cardHTML(c,false,!isTurn||!room.drawn)).join('')+'</div>'+
+'<div class="field-title">Sua mão <span class="hint">· '+(local?.hand.length||0)+' / 9 cartas</span></div><div class="hand-order-toolbar"><button type="button" class="order-toggle '+(multiArranging?'active':'')+'" id="multiOrderToggle" aria-pressed="'+multiArranging+'">'+(multiArranging?'✓ CONCLUIR ORGANIZAÇÃO':'↔ ORGANIZAR CARTAS')+'</button><span>Arraste ou toque em duas cartas para mudar a ordem.</span></div><div class="cards multi-hand">'+window.EcoHandOrder.ordered(local?.hand||[],multiOrder).map(c=>cardHTML(c,multiArranging&&multiFrom===c.id,!multiArranging&&(!isTurn||!room.drawn))).join('')+'</div>'+
 (isTurn&&room.drawn?'<p class="hint">Clique em uma carta da mão para descartá-la e encerrar o turno.</p>':'')+
 (isTurn&&!room.drawn&&local?.hand.length===9?'<button class="btn" id="declareWin" '+(!hasWin(local.hand)?'disabled':'')+'>Bater! · Três trincas prontas</button>':'')+
 (room.winner?'<p><strong>Vencedor: '+esc(room.players.find(p=>p.id===room.winner)?.name||'Jogador')+'</strong></p>'+(host?'<button class="btn" id="restartMatch">Nova rodada ↻</button>':''):''));
-main.querySelector('#copyRoom').onclick=()=>navigator.clipboard?.writeText(room.code).then(()=>{multiMessage='Código copiado.';renderMulti()}).catch(()=>{multiMessage='Copie o código exibido acima.';renderMulti()});main.querySelector('#leaveRoom').onclick=()=>{cleanMulti();renderMulti()};main.querySelector('#startMatch')?.addEventListener('click',startMatch);main.querySelector('#restartMatch')?.addEventListener('click',startMatch);main.querySelector('#drawDeck')?.addEventListener('click',()=>sendAction({type:'draw',from:'deck'}));main.querySelector('#drawDiscard')?.addEventListener('click',()=>sendAction({type:'draw',from:'discard'}));main.querySelector('#declareWin')?.addEventListener('click',()=>sendAction({type:'win'}));main.querySelectorAll('[data-card]:not([disabled])').forEach(el=>el.addEventListener('click',()=>cardMultiClick(el.dataset.card)))}
+main.querySelector('#copyRoom').onclick=()=>navigator.clipboard?.writeText(room.code).then(()=>{multiMessage='Código copiado.';renderMulti()}).catch(()=>{multiMessage='Copie o código exibido acima.';renderMulti()});main.querySelector('#leaveRoom').onclick=()=>{cleanMulti();renderMulti()};main.querySelector('#startMatch')?.addEventListener('click',startMatch);main.querySelector('#restartMatch')?.addEventListener('click',startMatch);main.querySelector('#drawDeck')?.addEventListener('click',()=>sendAction({type:'draw',from:'deck'}));main.querySelector('#drawDiscard')?.addEventListener('click',()=>sendAction({type:'draw',from:'discard'}));main.querySelector('#declareWin')?.addEventListener('click',()=>sendAction({type:'win'}));main.querySelector('#multiOrderToggle')?.addEventListener('click',toggleMultiOrder);
+ main.querySelectorAll('.multi-hand [data-card]:not([disabled])').forEach(el=>el.addEventListener('click',()=>cardMultiClick(el.dataset.card)));
+ window.EcoHandOrder.drag(main.querySelector('.multi-hand'),moveMulti)}
 function view(id){for(const s of ['home','solo','multi'])$('#'+s).classList.toggle('hidden',s!==id);if(id==='solo'&&!solo)startSolo();if(id==='multi')showMulti();window.scrollTo({top:0,behavior:'smooth'})}
 document.querySelectorAll('[data-view]').forEach(el=>el.addEventListener('click',()=>view(el.dataset.view)));$('#homeBrand').addEventListener('click',e=>{e.preventDefault();view('home')});
 </script>
+<script src="./hand-order.js"></script>
 <script src="./solo-v2.js"></script>
 </body></html>
