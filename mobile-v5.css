@@ -1,0 +1,130 @@
+/* EcoCard V5 — mobile-first masthead + hand organization. */
+.site-header{
+ display:grid!important;
+ grid-template-columns:minmax(0,1fr) auto!important;
+ gap:10px 14px!important;
+ align-items:center!important;
+ padding:10px 0 16px!important;
+ border-bottom:1px solid #415849!important;
+ width:100%;
+}
+.site-header .brand{
+ grid-column:1;
+ display:inline-flex;
+ align-items:center;
+ justify-self:start;
+ gap:10px;
+ text-decoration:none;
+ font:900 29px/.92 'Barlow Condensed','Arial Narrow',sans-serif!important;
+ letter-spacing:0!important;
+ white-space:nowrap;
+}
+.site-header .brand .mark{
+ flex:none;
+ width:40px;height:40px;
+ background:#d6eb88;
+ color:#15291c;
+ border-radius:10px 3px 10px 3px;
+ box-shadow:3px 3px 0 #080e0a;
+ font:900 30px/1 'Barlow Condensed',sans-serif;
+ transform:none;
+ display:grid;place-items:center;
+}
+.site-header .brand-lettering{display:flex;gap:4px;align-items:baseline;letter-spacing:-.025em}
+.site-header .brand-lettering span:first-child{color:#f2f2df}
+.site-header .brand-lettering span:last-child{color:#d6ee86}
+.site-header .project-link{
+ grid-column:2;justify-self:end;align-self:center;
+ display:inline-flex;gap:9px;align-items:center;
+ min-height:44px;padding:10px 12px;
+ border-radius:3px;
+ border:1px solid #6b826a;
+ color:#e7f5cd;
+ background:#1d3125;
+ font:700 12px 'IBM Plex Sans',sans-serif;
+ text-decoration:none;white-space:nowrap;
+}
+.site-header .project-link:hover,.site-header .project-link:focus-visible{background:#304d37;border-color:#d3ef9b}
+.site-header .institutional-wrap{grid-column:1 / -1;justify-self:stretch;max-width:100%;min-width:0}
+.site-header .institutional-plate{
+ display:flex;justify-content:flex-start;align-items:center;
+ width:100%;min-height:64px;
+ padding:8px;
+ background:linear-gradient(115deg,#263d2c,#1c2b24);
+ border:1px solid #516e53;
+ box-shadow:inset 0 1px #78947545;
+ border-radius:3px;
+}
+.site-header .ifma{
+ border-radius:2px;
+ width:max-content;max-width:100%;
+ background:#edeedf;
+ padding:7px 9px;
+ box-shadow:0 1px 0 #9bac8a;
+ gap:10px;
+}
+.site-header .ifma .ifma-logo{width:clamp(115px,34vw,165px);height:auto;max-width:100%;max-height:48px;object-fit:contain}
+.site-header .ifma .ifma-universo{
+ border-left:1px solid #a5ad9b;
+ max-width:90px;min-width:52px;
+ font:700 10px/1.15 'IBM Plex Sans',sans-serif;
+ letter-spacing:0;padding-left:10px;color:#223227;
+}
+.hand-order-toolbar{
+ display:flex;align-items:center;gap:10px;
+ justify-content:flex-start;flex-wrap:wrap;
+ margin:10px 0 0;
+ text-align:left;
+}
+.hand-order-toolbar .order-toggle{
+ display:inline-flex;justify-content:center;align-items:center;
+ min-height:44px;min-width:148px;
+ color:#e8f3d3;background:#1d392c;
+ border:1px solid #a2be90;border-radius:3px;
+ padding:10px 13px;
+ font:800 12px 'IBM Plex Sans',sans-serif;
+ letter-spacing:.03em;
+ cursor:pointer;
+}
+.hand-order-toolbar .order-toggle.active{background:#d6ed83;color:#1b2a20;border-color:#e1f7a4}
+.hand-order-toolbar .order-toggle:hover:not(:disabled){border-color:#e1f7a4}
+.hand-order-toolbar .order-toggle:disabled{opacity:.45}
+.hand-order-toolbar>span{font:500 12px/1.4 'IBM Plex Sans',sans-serif;color:#c6d4c0;max-width:340px}
+#solo .arcade-hand .playing-card.dragging,
+#multi .multi-hand .playing-card.dragging{opacity:.5}
+#solo .arcade-hand .playing-card.drag-over,
+#multi .multi-hand .playing-card.drag-over{outline:3px solid #f5ffa7;outline-offset:2px}
+#solo .arcade-hand .playing-card,
+#multi .multi-hand .playing-card{touch-action:pan-x;user-select:none}
+#multi .multi-hand{display:flex;flex-wrap:nowrap;gap:8px;align-items:stretch;overflow-x:auto;overflow-y:visible;scrollbar-width:thin;scrollbar-color:#809f80 transparent;padding:14px 6px 16px;justify-content:flex-start}
+#multi .multi-hand .playing-card{flex:0 0 clamp(94px,12vw,120px);width:clamp(94px,12vw,120px);min-height:170px}
+#multi .multi-hand .playing-card.selected{transform:translateY(-9px);outline:3px solid #e3f18b;outline-offset:1px}
+#solo .arcade-hand .playing-card.selected{outline:2px solid #f1ffac;outline-offset:1px}
+@media(min-width:760px){
+ .site-header{
+   grid-template-columns:minmax(160px,1fr) auto auto!important;
+   column-gap:clamp(12px,2vw,24px)!important;
+   padding:14px 0 16px!important;
+ }
+ .site-header .brand{grid-column:1;font-size:33px!important}
+ .site-header .institutional-wrap{grid-column:2;grid-row:1;justify-self:end}
+ .site-header .institutional-plate{min-height:58px;padding:5px 7px;width:auto}
+ .site-header .ifma .ifma-logo{width:clamp(110px,13vw,175px)}
+ .site-header .project-link{grid-column:3;grid-row:1;min-height:44px;font-size:13px}
+}
+@media(max-width:420px){
+ .site-header .brand{font-size:25px!important;gap:8px}
+ .site-header .brand .mark{width:36px;height:36px;font-size:25px}
+ .site-header .project-link{font-size:11px;padding:9px 10px;min-height:44px}
+ .site-header .institutional-plate{padding:6px}
+ .site-header .ifma .ifma-logo{width:130px}
+ .site-header .ifma .ifma-universo{font-size:9px}
+ .hand-order-toolbar{gap:6px}
+ .hand-order-toolbar .order-toggle{width:100%}
+ .hand-order-toolbar>span{font-size:12px}
+ #multi .multi-hand .playing-card{flex-basis:90px;width:90px;min-height:159px}
+}
+@media(prefers-reduced-motion:reduce){
+ #solo .arcade-hand .playing-card,
+ #multi .multi-hand .playing-card{transition:none!important}
+}
