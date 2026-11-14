@@ -16,7 +16,10 @@ jobs:
           node --check solo-v2.js
           node --check tests/solo.test.cjs
           node --check tests/decks.test.cjs
+          node --check hand-order.js
+          node --check tests/hand-order.test.cjs
       - name: Executar testes de combos e coringas
         run: |
           node tests/solo.test.cjs
           node tests/decks.test.cjs
+          node tests/hand-order.test.cjs
