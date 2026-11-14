@@ -10,7 +10,7 @@ Plataforma web de jogo de cartas ambiental para demonstração em estande. A exp
 
 Roguelike de pontuação com cartas de cinco categorias de resíduos: **azul/papel**, **vermelho/plástico**, **verde/vidro**, **amarelo/metal**, **marrom/orgânicos**. São **65 cartas**, com **A, 2–10, J, Q, K** por categoria. A=1, J=11, Q=12, K=13 para sequências e pontuação. As combinações de 1–5 cartas recebem pontos base e multiplicadores, com ajustes dos coringas e dos chefes.
 
-- Etapas: Contaminação Cruzada, Descarte Irregular, Desperdício de Recursos, Crise dos Aterros e Mudanças Climáticas.
+- Etapas: Contaminação Cruzada, Descarte Irregular, Desperdício de Recursos, Crise dos Aterros, Poluição dos Oceanos, Consumo Desenfreado e Mudanças Climáticas.
 - Cada desafio tem meta crescente; o jogador dispõe de jogadas e descartes limitados.
 - Entre desafios, recebe ecofichas para adquirir coringas, até cinco simultâneos.
 - Coringas **Reduzir**, **Reutilizar** e **Reciclar** representam os 3 Rs; também existem Compostagem Viva, Força Coletiva e Educação Ambiental.
@@ -19,11 +19,15 @@ Roguelike de pontuação com cartas de cinco categorias de resíduos: **azul/pap
 As regras de pontuação são originais para este projeto. O jogo usa o conceito geral de construção de combinações e progressão roguelike, sem reutilizar assets de Balatro.
 
 
-### Escalada de dificuldade das crises
+### Escalada e regras rotativas (7 crises)
 
-A jornada progride de forma fixa: **crise 1 Fácil (meta normal 850, 5 jogadas)**, **crise 2 Médio (2.500, 4 jogadas)**, **crise 3 Médio (4.300, 4 jogadas)**, **crise 4 Difícil (9.300, 3 jogadas)** e **crise 5 Final (20.000, 3 jogadas)**. A última crise aplica **×0,7** ao multiplicador de jogadas com menos de 3 cartas orgânicas; combinações com 3 ou mais orgânicos recebem +80 pontos base. É um desafio final deliberadamente rigoroso, sem bloquear estratégias alternativas.
+Agora a jornada contém **7 crises**: (1) Contaminação Cruzada — Fácil, 850 pontos, 5 mãos; (2) Descarte Irregular — Médio, 2.200 pontos, 4 mãos; (3) Desperdício de Recursos — Médio, 4.000 pontos, 4 mãos; (4) Crise dos Aterros — Difícil, 7.600 pontos, 4 mãos; (5) Poluição dos Oceanos — Difícil, 12.000 pontos, 4 mãos; (6) Consumo Desenfreado — Extremo, 18.500 pontos, 3 mãos; (7) Mudanças Climáticas — Final, 28.000 pontos, 3 mãos. Metas e recursos são valores-base para o nível Normal; Aprendiz, Difícil e Extremo aplicam multiplicadores adicionais.
 
-As quatro opções de dificuldade (**Aprendiz, Normal, Difícil e Extremo**) aplicam modificadores por cima dessa progressão. Os valores são metas iniciais de balanceamento e precisam ser validados com partidas e métricas de vitória.
+A primeira crise funciona como introdução. Da segunda à sétima, o jogo sorteia uma **restrição de chefe**, evitando repetir a imediatamente anterior. As possibilidades incluem: uma das cinco categorias anulada; **somente mãos com 3+ cartas da mesma categoria**; **somente mãos com 2+ valores iguais**; **mãos com exatamente 5 cartas valem zero**; **somente mãos de 3 cartas**. Cada crise continua tendo também seu próprio bônus ou penalidade temática e um evento aleatório da rodada.
+
+Uma carta de categoria anulada não conta na combinação, pontuação ou gatilho dos coringas. Se a mão não satisfizer a restrição, **a jogada vale 0**, mas ainda consome uma mão. A prévia exibe zero antes de jogar. Essas restrições são regras ficcionais de jogo, não orientações de descarte de resíduos.
+
+As quatro dificuldades (Aprendiz, Normal, Difícil, Extremo) permanecem. As metas ainda precisam de testes práticos de balanceamento para confirmar que cada crise é vencível.
 
 ## Como executar
 
@@ -76,8 +80,7 @@ O cabeçalho mobile-first prioriza a identidade do EcoCard, o acesso à EcoResid
 
 A página inicial usa um menu de videogame em uma mesa 2D, com acesso direto ao Salve o Mundo, marca do IFMA e link do projeto. O estilo está em `landing-v7.css`. O controle extra de organização foi removido; arrastar continua disponível. Os efeitos sonoros do modo solo foram amplificados, com ganho limitado no solo para reduzir distorção. O volume final depende das configurações e permissões do dispositivo.
 
-## Chefes que anulam categorias
+## Regras especiais dos chefes
 
-A primeira crise apresenta as regras sem anular nenhuma categoria. Na segunda, o chefe anula o plástico (vermelho); na terceira, metal (amarelo); na quarta, papel (azul); e na quinta, vidro (verde). Cartas da categoria anulada **não contribuem para pontos base, combinações ou efeitos de coringas**. É permitido selecioná-las e descartá-las. A indicação aparece acima da mesa e nas cartas afetadas.
+As fases 2–7 sorteiam uma regra da lista detalhada acima. O bloqueio de categoria é uma das regras possíveis; não está mais preso a uma fase específica. Cada regra aparece no topo da mesa. O jogador deve adaptar as cartas escolhidas para evitar jogadas anuladas.
 
-A Trinca Circular foi retirada da interface e do código multiplayer. Um futuro jogo infantil ainda será definido e desenvolvido separadamente.
