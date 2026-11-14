@@ -228,3 +228,25 @@ footer a{color:#d9ecab;text-decoration:underline;text-underline-offset:3px}
 #solo .arcade-hand .playing-card.boss-negated:before{content:'ANULADA';position:absolute;inset:auto 0 42%;z-index:4;display:block;text-align:center;padding:3px 1px;font:900 10px 'IBM Plex Mono',monospace;letter-spacing:.01em;background:#642b29;color:#fff;transform:rotate(-9deg);border:1px solid #efb19c;pointer-events:none}
 #solo .arcade-hand .playing-card.boss-negated.selected{filter:saturate(.75)}
 @media(max-width:540px){#solo .boss-block{gap:4px;padding:9px}#solo .boss-block span{font-size:12px}#solo .arcade-hand .playing-card.boss-negated:before{font-size:8px}}
+
+/* First-run hand guide — legible at phone widths, all examples fit without horizontal page overflow. */
+#solo .hand-guide{position:relative;z-index:1;padding:clamp(13px,3.3vw,36px);text-align:left}
+#solo .guide-kicker{font:800 11px 'IBM Plex Mono',monospace;color:#d9eea0;letter-spacing:.085em}
+#solo .hand-guide h2{font:900 clamp(41px,7vw,76px)/.9 'Barlow Condensed','Arial Narrow',sans-serif;margin:14px 0 12px;color:#f6f4df}
+#solo .hand-guide>p{font:500 15px/1.6 'IBM Plex Sans',sans-serif;max-width:780px;color:#e2e8d9}
+#solo .guide-formula{display:flex;align-items:center;gap:8px 12px;flex-wrap:wrap;padding:15px;margin:20px 0 24px;border:1px solid #c4df8a;background:#243d2b;color:#f6f9e7}
+#solo .guide-formula span{font:800 11px/1.3 'IBM Plex Mono',monospace}
+#solo .guide-formula strong{font:900 25px 'Barlow Condensed',sans-serif;color:#d6f28d}
+#solo .guide-collection{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+#solo .guide-combo{padding:15px;background:#1f352b;border:1px solid #77946e;min-width:0}
+#solo .guide-combo h3{font:900 clamp(21px,2.6vw,30px)/1 'Barlow Condensed',sans-serif;margin:0 0 11px;color:#e6f9b5}
+#solo .guide-combo p{margin:10px 0 0;font:500 13px/1.45 'IBM Plex Sans',sans-serif;color:#ebeee3}
+#solo .guide-cards{display:flex;align-items:stretch;gap:5px;flex-wrap:wrap}
+#solo .guide-mini-card{flex:0 0 41px;width:41px;height:61px;border:2px solid #253c2e;border-radius:4px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:5px;color:#16271f;box-shadow:2px 3px 0 #081710;font:900 22px 'Barlow Condensed',sans-serif}
+#solo .guide-mini-card i{font:normal 17px 'IBM Plex Sans',sans-serif}
+#solo .guide-azul{background:#9ac5f2}#solo .guide-vermelho{background:#ed9d9d}#solo .guide-verde{background:#93d9b2}#solo .guide-amarelo{background:#edd883}#solo .guide-marrom{background:#cda48a}
+#solo .guide-note{margin:20px 0 24px;border-left:5px solid #e4ac82;padding:13px 15px;background:#3a302a}
+#solo .guide-note b{font:900 18px 'Barlow Condensed',sans-serif;color:#fce0bf}
+#solo .guide-note p{font:500 14px/1.5 'IBM Plex Sans',sans-serif;margin:5px 0 0}
+#solo .guide-next{width:100%;max-width:510px;min-height:56px;white-space:normal}
+@media(max-width:680px){#solo .guide-collection{grid-template-columns:1fr}#solo .guide-mini-card{width:38px;height:58px;flex-basis:38px}#solo .guide-formula{gap:6px 8px}#solo .guide-formula span{font-size:10px}}
