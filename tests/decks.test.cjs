@@ -46,6 +46,16 @@ assert(!win(nine.slice(0,8)),'eight cards must not win');
 assert(!win([...nine,C(8,'amarelo','j')]),'must discard tenth card first');
 const highAce=[C(1,'azul','1'),C(2,'azul','2'),C(3,'azul','3'),C(12,'verde','4'),C(13,'verde','5'),C(1,'verde','6'),C(8,'marrom','7'),C(8,'verde','8'),C(8,'azul','9')];
 assert(win(highAce),'A-2-3 plus Q-K-A plus three 8s should win');
+const best=cards=>vm.runInContext('bestMeldGroups('+JSON.stringify(cards)+')',ctx);
+assert.equal(best(nine).length,3,'nine cards form three visible completed combinations');
+assert.equal(best(nine.slice(0,6)).length,2,'two groups should count as two of three');
+assert.equal(best(nine.slice(0,3)).length,1,'one group should count as one of three');
+const ten=[...nine,C(6,'amarelo','extra')];
+assert.equal(best(ten).length,3,'ten cards still have three groups before discard');
+const grouped=best(nine).flat();
+assert.equal(new Set(grouped.map(c=>c.id)).size,9,'no card is assigned to two highlighted groups');
+assert(html.includes('trinca-tracker')&&html.includes('trinca-victory'),'interface includes progress and victory celebration');
+
 assert(html.includes('i<9;i++'),'each player starts with nine cards');
 assert(html.includes('p.hand.length!==10'),'turn ends by discarding tenth card');
 console.log('✓ Three trincas, nine cards, Ace low/high and win conditions passed');
