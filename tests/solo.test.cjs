@@ -96,6 +96,17 @@ assert.equal(scoringFrames(cardsToCount,blockedResult).filter(x=>x.kind==='card'
 const nulledResult=evaluate(cardsToCount,2,[],null,boss('only_equal'));
 assert.equal(nulledResult.score,0);
 assert.equal(scoringFrames(cardsToCount,nulledResult).filter(x=>x.kind==='card').length,0,'invalid hand has no counted cards');
+const {RARITY_INFO,jokerArt}=sandbox.window.EcoCardSolo;
+assert.equal(RARITY_INFO.common.label,'COMUM');
+assert.equal(RARITY_INFO.uncommon.label,'RARO');
+assert.equal(RARITY_INFO.legend.label,'LENDÁRIO');
+for(const j of jokers){
+ const art=jokerArt(j);
+ assert(art.includes('<svg')&&art.includes('</svg>'),'vector art for '+j.id);
+ assert(!/\p{Extended_Pictographic}/u.test(art),'no emoji icon for '+j.id);
+}
+assert(source.includes('rarity-card rarity-'),'store uses visible rarity cards');
+assert(source.includes('joker-rarity-'),'equipped joker retains rarity frame');
 const indexHtml=require('node:fs').readFileSync('index.html','utf8');
 assert(indexHtml.includes('id="helpEcoCard"'),'Como jogar button must be visible');
 assert(indexHtml.includes('window.EcoCardSolo.showHandGuide()'),'solo route must launch guide explicitly');
