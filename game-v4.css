@@ -347,3 +347,34 @@ footer a{color:#d9ecab;text-decoration:underline;text-underline-offset:3px}
  #solo .arcade-shop .joker-art svg{height:65px;width:65px}
 }
 @media(prefers-reduced-motion:reduce){#solo .rarity-card{animation:none!important;transition:none!important}}
+
+/* Four distinct rarities, with readable names and no numeric tiers. */
+#solo .arcade-shop .rarity-common,#solo .arcade-side .joker-rarity-common{
+ --rarity-color:#afd26f;--rarity-bg:#233d2d;--rarity-soft:#e2f6c0;
+ background:linear-gradient(145deg,#2d4934,#1c3027 90%)!important;border:2px solid #afd26f!important;
+}
+#solo .arcade-shop .rarity-uncommon,#solo .arcade-side .joker-rarity-uncommon{
+ --rarity-color:#68d2e8;--rarity-bg:#183e50;--rarity-soft:#d5f6fe;
+ background:linear-gradient(145deg,#205064,#193646 90%)!important;border:3px double #68d2e8!important;
+}
+#solo .arcade-shop .rarity-epic,#solo .arcade-side .joker-rarity-epic{
+ --rarity-color:#bb83fa;--rarity-bg:#39244f;--rarity-soft:#f0d9ff;
+ background:radial-gradient(circle at 45% 12%,#5a327e,#302240 80%)!important;border:3px solid #bb83fa!important;
+ box-shadow:4px 6px 0 #06110d,0 0 16px #9a5cee50,inset 0 0 16px #d5a5ff18!important;
+}
+#solo .arcade-shop .rarity-legend,#solo .arcade-side .joker-rarity-legend{
+ --rarity-color:#f4c46e;--rarity-bg:#443323;--rarity-soft:#fff1c7;
+ background:radial-gradient(circle at 50% 18%,#6a502f,#302c2c 80%)!important;border:3px solid #f4c46e!important;
+ box-shadow:4px 6px 0 #080b0a,0 0 18px #efbf6980,inset 0 0 18px #f5c56820!important;
+}
+#solo .arcade-shop .rarity-card-top{justify-content:flex-start}
+#solo .arcade-shop .rarity-card .rarity-ribbon,#solo .arcade-side .joker .rarity-ribbon{
+ background:var(--rarity-color)!important;color:#18221a!important;
+ padding:7px 11px!important;min-height:27px;font-size:12px!important;
+}
+#solo .arcade-shop .rarity-epic .rarity-ribbon,#solo .arcade-side .joker-rarity-epic .rarity-ribbon{color:#25162e!important}
+#solo .rarity-tier{display:none!important}
+#solo .arcade-shop .rarity-epic button:not(:disabled){background:#c59af9;color:#211329;border-color:#e3c5ff}
+#solo .arcade-shop .rarity-common button:not(:disabled){background:#bbdc7b;color:#172417}
+#solo .arcade-shop .rarity-uncommon button:not(:disabled){background:#8cdeec;color:#153242}
+#solo .arcade-shop .rarity-legend button:not(:disabled){background:#f4d27e;color:#28200f}
