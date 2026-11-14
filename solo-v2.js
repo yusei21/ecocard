@@ -209,16 +209,26 @@ function sellJoker(id){
 }
 function rerollCost(){return 4+(solo?.rerolls||0)}
 
+// The sound is tied to each actual counted card, not to the whole hand.
+// Blocked suits and invalid hands never receive a positive counting chime.
+function scoringFrames(playedCards,result,events=[]){
+ const cards=result.invalidReason?[]:playedCards.filter(c=>c.suit!==result.blockedSuit);
+ const cardFrames=cards.map((card,index)=>({kind:'card',cardIndex:playedCards.indexOf(card),
+  name:'CARTA '+(index+1)+' / '+cards.length,
+  detail:'VALOR '+card.rank+' · '+card.suit.toUpperCase()}));
+ return [{kind:'combo',name:result.type,detail:'COMBINAÇÃO'},...cardFrames,...events,
+  {kind:'total',name:'+'+fmt(result.score),detail:'PONTOS NA RODADA'}];
+}
 function animateScore(result,onDone){
  const zone=document.querySelector('#scorePerformance');
  const board=document.querySelector('.arcade-tabletop');
  if(!zone||!board){onDone?.();return}
  clearQueue();busy=true;board.classList.add('scoring');
  const reduce=window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
- const duration=reduce?0:240;
+ const duration=reduce?105:210;
  const startPoints=solo.score-result.score,goal=target();
- const events=result.events.map(e=>({name:e.label,detail:e.chips!==0?(e.chips>0?'+':'')+fmt(e.chips)+' pontos base':e.factor!==1?'×'+e.factor.toFixed(2):e.mult!==0?(e.mult>0?'+':'')+e.mult.toFixed(2)+' MULT':'EFEITO'}));
- const frames=[{name:result.type,detail:'COMBINAÇÃO'},...events,{name:'+'+fmt(result.score),detail:'PONTOS NA RODADA'}];
+ const events=result.events.map(e=>({kind:'effect',name:e.label,detail:e.chips!==0?(e.chips>0?'+':'')+fmt(e.chips)+' pontos base':e.factor!==1?'×'+e.factor.toFixed(2):e.mult!==0?(e.mult>0?'+':'')+e.mult.toFixed(2)+' MULT':'EFEITO'}));
+ const frames=scoringFrames(solo.playedCards,result,events);
  frames.forEach((frame,i)=>{
   queue.push(setTimeout(()=>{
    zone.textContent=frame.name+' · '+frame.detail;
@@ -231,7 +241,15 @@ function animateScore(result,onDone){
    const progress=document.querySelector('#soloSide .arcade-sticky-score .progress div');if(progress)progress.style.width=Math.min(100,100*animated/goal)+'%';
    const b=board.querySelector('.score-chip.total b');
    if(b)b.textContent=fmt(Math.floor(result.score*(i+1)/frames.length));
-   if(!reduce)beep(370+i*65,.075,'triangle',.018);
+   board.querySelectorAll('.played-cards .playing-card').forEach((card,j)=>{
+    card.classList.toggle('counting-card',frame.kind==='card'&&frame.cardIndex===j);
+    card.classList.toggle('counted-card',frame.kind!=='combo'&&frames.slice(0,i+1).some(f=>f.kind==='card'&&f.cardIndex===j));
+   });
+   if(frame.kind==='card'){
+    const count=frames.slice(0,i+1).filter(f=>f.kind==='card').length;
+    beep(480+(count-1)*95,.11,'sine',.034);
+   }else if(frame.kind==='effect')beep(690,.085,'triangle',.018);
+   else if(frame.kind==='total')beep(930,.15,'triangle',.032);
    if(i===frames.length-1){
     zone.classList.add('score-finish');board.classList.add('score-victory');
     if(!reduce){const fx=document.createElement('div');fx.className='score-particles';
@@ -310,5 +328,5 @@ function render(){
 startSolo=showHandGuide;drawSolo=fill;combo=combination;scoreSolo=cards=>evaluate(cards,solo.stage,solo.jokers,solo.modifier,solo.bossRule);
 selectSolo=choose;playSolo=play;targetSolo=target;makeOffers=()=>offers(solo.jokers);
 buyJoker=buy;nextSolo=next;renderSolo=render;
-window.EcoCardSolo={combination,evaluate,offers,stages,jokers:upgradedJokers,MODIFIERS,rollModifier,payoutFor,rerollCost,difficultyRules,rollDifficultyModifier,BOSS_RULES,drawBossRule,bossInvalidReason,HAND_GUIDE,showHandGuide};
+window.EcoCardSolo={combination,evaluate,offers,stages,jokers:upgradedJokers,MODIFIERS,rollModifier,payoutFor,rerollCost,difficultyRules,rollDifficultyModifier,BOSS_RULES,drawBossRule,bossInvalidReason,HAND_GUIDE,showHandGuide,scoringFrames};
 })();
