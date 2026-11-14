@@ -44,7 +44,7 @@ const upgradedJokers=[
  {id:'usina',name:'Usina Circular',desc:'+150 pontos base em trincas ou sequências.',rarity:'epic',price:12},
  {id:'circular',name:'Aventura Circular',desc:'Ativa cada outro coringa equipado 2 vezes, na ordem. Nunca ativa a si própria.',rarity:'legend',price:15}
 ];
-const ranks={common:1,uncommon:.25,epic:.045,legend:.002};
+const ranks={common:1,uncommon:1.1,epic:.55,legend:.015};
 const RARITY_INFO={
  common:{label:'COMUM'},
  uncommon:{label:'RARO'},
@@ -163,12 +163,22 @@ function evaluate(cards,stage,jokers,modifier=null,bossRule=null){
  const score=Math.max(0,Math.floor(chips*mult));
  return {score,type:c.name,base:chips,mult,events,combination:c,negated,blockedSuit,invalidReason:null};
 }
-function offers(exclude){
+function offers(exclude,rng=Math.random){
  const pool=upgradedJokers.filter(j=>!exclude.some(x=>x.id===j.id)),chosen=[];
+ function pickWeighted(options){
+  let total=options.reduce((sum,j)=>sum+ranks[j.rarity],0),roll=rng()*total,ix=0;
+  for(;ix<options.length-1;ix++){roll-=ranks[options[ix].rarity];if(roll<0)break}
+  return options[ix];
+ }
  while(chosen.length<3&&pool.length){
- let total=pool.reduce((a,j)=>a+ranks[j.rarity],0),roll=Math.random()*total,ix=0;
- for(;ix<pool.length-1;ix++){roll-=ranks[pool[ix].rarity];if(roll<0)break}
- chosen.push(pool.splice(ix,1)[0]);
+  const picked=pickWeighted(pool);
+  chosen.push(picked);pool.splice(pool.indexOf(picked),1);
+ }
+ // Prevent stores with three common cards when rare/epic choices still exist.
+ // The legendary is never forced: it remains the rarest random discovery.
+ if(chosen.length===3&&chosen.every(j=>j.rarity==='common')){
+  const upgrades=pool.filter(j=>j.rarity==='uncommon'||j.rarity==='epic');
+  if(upgrades.length)chosen[2]=pickWeighted(upgrades);
  }
  return chosen;
 }
