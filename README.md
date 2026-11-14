@@ -73,6 +73,15 @@ A marca institucional exibida é o SVG horizontal do **IFMA (manual de 2015)** d
 
 Referências usadas na revisão: https://www.reddit.com/r/SoloDevelopment/comments/1tf84yf/ ; https://www.reddit.com/r/IndieDev/comments/1wt9lwn/ ; https://www.reddit.com/r/godot/comments/1u5flj3/ ; https://www.reddit.com/r/BoardgameDesign/comments/12qj22f/ .
 
+## Feedback visual da Trinca Circular
+
+- Cada jogador tem **9 cartas** e precisa fechar **3 combinações de 3 cartas**; a tela mostra um contador **0/3, 1/3, 2/3 ou 3/3** e destaca com cores diferentes as cartas de cada trinca reconhecida.
+- As trincas válidas são três valores idênticos ou sequências consecutivas da mesma categoria (incluindo **A–2–3** e **Q–K–A**).
+- Ao completar uma trinca, há indicação visual e um sinal sonoro, sujeito às permissões de áudio do navegador. A primeira interação do usuário pode ser necessária para liberar sons no dispositivo.
+- Ao fechar três combinações, aparece uma tela de vitória com animação, partículas e opção de nova rodada para o anfitrião. A verificação de vitória continua a cargo do anfitrião, e a organização manual da mão é preservada.
+- Em uma mão temporária de 10 cartas, o contador pode mostrar 3/3, mas é necessário descartar a carta extra e terminar com exatamente 9 para ganhar.
+- Animações respeitam `prefers-reduced-motion`.
+
 ## Controles e uso no celular
 
 Os dois modos permitem **reorganizar manualmente a mão** sem alterar quais cartas pertencem ao jogador: no computador, arraste uma carta até outra posição; no celular, toque em **Organizar cartas**, toque na carta que deseja mover e depois na carta que representa a posição de destino. Toque em **Concluir organização** para voltar às ações de jogo. A ordem escolhida permanece durante a compra e descarte das cartas. Na Trinca Circular, a organização é individual por dispositivo e não é transmitida aos adversários.
