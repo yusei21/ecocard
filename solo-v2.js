@@ -40,13 +40,16 @@ const upgradedJokers=[
  {id:'educacao',name:'Educação Ambiental',desc:'+60 pontos base em uma sequência.',rarity:'uncommon',price:7},
  {id:'catadores',name:'Rede de Catadores',desc:'+70 pontos base em Coleta Seletiva ou Triagem Perfeita.',rarity:'uncommon',price:7},
  {id:'logistica',name:'Logística Reversa',desc:'×1,35 se houver pelo menos 2 cartas de metal ou vidro.',rarity:'uncommon',price:8},
+ {id:'biomas',name:'Aliança dos Biomas',desc:'×1,8 multiplicador com cartas de pelo menos 3 categorias.',rarity:'epic',price:11},
+ {id:'usina',name:'Usina Circular',desc:'+150 pontos base em trincas ou sequências.',rarity:'epic',price:12},
  {id:'circular',name:'Aventura Circular',desc:'Ativa cada outro coringa equipado 2 vezes, na ordem. Nunca ativa a si própria.',rarity:'legend',price:15}
 ];
-const ranks={common:1,uncommon:.25,legend:.002};
+const ranks={common:1,uncommon:.25,epic:.045,legend:.002};
 const RARITY_INFO={
- common:{label:'COMUM',tier:'01 / 03'},
- uncommon:{label:'RARO',tier:'02 / 03'},
- legend:{label:'LENDÁRIO',tier:'03 / 03'}
+ common:{label:'COMUM'},
+ uncommon:{label:'RARO'},
+ epic:{label:'ÉPICO'},
+ legend:{label:'LENDÁRIO'}
 };
 // Minimal geometric illustrations, drawn as vectors without emoji or external files.
 const JOKER_ART={
@@ -58,6 +61,8 @@ const JOKER_ART={
  educacao:'<path d="M28 13c-8-6-17-5-21-3v30c7-2 14-1 21 4 7-5 14-6 21-4V10c-5-2-14-3-21 3ZM28 13v31M13 18h8M35 18h8"/>',
  catadores:'<path d="M9 38h38M13 38V22l15-10 15 10v16M20 38V27h16v11M18 44h20"/><circle cx="28" cy="20" r="3"/>',
  logistica:'<rect x="7" y="17" width="27" height="23" rx="2"/><path d="M34 24h9l7 9v7H34M11 12h25M41 12l-5-5M41 12l-5 5"/><circle cx="17" cy="42" r="4"/><circle cx="42" cy="42" r="4"/>',
+ biomas:'<circle cx="28" cy="28" r="18"/><path d="M28 10v36M10 28h36M17 15l22 26M39 15 17 41"/><circle cx="28" cy="28" r="6"/>',
+ usina:'<path d="M7 44h42V24L36 32V20L22 29V12H11v32M15 19h4M16 35h4M30 38h4M41 38h4"/>',
  circular:'<circle cx="28" cy="28" r="18"/><circle cx="28" cy="28" r="9"/><path d="m28 3 6 9-10 2M53 28l-9 6-2-10M28 53l-6-9 10-2M3 28l9-6 2 10"/>'
 };
 function jokerArt(j){
@@ -151,6 +156,8 @@ function evaluate(cards,stage,jokers,modifier=null,bossRule=null){
  if(joker.id==='educacao'&&c.straight)add('Educação Ambiental',()=>chips+=60);
  if(joker.id==='catadores'&&(['flush','straightflush'].includes(c.kind)))add('Rede de Catadores',()=>chips+=70);
  if(joker.id==='logistica'&&cards.filter(x=>['verde','amarelo'].includes(x.suit)).length>=2)add('Logística Reversa',()=>mult*=1.35);
+ if(joker.id==='biomas'&&c.distinct>=3)add('Aliança dos Biomas',()=>mult*=1.8);
+ if(joker.id==='usina'&&(c.straight||c.maxRank>=3))add('Usina Circular',()=>chips+=150);
  }
  }
  const score=Math.max(0,Math.floor(chips*mult));
@@ -329,7 +336,7 @@ function render(){
   const p=solo.payout;
   area=ruleBrief+'<div class="run-result won-result"><div class="result-kicker">DESAFIO '+(solo.stage+1)+' / '+stages.length+' CONCLUÍDO</div><div class="result-symbol" aria-hidden="true">✓</div><h2>CRISE SUPERADA!</h2><p>Você ultrapassou a meta de <b>'+fmt(goal)+'</b> pontos.</p><div class="result-score"><small>PONTUAÇÃO DA RODADA</small><strong>'+fmt(solo.score)+'</strong></div><div class="payout-ledger"><div><span>Recompensa da crise</span><b>+'+p.base+' ✦</b></div><div><span>Jogadas não utilizadas</span><b>+'+p.saved+' ✦</b></div><div><span>Juros (1 para cada 5 fichas, máximo 5)</span><b>+'+p.interest+' ✦</b></div><div class="total"><span>RECEBER AGORA</span><b>+'+p.total+' ✦</b></div></div><button class="btn arcade-play" id="collectPayout">RESGATAR '+p.total+' FICHAS →</button></div>';
  } else if(solo.phase==='shop'){
-  area=ruleBrief+'<div class="arcade-shop"><span class="eyebrow">ENTRE CRISES / MERCADO CIRCULAR</span><h2>MONTE SUA ESTRATÉGIA.</h2><div class="shop-wallet"><strong>'+fmt(solo.coins)+' ✦</strong><span>EM CAIXA</span><span>Juros futuros: +'+Math.min(5,Math.floor(solo.coins/5))+' por crise<br>Guardar ou gastar? Você decide.</span></div><p class="hint">Até 5 coringas em jogo. Você pode vender um coringa por metade do preço.</p><div class="market">'+solo.offer.map(j=>'<div class="market-item rarity-card rarity-'+j.rarity+'"><div class="rarity-card-top"><span class="rarity-ribbon">'+rarityLabel(j)+'</span><span class="rarity-tier">'+RARITY_INFO[j.rarity].tier+'</span></div>'+jokerArt(j)+'<b>'+esc(j.name)+'</b><p>'+esc(j.desc)+'</p><button class="btn" data-buy="'+j.id+'" '+(solo.coins<j.price||solo.jokers.length>=5?'disabled':'')+'>COMPRAR · '+j.price+' ✦</button></div>').join('')+'</div><div class="actions shop-actions"><button class="btn secondary" id="rerollShop" '+(solo.coins<rerollCost()?'disabled':'')+'>NOVAS OFERTAS · '+rerollCost()+' ✦</button><button class="btn arcade-play" id="nextStage">'+(solo.stage===stages.length-1?'CONCLUIR JORNADA →':'PRÓXIMA CRISE →')+'</button></div></div>';
+  area=ruleBrief+'<div class="arcade-shop"><span class="eyebrow">ENTRE CRISES / MERCADO CIRCULAR</span><h2>MONTE SUA ESTRATÉGIA.</h2><div class="shop-wallet"><strong>'+fmt(solo.coins)+' ✦</strong><span>EM CAIXA</span><span>Juros futuros: +'+Math.min(5,Math.floor(solo.coins/5))+' por crise<br>Guardar ou gastar? Você decide.</span></div><p class="hint">Até 5 coringas em jogo. Você pode vender um coringa por metade do preço.</p><div class="market">'+solo.offer.map(j=>'<div class="market-item rarity-card rarity-'+j.rarity+'"><div class="rarity-card-top"><span class="rarity-ribbon">'+rarityLabel(j)+'</span></div>'+jokerArt(j)+'<b>'+esc(j.name)+'</b><p>'+esc(j.desc)+'</p><button class="btn" data-buy="'+j.id+'" '+(solo.coins<j.price||solo.jokers.length>=5?'disabled':'')+'>COMPRAR · '+j.price+' ✦</button></div>').join('')+'</div><div class="actions shop-actions"><button class="btn secondary" id="rerollShop" '+(solo.coins<rerollCost()?'disabled':'')+'>NOVAS OFERTAS · '+rerollCost()+' ✦</button><button class="btn arcade-play" id="nextStage">'+(solo.stage===stages.length-1?'CONCLUIR JORNADA →':'PRÓXIMA CRISE →')+'</button></div></div>';
  } else {
   area=ruleBrief+'<div class="run-result '+(solo.phase==='won'?'won-result':'lost-result')+'"><div class="result-kicker">'+(solo.phase==='won'?'7 DE 7 DESAFIOS CONCLUÍDOS':'TENTATIVA ENCERRADA')+'</div><div class="result-symbol">'+(solo.phase==='won'?'✓':'×')+'</div><h2>'+(solo.phase==='won'?'VOCÊ SALVOU O MUNDO!':'FIM DE JOGO')+'</h2><p>'+(solo.phase==='won'?'A jornada foi concluída. Agora leve essas decisões para o mundo real.':'A meta não foi alcançada. Experimente construir combinações mais fortes e reservar fichas para os juros.')+'</p><div class="result-score"><small>PONTUAÇÃO TOTAL DA JORNADA</small><strong>'+fmt(solo.runScore)+'</strong></div><div class="result-stats"><span>Crises superadas <b>'+solo.wonStages+'/'+stages.length+'</b></span><span>Jogadas realizadas <b>'+solo.played+'</b></span><span>Fichas finais <b>'+solo.coins+'</b></span></div><button class="btn arcade-play" id="restartSolo">JOGAR NOVAMENTE</button></div>';
  }
