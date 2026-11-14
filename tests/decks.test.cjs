@@ -19,7 +19,7 @@ assert.equal(new Set(solo.map(c=>c.suit)).size,5);
 for(const suit of ['azul','vermelho','verde','amarelo','marrom']){
  const cards=solo.filter(c=>c.suit===suit);
  assert.equal(cards.length,13);
- assert.deepEqual(cards.map(c=>c.rank).sort((a,b)=>a-b),Array.from({length:13},(_,i)=>i+1));
+ assert.equal(cards.map(c=>c.rank).sort((a,b)=>a-b).join(','),Array.from({length:13},(_,i)=>i+1).join(','));
 }
 assert.equal(vm.runInContext('cardRank(1)',ctx),'A');
 assert.equal(vm.runInContext('cardRank(11)',ctx),'J');
