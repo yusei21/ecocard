@@ -29,4 +29,11 @@ assert.equal(new Set(jokers.map(j=>j.id)).size,jokers.length,'unique joker IDs')
 assert.equal(offers([]).length,3);
 assert.throws(()=>evaluate([],0,[]));
 assert.throws(()=>evaluate(Array(6).fill(make('azul',1)),0,[]));
-console.log('✓ All 11 Salve o Mundo logic checks passed');
+const {payoutFor,rerollCost}=sandbox.window.EcoCardSolo;
+assert.deepEqual(JSON.parse(JSON.stringify(payoutFor({stage:0,hands:2,coins:15}))),{base:3,saved:2,interest:3,total:8});
+assert.deepEqual(JSON.parse(JSON.stringify(payoutFor({stage:4,hands:0,coins:60}))),{base:7,saved:0,interest:5,total:12});
+sandbox.solo={rerolls:0};
+assert.equal(rerollCost(),4);
+sandbox.solo={rerolls:3};
+assert.equal(rerollCost(),7);
+console.log('✓ Scoring, legendary retriggers, interest payouts and rising reroll costs passed');
