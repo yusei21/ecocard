@@ -2,11 +2,11 @@
 (() => {
 'use strict';
 const stages=[
- {title:'Contaminação Cruzada',desc:'A separação incorreta dificulta a reciclagem. Misturar categorias perde eficiência nesta etapa.',goal:1100,limit:4,rule:'mixed',hint:'Mãos de uma cor ganham ×1,35. Misturar quatro ou mais cores reduz ×0,75.'},
- {title:'Descarte Irregular',desc:'Descartes fora de lugar podem atingir solo e água. A atenção ao plástico será decisiva.',goal:2300,limit:4,rule:'plastic',hint:'Cartas de plástico sofrem penalidade de 10 pontos base cada. Coleta limpa recebe +40.'},
- {title:'Desperdício de Recursos',desc:'Antes de reciclar, é preciso reduzir o consumo. Aproveite materiais equivalentes.',goal:3600,limit:4,rule:'resource',hint:'Trinca ou par de valores iguais recebe ×1,5.'},
- {title:'Crise dos Aterros',desc:'A produção crescente de rejeitos pressiona a destinação final.',goal:6700,limit:3,rule:'hands',hint:'Apenas 3 jogadas. Sequências recebem +45 pontos base.'},
- {title:'Mudanças Climáticas',desc:'Produção e descarte têm impactos no clima. Escolha cuidadosamente seus recursos.',goal:11000,limit:4,rule:'climate',hint:'Mãos com 3 ou mais orgânicos ganham +60 pontos base.'}
+ {title:'Contaminação Cruzada',desc:'A separação incorreta dificulta a reciclagem. Misturar categorias perde eficiência nesta etapa.',goal:850,limit:5,tier:'FÁCIL',rule:'mixed',hint:'Mãos de uma cor ganham ×1,35. Misturar quatro ou mais cores reduz ×0,75.'},
+ {title:'Descarte Irregular',desc:'Descartes fora de lugar podem atingir solo e água. A atenção ao plástico será decisiva.',goal:2500,limit:4,tier:'MÉDIO',rule:'plastic',hint:'Cartas de plástico sofrem penalidade de 10 pontos base cada. Coleta limpa recebe +40.'},
+ {title:'Desperdício de Recursos',desc:'Antes de reciclar, é preciso reduzir o consumo. Aproveite materiais equivalentes.',goal:4300,limit:4,tier:'MÉDIO',rule:'resource',hint:'Trinca ou par de valores iguais recebe ×1,5.'},
+ {title:'Crise dos Aterros',desc:'A produção crescente de rejeitos pressiona a destinação final.',goal:9300,limit:3,tier:'DIFÍCIL',rule:'hands',hint:'Apenas 3 jogadas. Sequências recebem +45 pontos base.'},
+ {title:'Mudanças Climáticas',desc:'Produção e descarte têm impactos no clima. Escolha cuidadosamente seus recursos.',goal:20000,limit:3,tier:'FINAL',rule:'climate',hint:'Sem 3 orgânicos, sua combinação perde 30% do multiplicador. Com 3 orgânicos, ganha +80 base.'}
 ];
 const upgradedJokers=[
  {id:'reduzir',name:'Reduzir',desc:'+3 de multiplicador por carta selecionada.',rarity:'common',price:4},
@@ -47,7 +47,7 @@ function chooseDifficulty(){
  if(!main||!side)return;
  main.classList.add('arcade-solo');
  main.innerHTML='<div class="difficulty-screen"><div class="eyebrow">SALVE O MUNDO / NOVA JORNADA</div><h2>ESCOLHA A DIFICULDADE</h2><p>Metas mais altas, menos descartes e condições mais severas. A dificuldade permanece durante as cinco crises.</p><div class="difficulty-options">'+Object.entries(DIFFICULTIES).map(([key,d])=>{const r=difficultyRules(key,0);return '<button type="button" class="difficulty-option '+key+'" data-difficulty="'+key+'"><span class="difficulty-option-top"><b>'+d.name.toUpperCase()+'</b><span>↗</span></span><small>'+d.description+'</small><span class="difficulty-details"><span>META <b>'+r.goal.toLocaleString('pt-BR')+'</b></span><span>JOGADAS <b>'+r.hands+'</b></span><span>DESCARTES <b>'+r.discards+'</b></span><span>FICHAS <b>'+r.coins+'</b></span></span></button>'}).join('')+'</div><p class="difficulty-footnote">Escolha Normal para uma partida equilibrada ou Difícil se já domina os combos.</p></div>';
- side.innerHTML='<div class="arcade-level"><span class="label">ANTES DE JOGAR</span><b>5 CRISES AMBIENTAIS</b><p>Jogue até cinco cartas por mão, forme combinações e gerencie coringas e ecofichas entre as etapas.</p></div><div class="rulebox"><strong>Observação:</strong> em Difícil e Extremo, os eventos negativos também têm maior chance de aparecer. A sorte faz parte da estratégia.</div>';
+ side.innerHTML='<div class="arcade-level"><span class="label">PROGRESSÃO: FÁCIL → MÉDIO → MÉDIO → DIFÍCIL → FINAL</span><b>5 CRISES AMBIENTAIS</b><p>Jogue até cinco cartas por mão, forme combinações e gerencie coringas e ecofichas entre as etapas.</p></div><div class="rulebox"><strong>Observação:</strong> em Difícil e Extremo, os eventos negativos também têm maior chance de aparecer. A sorte faz parte da estratégia.</div>';
  main.querySelectorAll('[data-difficulty]').forEach(b=>b.addEventListener('click',()=>start(b.dataset.difficulty)));
 }
 let busy=false,queue=[];function clearQueue(){queue.forEach(clearTimeout);queue=[];busy=false}
@@ -80,7 +80,7 @@ function evaluate(cards,stage,jokers,modifier=null){
  if(phase.rule==='plastic'){let n=cards.filter(x=>x.suit==='vermelho').length;if(n)add('Contaminação de embalagens',()=>chips=Math.max(1,chips-n*10));if(['flush','straightflush'].includes(c.kind))add('Separação cuidadosa',()=>chips+=40)}
  if(phase.rule==='resource'&&c.maxRank>=2)add('Reaproveitamento de valor',()=>mult*=1.5);
  if(phase.rule==='hands'&&c.straight)add('Eficiência na triagem',()=>chips+=45);
- if(phase.rule==='climate'&&cards.filter(x=>x.suit==='marrom').length>=3)add('Compostagem',()=>chips+=60);if(modifier?.id==='audit'&&cards.length>=4)add('Auditoria',()=>mult*=.8);if(modifier?.id==='good'&&c.distinct>=3)add('Mutirão',()=>chips+=35);
+ if(phase.rule==='climate'){if(cards.filter(x=>x.suit==='marrom').length>=3)add('Compostagem estratégica',()=>chips+=80);else add('Pressão climática',()=>mult*=.7);}if(modifier?.id==='audit'&&cards.length>=4)add('Auditoria',()=>mult*=.8);if(modifier?.id==='good'&&c.distinct>=3)add('Mutirão',()=>chips+=35);
  // Full deterministic order; Circular repeats each other joker's effect twice, not the entire combined result.
  const repeat=jokers.some(j=>j.id==='circular')?2:1;
  for(const joker of jokers){
@@ -229,7 +229,7 @@ function render(){
  const headline=solo.phase==='won'?'JORNADA VENCIDA':solo.phase==='clear'?'CRISE SUPERADA':solo.phase==='lost'?'FIM DA JORNADA':'MISSÃO '+(solo.stage+1)+' DE '+stages.length;
  side.classList.add('arcade-side');
  side.innerHTML='<div class="difficulty-label">DIFICULDADE <b>'+DIFFICULTIES[solo.difficulty||'normal'].name.toUpperCase()+'</b></div><div class="arcade-sticky-score"><small>PLACAR DA RODADA</small><strong>'+fmt(shownScore)+' <span>/ '+fmt(goal)+'</span></strong><p>'+(remaining?'FALTAM <b>'+fmt(remaining)+'</b> PONTOS':'<b>META ATINGIDA ✓</b>')+'</p><div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="'+goal+'" aria-valuenow="'+Math.min(goal,shownScore)+'"><div style="width:'+progress+'%"></div></div></div>'+
- '<div class="arcade-level"><span class="label">'+headline+'</span><b>'+esc(stage.title)+'</b><p>'+esc(stage.desc)+'</p><small>'+esc(stage.hint)+'</small></div>'+
+ '<div class="arcade-level"><span class="label">'+headline+' · '+stage.tier+'</span><b>'+esc(stage.title)+'</b><p>'+esc(stage.desc)+'</p><small>'+esc(stage.hint)+'</small></div>'+
  '<div class="arcade-modifier"><span class="label">CONDIÇÃO DO DESAFIO</span><b>'+esc(solo.modifier.name)+'</b><small>'+esc(solo.modifier.desc)+'</small></div>'+
  '<div class="arcade-counters"><span>Fichas <b>'+fmt(solo.coins)+' ✦</b></span><span>Juros previstos <b>+'+Math.min(5,Math.floor(solo.coins/5))+' ✦</b></span><span>Jogadas restantes <b>'+solo.hands+'</b></span><span>Descartes <b>'+solo.discards+'</b></span><span>Monte <b>'+solo.deck.length+' cartas</b></span></div>'+
  '<h3>Coringas <span>'+solo.jokers.length+'/5</span></h3><div class="jokers">'+(solo.jokers.length?solo.jokers.map(j=>'<div class="joker '+(j.rarity==='legend'?'legend':'')+'"><span class="label">'+(j.rarity==='legend'?'LENDÁRIO':j.rarity==='uncommon'?'INCOMUM':'COMUM')+'</span><b>'+esc(j.name)+'</b><small>'+esc(j.desc)+'</small>'+(solo.phase==='shop'?'<button class="sell-joker" data-sell="'+j.id+'">Vender +'+Math.max(1,Math.floor(j.price/2))+' ✦</button>':'')+'</div>').join(''):'<p class="hint">Aproveite a loja após superar uma crise.</p>')+'</div>'+
