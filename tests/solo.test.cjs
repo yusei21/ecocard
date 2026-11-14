@@ -36,4 +36,18 @@ sandbox.solo={rerolls:0};
 assert.equal(rerollCost(),4);
 sandbox.solo={rerolls:3};
 assert.equal(rerollCost(),7);
-console.log('✓ Scoring, legendary retriggers, interest payouts and rising reroll costs passed');
+const {DIFFICULTIES,difficultyRules}=sandbox.window.EcoCardSolo;
+assert.deepEqual(Object.keys(DIFFICULTIES),['facil','normal','dificil','extremo']);
+assert.equal(difficultyRules('normal',0).goal,1100);
+assert.equal(difficultyRules('facil',0).goal,900);
+assert.equal(difficultyRules('dificil',0).goal,1650);
+assert.equal(difficultyRules('extremo',0).goal,2200);
+for(let stage=0;stage<5;stage++){
+ const goals=['facil','normal','dificil','extremo'].map(k=>difficultyRules(k,stage).goal);
+ assert(goals.every((value,i)=>i===0||value>goals[i-1]),'goals must increase by difficulty');
+}
+assert.equal(difficultyRules('dificil',0).discards,1);
+assert.equal(difficultyRules('extremo',3,'short').hands,1);
+sandbox.solo={rerolls:0,difficulty:'extremo'};
+assert.equal(rerollCost(),6);
+console.log('✓ Scoring, difficulty scaling, limited resources and economic tests passed');
