@@ -21,19 +21,19 @@ As regras de pontuação são originais para este projeto. O jogo usa o conceito
 
 ### Escalada e regras rotativas (7 crises)
 
-Agora a jornada contém **7 crises**: (1) Contaminação Cruzada — Fácil, 850 pontos, 5 mãos; (2) Descarte Irregular — Médio, 2.200 pontos, 4 mãos; (3) Desperdício de Recursos — Médio, 4.000 pontos, 4 mãos; (4) Crise dos Aterros — Difícil, 7.600 pontos, 4 mãos; (5) Poluição dos Oceanos — Difícil, 12.000 pontos, 4 mãos; (6) Consumo Desenfreado — Extremo, 18.500 pontos, 3 mãos; (7) Mudanças Climáticas — Final, 150.000 pontos, 3 mãos. Metas e recursos são valores-base para o nível Normal; Aprendiz, Difícil e Extremo aplicam multiplicadores adicionais.
+Agora a jornada contém **7 crises**: (1) Contaminação Cruzada — Fácil, 850 pontos, 5 mãos; (2) Descarte Irregular — Médio, 2.200 pontos, 4 mãos; (3) Desperdício de Recursos — Médio, 4.000 pontos, 4 mãos; (4) Crise dos Aterros — Difícil, 7.600 pontos, 4 mãos; (5) Poluição dos Oceanos — Difícil, 12.000 pontos, 4 mãos; (6) Consumo Desenfreado — Extremo, 18.500 pontos, 3 mãos; (7) Mudanças Climáticas — Final, 150.000 pontos, 3 mãos. A dificuldade é definida por fase, sem um multiplicador global escolhido pelo jogador.
 
 A primeira crise funciona como introdução. Da segunda à sétima, o jogo sorteia uma **restrição de chefe**, evitando repetir a imediatamente anterior. As possibilidades incluem: uma das cinco categorias anulada; **somente mãos com 3+ cartas da mesma categoria**; **somente mãos com 2+ valores iguais**; **mãos com exatamente 5 cartas valem zero**; **somente mãos de 3 cartas**; ou **Crise agravada, que dobra a meta de pontos do chefe**. Cada crise continua tendo também seu próprio bônus ou penalidade temática e um evento aleatório da rodada.
 
 Uma carta de categoria anulada não conta na combinação, pontuação ou gatilho dos coringas. Se a mão não satisfizer a restrição, **a jogada vale 0**, mas ainda consome uma mão. A prévia exibe zero antes de jogar. Essas restrições são regras ficcionais de jogo, não orientações de descarte de resíduos.
 
-As quatro dificuldades (Aprendiz, Normal, Difícil, Extremo) permanecem. As metas ainda precisam de testes práticos de balanceamento para confirmar que cada crise é vencível.
+Não há seleção global de dificuldade. O tutorial leva diretamente à crise 1 e as metas aumentam conforme a jornada; eventos e chefes sorteados ainda alteram o desafio de cada fase. As metas precisam de testes práticos de balanceamento para confirmar que cada crise é vencível.
 
 ### Tutorial de combinações antes da partida
 
-Antes da escolha de dificuldade, o jogador vê sete exemplos com cartas ilustradas: Separação Inicial, Materiais Equivalentes (par), Reaproveitamento (trinca), Fluxo Circular (sequência), Coleta Seletiva (3 cartas da mesma categoria), Triagem Perfeita (5 da mesma categoria) e Ciclo Completo (5 consecutivas da mesma categoria). A explicação apresenta **pontos base × multiplicador** e avisa que certas regras de chefe zeram a mão. O botão **Entendi · Escolher dificuldade** leva à seleção de modo.
+Antes da escolha de dificuldade, o jogador vê sete exemplos com cartas ilustradas: Separação Inicial, Materiais Equivalentes (par), Reaproveitamento (trinca), Fluxo Circular (sequência), Coleta Seletiva (3 cartas da mesma categoria), Triagem Perfeita (5 da mesma categoria) e Ciclo Completo (5 consecutivas da mesma categoria). A explicação apresenta **pontos base × multiplicador** e avisa que certas regras de chefe zeram a mão. O botão **Entendi · Começar jornada** inicia diretamente a primeira crise.
 
-A sétima crise tem pelo menos **120.000 pontos de meta até no nível Aprendiz** e **150.000 no Normal**. A regra aleatória **Crise agravada (×2)** dobra a meta já ajustada pela dificuldade: por exemplo, na sétima crise Normal, 150.000 → 300.000. Essa é uma meta inicialmente experimental: deve-se testar a viabilidade real com diferentes coringas e combinações para evitar finais impossíveis.
+A sétima crise tem meta-base de **150.000 pontos**. A regra aleatória **Crise agravada (×2)** dobra a meta já ajustada pela dificuldade: por exemplo, na sétima crise, 150.000 → 300.000. Essa é uma meta inicialmente experimental: deve-se testar a viabilidade real com diferentes coringas e combinações para evitar finais impossíveis.
 
 ## Como executar
 
