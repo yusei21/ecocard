@@ -219,3 +219,12 @@ footer a{color:#d9ecab;text-decoration:underline;text-underline-offset:3px}
 #solo .game-top-actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
 #solo .game-top-actions .btn{min-height:44px}
 @media(max-width:460px){#solo .game-top-actions{width:100%}#solo .game-top-actions .btn{flex:1}}
+
+/* Boss mechanic — clear suit-nullification warning, accessible without relying on color. */
+#solo .boss-block{display:flex;flex-wrap:wrap;align-items:center;gap:7px 15px;margin-bottom:9px;padding:10px 12px;background:#4b2927;border:2px solid #e4a287;border-radius:4px;color:#fff1e1}
+#solo .boss-block b{font:900 clamp(16px,2vw,22px) 'Barlow Condensed',sans-serif;letter-spacing:.03em}
+#solo .boss-block span{flex:1 1 210px;font:600 13px/1.4 'IBM Plex Sans',sans-serif}
+#solo .arcade-hand .playing-card.boss-negated{filter:saturate(.28) brightness(.78);border:3px dashed #e99989!important;position:relative}
+#solo .arcade-hand .playing-card.boss-negated:before{content:'ANULADA';position:absolute;inset:auto 0 42%;z-index:4;display:block;text-align:center;padding:3px 1px;font:900 10px 'IBM Plex Mono',monospace;letter-spacing:.01em;background:#642b29;color:#fff;transform:rotate(-9deg);border:1px solid #efb19c;pointer-events:none}
+#solo .arcade-hand .playing-card.boss-negated.selected{filter:saturate(.75)}
+@media(max-width:540px){#solo .boss-block{gap:4px;padding:9px}#solo .boss-block span{font-size:12px}#solo .arcade-hand .playing-card.boss-negated:before{font-size:8px}}
