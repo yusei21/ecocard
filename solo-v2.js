@@ -151,7 +151,7 @@ function animateScore(result,onDone){
  const reduce=window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
  const duration=reduce?0:240;
  const startPoints=solo.score-result.score,goal=stages[solo.stage].goal;
- const events=result.events.map(e=>({name:e.label,detail:e.chips!==0?(e.chips>0?'+':'')+fmt(e.chips)+' fichas':e.factor!==1?'×'+e.factor.toFixed(2):e.mult!==0?(e.mult>0?'+':'')+e.mult.toFixed(2)+' MULT':'EFEITO'}));
+ const events=result.events.map(e=>({name:e.label,detail:e.chips!==0?(e.chips>0?'+':'')+fmt(e.chips)+' pontos base':e.factor!==1?'×'+e.factor.toFixed(2):e.mult!==0?(e.mult>0?'+':'')+e.mult.toFixed(2)+' MULT':'EFEITO'}));
  const frames=[{name:result.type,detail:'COMBINAÇÃO'},...events,{name:'+'+fmt(result.score),detail:'PONTOS NA RODADA'}];
  frames.forEach((frame,i)=>{
   queue.push(setTimeout(()=>{
