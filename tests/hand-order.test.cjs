@@ -17,6 +17,6 @@ const index=fs.readFileSync('index.html','utf8'),solo=fs.readFileSync('solo-v2.j
 assert(index.includes('hand-order.js')&&index.includes('mobile-v5.css'));
 assert(index.indexOf('hand-order.js')<index.indexOf('solo-v2.js'),'hand helper must load before solo module');
 assert(!index.includes('id="multiOrderToggle"')&&!solo.includes('id="soloOrderToggle"'),'reorder buttons should be removed');
-assert(index.includes('moveMulti(from,to)')&&solo.includes('moveSolo(from,to)'));
-assert(index.includes('EcoHandOrder.drag')&&solo.includes('EcoHandOrder.drag'));
-console.log('✓ Drag-based manual ordering without visible organize buttons passed');
+assert(!index.includes('moveMulti(from,to)')&&solo.includes('moveSolo(from,to)'));
+assert(solo.includes('EcoHandOrder.drag'),'solo drag ordering must remain');
+console.log('✓ Solo drag ordering without visible organize buttons passed');
