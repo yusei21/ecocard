@@ -38,13 +38,28 @@ sandbox.solo={rerolls:3};
 assert.equal(rerollCost(),7);
 const {DIFFICULTIES,difficultyRules}=sandbox.window.EcoCardSolo;
 assert.deepEqual(Object.keys(DIFFICULTIES),['facil','normal','dificil','extremo']);
-assert.equal(difficultyRules('normal',0).goal,1100);
-assert.equal(difficultyRules('facil',0).goal,900);
-assert.equal(difficultyRules('dificil',0).goal,1650);
-assert.equal(difficultyRules('extremo',0).goal,2200);
+assert.equal(difficultyRules('normal',0).goal,850);
+assert.equal(difficultyRules('facil',0).goal,700);
+assert.equal(difficultyRules('dificil',0).goal,1300);
+assert.equal(difficultyRules('extremo',0).goal,1700);
 for(let stage=0;stage<5;stage++){
  const goals=['facil','normal','dificil','extremo'].map(k=>difficultyRules(k,stage).goal);
  assert(goals.every((value,i)=>i===0||value>goals[i-1]),'goals must increase by difficulty');
+}
+assert.equal(stages.map(s=>s.tier).join(','),'FÁCIL,MÉDIO,MÉDIO,DIFÍCIL,FINAL');
+assert.equal(stages.map(s=>s.goal).join(','),'850,2500,4300,9300,20000');
+assert.equal(difficultyRules('normal',0).hands,5,'intro gives additional hand');
+assert.equal(difficultyRules('normal',4).hands,3,'climate finale limits plays');
+assert.equal(difficultyRules('extremo',4).hands,2,'extreme finale is more restrictive');
+const climateCards=[make('azul',10),make('verde',11),make('amarelo',12)];
+const climatePenalty=evaluate(climateCards,4,[]);
+const climateBase=evaluate(climateCards,3,[]);
+assert(climatePenalty.mult<climateBase.mult,'climate boss penalizes hands without organics');
+const compostCards=[make('marrom',10),make('marrom',11),make('marrom',12)];
+assert(evaluate(compostCards,4,[]).base>evaluate(compostCards,3,[]).base,'composting counters final crisis');
+for(const key of Object.keys(DIFFICULTIES)){
+ const goals=stages.map((_,i)=>difficultyRules(key,i).goal);
+ assert(goals.every((value,i)=>i===0||value>goals[i-1]),'each crisis must increase goal on '+key);
 }
 assert.equal(difficultyRules('dificil',0).discards,1);
 assert.equal(difficultyRules('extremo',3,'short').hands,1);
