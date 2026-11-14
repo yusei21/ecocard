@@ -96,7 +96,7 @@ main.querySelectorAll('[data-card]').forEach(el=>el.addEventListener('click',()=
 // Multiplayer uses PeerJS data channels; the host is the authoritative state owner.
 // PeerJS public signaling is for a stand demonstration, not guaranteed production uptime.
 let peer=null,connections=new Map(),host=false,room=null,clientId=null,multiMessage='',myName='Visitante',joinedCode='';
-let multiOrder=[],multiArranging=false,multiFrom=null,lastMeldCount=0,lastWinnerId=null;
+let multiOrder=[],lastMeldCount=0,lastWinnerId=null;
 const roomId=code=>'ecocard-trinca-'+code.toLowerCase();
 function randomCode(){const a='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';return Array.from({length:6},()=>a[Math.floor(Math.random()*a.length)]).join('')}
 // Trinca Circular: 9 cartas = 3 trincas independentes. Ás é baixo (A-2-3)
@@ -164,13 +164,13 @@ function trincaChime(win=false){
   for(let i=0;i<notes.length;i++){
    const osc=context.createOscillator(),gain=context.createGain(),when=context.currentTime+i*(win?.13:.095);
    osc.type='sine';osc.frequency.value=notes[i];
-   gain.gain.setValueAtTime(.0001,when);gain.gain.exponentialRampToValueAtTime(.045,when+.015);gain.gain.exponentialRampToValueAtTime(.0001,when+.24);
+   gain.gain.setValueAtTime(.0001,when);gain.gain.exponentialRampToValueAtTime(.12,when+.015);gain.gain.exponentialRampToValueAtTime(.0001,when+.24);
    osc.connect(gain);gain.connect(context.destination);osc.start(when);osc.stop(when+.25);
   }
  }catch(e){}
 }
 
-function cleanMulti(){multiOrder=[];multiArranging=false;multiFrom=null;lastMeldCount=0;lastWinnerId=null;try{connections.forEach(c=>c.close());peer?.destroy()}catch(e){}connections.clear();peer=null;host=false;room=null;clientId=null;joinedCode='';multiMessage=''}
+function cleanMulti(){multiOrder=[];lastMeldCount=0;lastWinnerId=null;try{connections.forEach(c=>c.close());peer?.destroy()}catch(e){}connections.clear();peer=null;host=false;room=null;clientId=null;joinedCode='';multiMessage=''}
 function showMulti(){renderMulti()}
 function createRoom(){if(typeof Peer==='undefined'){multiMessage='Rede indisponível: não foi possível carregar o serviço de salas.';renderMulti();return}const name=$('#playerName')?.value.trim().slice(0,22)||'Visitante';myName=name;cleanMulti();host=true;const code=randomCode();joinedCode=code;peer=new Peer(roomId(code));peer.on('open',id=>{clientId=id;room={code,players:[{id,name,hand:[],selected:[]}],deck:[],discard:[],turn:0,drawn:false,started:false,winner:null};multiMessage='Sala criada. Compartilhe o código com até três pessoas.';renderMulti()});peer.on('connection',conn=>{connections.set(conn.peer,conn);conn.on('data',data=>handleHost(conn.peer,data));conn.on('close',()=>removePlayer(conn.peer));conn.on('error',()=>removePlayer(conn.peer));conn.on('open',()=>sendState())});peer.on('error',e=>{multiMessage=e.type==='unavailable-id'?'Código em uso. Tente criar outra sala.':'Erro de conexão: '+e.type;renderMulti()});renderMulti()}
 function joinRoom(){if(typeof Peer==='undefined'){multiMessage='Rede indisponível: não foi possível carregar o serviço de salas.';renderMulti();return}const code=($('#roomInput')?.value||'').trim().toUpperCase();if(!/^[A-Z2-9]{6}$/.test(code)){multiMessage='Informe um código de seis caracteres.';renderMulti();return}myName=$('#playerName')?.value.trim().slice(0,22)||'Visitante';cleanMulti();joinedCode=code;peer=new Peer();peer.on('open',id=>{clientId=id;const conn=peer.connect(roomId(code),{reliable:true});connections.set('host',conn);conn.on('open',()=>conn.send({type:'join',name:myName}));conn.on('data',data=>{if(data.type==='state'){room=data.state;multiMessage=data.message||'';renderMulti()}else if(data.type==='error'){multiMessage=data.message;renderMulti()}});conn.on('close',()=>{multiMessage='A pessoa que hospedava a sala desconectou. A partida terminou.';room=null;renderMulti()})});peer.on('error',e=>{multiMessage='Não foi possível entrar. Confirme o código e a conexão ('+e.type+').';renderMulti()});multiMessage='Conectando à sala '+code+'…';renderMulti()}
@@ -187,17 +187,11 @@ function sendAction(data){if(host)actionMulti(clientId,data);else connections.ge
 function moveMulti(from,to){
  const my=room?.players.find(p=>p.id===clientId);if(!my)return;
  multiOrder=window.EcoHandOrder.move(window.EcoHandOrder.ordered(my.hand,multiOrder),from,to).map(c=>c.id);
- multiFrom=null;renderMulti();
+ renderMulti();
 }
-function toggleMultiOrder(){multiArranging=!multiArranging;multiFrom=null;renderMulti()}
 function cardMultiClick(id){
  if(!room)return;
  const p=room.players.find(p=>p.id===clientId);if(!p)return;
- if(multiArranging){
-  if(!multiFrom){multiFrom=id;renderMulti();return}
-  if(multiFrom===id){multiFrom=null;renderMulti();return}
-  moveMulti(multiFrom,id);return;
- }
  if(!room.drawn||room.players[room.turn].id!==clientId)return;
  sendAction({type:'discard',cardId:id});
 }
@@ -218,13 +212,12 @@ main.innerHTML='<div class="label">Sala compartilhada</div><div class="room-code
 '<h3 class="field-title">'+(room.winner?'Partida encerrada':isTurn?'Sua vez de jogar':'Aguardando '+esc(room.players[room.turn].name))+'</h3>'+
 '<div class="label">Descarte visível</div><div class="cards">'+(room.discard.length?cardHTML(room.discard.at(-1),false,true):'Nenhuma carta')+'</div>'+
 (isTurn&&!room.drawn?'<div class="actions"><button class="btn" id="drawDeck">Comprar do monte</button><button class="btn secondary" id="drawDiscard" '+(!room.discard.length?'disabled':'')+'>Comprar descarte</button></div>':'')+
-groupsMarkup+'<div class="field-title">Sua mão <span class="hint">· '+(local?.hand.length||0)+' / 9 cartas</span></div><div class="hand-order-toolbar"><button type="button" class="order-toggle '+(multiArranging?'active':'')+'" id="multiOrderToggle" aria-pressed="'+multiArranging+'">'+(multiArranging?'✓ CONCLUIR ORGANIZAÇÃO':'↔ ORGANIZAR CARTAS')+'</button><span>Arraste ou toque em duas cartas para mudar a ordem.</span></div><div class="cards multi-hand">'+window.EcoHandOrder.ordered(local?.hand||[],multiOrder).map(c=>{let raw=cardHTML(c,multiArranging&&multiFrom===c.id,false);const group=groupLookup.get(c.id);return group===undefined?raw:raw.replace('class="playing-card','class="playing-card trinca-group-'+group)}).join('')+'</div>'+
+groupsMarkup+'<div class="field-title">Sua mão <span class="hint">· '+(local?.hand.length||0)+' / 9 cartas</span></div><div class="cards multi-hand">'+window.EcoHandOrder.ordered(local?.hand||[],multiOrder).map(c=>{let raw=cardHTML(c,false,false);const group=groupLookup.get(c.id);return group===undefined?raw:raw.replace('class="playing-card','class="playing-card trinca-group-'+group)}).join('')+'</div>'+
 (isTurn&&room.drawn?'<p class="hint">Clique em uma carta da mão para descartá-la e encerrar o turno.</p>':'')+
 (isTurn&&!room.drawn&&local?.hand.length===9?'<button class="btn" id="declareWin" '+(!hasWin(local.hand)?'disabled':'')+'>Bater! · Três trincas prontas</button>':'')+
 (room.winner?'<div class="trinca-victory '+(room.winner===clientId?'my-victory':'other-victory')+'" role="status">'+trincaConfetti()+'<span class="trinca-kicker">PARTIDA ENCERRADA</span><div class="trinca-trophy" aria-hidden="true">★</div><h2>'+(room.winner===clientId?'VOCÊ VENCEU!':'TRINCA FECHADA!')+'</h2><p>'+esc(room.players.find(p=>p.id===room.winner)?.name||'Jogador')+' completou 3 combinações de 3 cartas.</p><strong>9 CARTAS · 3 TRINCAS · 1 VENCEDOR</strong>'+(host?'<button class="btn trinca-replay" id="restartMatch">JOGAR NOVAMENTE ↻</button>':'<p>Aguarde o anfitrião iniciar outra rodada.</p>')+'</div>':''));
 const victoryPanel=main.querySelector('.trinca-victory');if(victoryPanel)main.prepend(victoryPanel);
-main.querySelector('#copyRoom').onclick=()=>navigator.clipboard?.writeText(room.code).then(()=>{multiMessage='Código copiado.';renderMulti()}).catch(()=>{multiMessage='Copie o código exibido acima.';renderMulti()});main.querySelector('#leaveRoom').onclick=()=>{cleanMulti();renderMulti()};main.querySelector('#startMatch')?.addEventListener('click',startMatch);main.querySelector('#restartMatch')?.addEventListener('click',startMatch);main.querySelector('#drawDeck')?.addEventListener('click',()=>sendAction({type:'draw',from:'deck'}));main.querySelector('#drawDiscard')?.addEventListener('click',()=>sendAction({type:'draw',from:'discard'}));main.querySelector('#declareWin')?.addEventListener('click',()=>sendAction({type:'win'}));main.querySelector('#multiOrderToggle')?.addEventListener('click',toggleMultiOrder);
- main.querySelectorAll('.multi-hand [data-card]:not([disabled])').forEach(el=>el.addEventListener('click',()=>cardMultiClick(el.dataset.card)));
+main.querySelector('#copyRoom').onclick=()=>navigator.clipboard?.writeText(room.code).then(()=>{multiMessage='Código copiado.';renderMulti()}).catch(()=>{multiMessage='Copie o código exibido acima.';renderMulti()});main.querySelector('#leaveRoom').onclick=()=>{cleanMulti();renderMulti()};main.querySelector('#startMatch')?.addEventListener('click',startMatch);main.querySelector('#restartMatch')?.addEventListener('click',startMatch);main.querySelector('#drawDeck')?.addEventListener('click',()=>sendAction({type:'draw',from:'deck'}));main.querySelector('#drawDiscard')?.addEventListener('click',()=>sendAction({type:'draw',from:'discard'}));main.querySelector('#declareWin')?.addEventListener('click',()=>sendAction({type:'win'}));main.querySelectorAll('.multi-hand [data-card]:not([disabled])').forEach(el=>el.addEventListener('click',()=>cardMultiClick(el.dataset.card)));
  window.EcoHandOrder.drag(main.querySelector('.multi-hand'),moveMulti)}
 function view(id){for(const s of ['home','solo','multi'])$('#'+s).classList.toggle('hidden',s!==id);if(id==='solo'&&!solo)startSolo();if(id==='multi')showMulti();window.scrollTo({top:0,behavior:'smooth'})}
 document.querySelectorAll('[data-view]').forEach(el=>el.addEventListener('click',()=>view(el.dataset.view)));$('#homeBrand').addEventListener('click',e=>{e.preventDefault();view('home')});
