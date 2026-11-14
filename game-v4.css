@@ -215,3 +215,7 @@ footer a{color:#d9ecab;text-decoration:underline;text-underline-offset:3px}
 #solo .crisis-rules-grid small{font:800 11px 'IBM Plex Mono',monospace;color:#e5faa6;letter-spacing:.03em}
 #solo .crisis-rules-grid p{font:500 14px/1.45 'IBM Plex Sans',sans-serif;margin:5px 0 0;color:#f4f3e4}
 @media(max-width:700px){#solo .arcade-side{display:flex;flex-direction:column}#solo .crisis-rules-grid{grid-template-columns:1fr}#solo .crisis-rules{padding:12px;margin-bottom:12px}#solo .difficulty-options{grid-template-columns:1fr}#solo .game-top{gap:10px}#solo .game-top h1{font-size:clamp(39px,10vw,65px)}}
+
+#solo .game-top-actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+#solo .game-top-actions .btn{min-height:44px}
+@media(max-width:460px){#solo .game-top-actions{width:100%}#solo .game-top-actions .btn{flex:1}}
