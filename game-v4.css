@@ -159,3 +159,13 @@ header a:hover{color:var(--lime)}
 .hero-deck .showcase-footer{position:absolute;bottom:17px;left:20px;font:700 11px 'IBM Plex Mono',monospace;letter-spacing:.08em;color:#b3cca5}
 @media(max-width:740px){.hero-deck{min-height:310px!important;margin:14px auto 24px;width:min(100%,440px)}.hero-deck .showcase-card{top:22%;width:116px;height:165px;padding:10px}.hero-deck .showcase-rank{font-size:40px}.hero-deck .showcase-card>b{font-size:45px}.hero-deck .showcase-card{font-size:11px}}
 @media(max-width:440px){.hero-deck{min-height:300px!important;width:100%}.hero-deck .showcase-label{top:43px;left:21px;right:auto}.hero-deck .showcase-card{top:29%;width:104px;height:148px;padding:8px}.hero-deck .showcase-rank{font-size:36px}.hero-deck .showcase-card>b{font-size:41px}.hero-deck .showcase-footer{font-size:9px}}
+
+/* Final typographic polish: never fall back to browser serif headings. */
+.fact b{font:800 clamp(23px,2vw,30px)/1.05 'Barlow Condensed','Arial Narrow',sans-serif;letter-spacing:.015em}
+.fact{font:500 15px/1.55 'IBM Plex Sans',Arial,sans-serif}
+footer{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:start;gap:16px;font:500 12px/1.45 'IBM Plex Sans',Arial,sans-serif}
+footer span:last-child{text-align:right}
+footer a{color:#d9ecab;text-decoration:underline;text-underline-offset:3px}
+.hero-title,.game-tile h3,.game-top h1{font-family:'Barlow Condensed','Arial Narrow',Impact,sans-serif!important}
+@media(max-width:800px){footer{grid-template-columns:1fr 1fr}footer span:last-child{grid-column:1/-1;text-align:left}}
+@media(max-width:510px){footer{grid-template-columns:1fr}footer span:last-child{grid-column:1}}
