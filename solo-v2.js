@@ -30,8 +30,8 @@ function combination(cards){
  const straight=cards.length>=3&&new Set(sorted).size===sorted.length&&sorted.every((n,i)=>i===0||n===sorted[i-1]+1);
  // The highest-ranked applicable formation takes precedence.
  let name='Separação Inicial',factor=1,kind='basic';
- if(cards.length===5&&maxColor===5){name='Triagem Perfeita';factor=5;kind='flush'}
- else if(cards.length===5&&straight&&maxColor===5){name='Ciclo Completo';factor=6;kind='straightflush'}
+ if(cards.length===5&&straight&&maxColor===5){name='Ciclo Completo';factor=6;kind='straightflush'}
+ else if(cards.length===5&&maxColor===5){name='Triagem Perfeita';factor=5;kind='flush'}
  else if(cards.length>=4&&maxRank>=4){name='Mutirão Quádruplo';factor=4.5;kind='rank'}
  else if(cards.length>=3&&maxRank>=3){name='Reaproveitamento';factor=3.5;kind='rank'}
  else if(cards.length>=3&&maxColor>=3){name='Coleta Seletiva';factor=3;kind='flush'}
@@ -46,7 +46,7 @@ function evaluate(cards,stage,jokers){
  let chips=20+cards.reduce((n,k)=>n+k.rank*12,0),mult=c.factor;
  const add=(label,fn)=>{let before=[chips,mult];fn();events.push({label,chips:Math.round(chips-before[0]),factor:before[1]===0?1:mult/before[1],mult:mult-before[1]})};
  if(phase.rule==='mixed'){if(c.distinct===1)add('Triagem correta',()=>mult*=1.35);else if(c.distinct>=4)add('Mistura inadequada',()=>mult*=.75)}
- if(phase.rule==='plastic'){let n=cards.filter(x=>x.suit==='vermelho').length;if(n)add('Contaminação de embalagens',()=>chips=Math.max(1,chips-n*10));if(c.kind==='flush')add('Separação cuidadosa',()=>chips+=40)}
+ if(phase.rule==='plastic'){let n=cards.filter(x=>x.suit==='vermelho').length;if(n)add('Contaminação de embalagens',()=>chips=Math.max(1,chips-n*10));if(['flush','straightflush'].includes(c.kind))add('Separação cuidadosa',()=>chips+=40)}
  if(phase.rule==='resource'&&c.maxRank>=2)add('Reaproveitamento de valor',()=>mult*=1.5);
  if(phase.rule==='hands'&&c.straight)add('Eficiência na triagem',()=>chips+=45);
  if(phase.rule==='climate'&&cards.filter(x=>x.suit==='marrom').length>=3)add('Compostagem',()=>chips+=60);
@@ -62,7 +62,7 @@ function evaluate(cards,stage,jokers){
  if(joker.id==='compostagem'&&n)add('Compostagem Viva',()=>chips+=n*22);
  if(joker.id==='cooperativa')add('Força Coletiva',()=>mult+=c.distinct*3);
  if(joker.id==='educacao'&&c.straight)add('Educação Ambiental',()=>chips+=60);
- if(joker.id==='catadores'&&(c.kind==='flush'))add('Rede de Catadores',()=>chips+=70);
+ if(joker.id==='catadores'&&(['flush','straightflush'].includes(c.kind)))add('Rede de Catadores',()=>chips+=70);
  if(joker.id==='logistica'&&cards.filter(x=>['verde','amarelo'].includes(x.suit)).length>=2)add('Logística Reversa',()=>mult*=1.35);
  }
  }
