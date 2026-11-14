@@ -8,14 +8,15 @@ const stages=[
  {title:'Crise dos Aterros',desc:'A destinação final exige boas estratégias.',goal:7600,limit:4,tier:'DIFÍCIL',rule:'hands',hint:'Sequências concedem +45 base.'},
  {title:'Poluição dos Oceanos',desc:'Reduza o impacto dos resíduos nos ambientes aquáticos.',goal:12000,limit:4,tier:'DIFÍCIL',rule:'ocean',hint:'Três categorias diferentes concedem +55 base.'},
  {title:'Consumo Desenfreado',desc:'Repense o desperdício e o consumo de recursos.',goal:18500,limit:3,tier:'EXTREMO',rule:'consumption',hint:'Três ou mais cartas ativas concedem ×1,25.'},
- {title:'Mudanças Climáticas',desc:'A última crise combina estratégia e sorte.',goal:28000,limit:3,tier:'FINAL',rule:'climate',hint:'Três orgânicos: +80 base. Menos de três: ×0,7.'}
+ {title:'Mudanças Climáticas',desc:'A última crise combina estratégia e sorte.',goal:150000,limit:3,tier:'FINAL',rule:'climate',hint:'Três orgânicos: +80 base. Menos de três: ×0,7.'}
 ];
 const BOSS_RULES=[
  ...['azul','vermelho','verde','amarelo','marrom'].map(suit=>({id:'ban_'+suit,name:'Categoria anulada',description:'As cartas dessa categoria não pontuam nem ativam coringas.',kind:'block',suit})),
  {id:'only_color',name:'Só coleta da mesma cor',description:'Apenas mãos com 3 ou mais cartas da mesma categoria pontuam.',kind:'only_color'},
  {id:'only_equal',name:'Só valores repetidos',description:'Apenas mãos com 2 ou mais cartas do mesmo valor pontuam.',kind:'only_equal'},
  {id:'no_five',name:'Cinco cartas anuladas',description:'Mãos de exatamente 5 cartas valem 0 pontos.',kind:'no_five'},
- {id:'only_three',name:'Exatamente três cartas',description:'Só mãos com exatamente 3 cartas pontuam.',kind:'only_three'}
+ {id:'only_three',name:'Exatamente três cartas',description:'Só mãos com exatamente 3 cartas pontuam.',kind:'only_three'},
+ {id:'double_hp',name:'Crise agravada',description:'A vida do chefe é dobrada: a meta de pontos desta fase é ×2.',kind:'double_hp'}
 ];
 function drawBossRule(stage,previous=null,rng=Math.random){
  if(stage===0)return null;
@@ -51,9 +52,9 @@ const DIFFICULTIES={
  dificil:{name:'Difícil',description:'Metas mais altas e pouca margem para erro',mult:1.5,extraHands:0,extraDiscards:-1,coins:4,growth:.06,badChance:1.5},
  extremo:{name:'Extremo',description:'Poucas jogadas e economia apertada',mult:2,extraHands:-1,extraDiscards:-1,coins:3,growth:.12,badChance:2}
 };
-function difficultyRules(key='normal',stage=0,modifierId='normal'){
+function difficultyRules(key='normal',stage=0,modifierId='normal',bossRule=null){
  const d=DIFFICULTIES[key]||DIFFICULTIES.normal;
- return {goal:Math.ceil(stages[stage].goal*d.mult*(1+d.growth*stage)/50)*50,
+ return {goal:Math.ceil(stages[stage].goal*d.mult*(1+d.growth*stage)*(bossRule?.kind==='double_hp'?2:1)/50)*50,
  hands:Math.max(1,stages[stage].limit+d.extraHands-(modifierId==='short'?1:0)),
  discards:Math.max(0,2+d.extraDiscards),coins:d.coins};
 }
@@ -63,6 +64,26 @@ function rollDifficultyModifier(key='normal'){
  let r=Math.random()*weights.reduce((sum,x)=>sum+x.weight,0);
  return (weights.find(x=>(r-=x.weight)<0)||weights.at(-1)).m;
 }
+
+const HAND_GUIDE=[
+ {name:'Separação Inicial',cards:[['A','azul'],['7','vermelho']],text:'Qualquer seleção de 1 a 5 cartas pontua, mesmo sem formar um combo forte.'},
+ {name:'Materiais Equivalentes',cards:[['3','azul'],['3','marrom']],text:'Duas cartas com o mesmo valor formam um par. Multiplicador ×2.'},
+ {name:'Reaproveitamento',cards:[['K','azul'],['K','verde'],['K','marrom']],text:'Três cartas com o mesmo valor. Multiplicador ×3,5.'},
+ {name:'Fluxo Circular',cards:[['4','azul'],['5','vermelho'],['6','amarelo']],text:'Três ou mais valores consecutivos, mesmo com cores diferentes. Multiplicador ×2,75.'},
+ {name:'Coleta Seletiva',cards:[['2','verde'],['6','verde'],['9','verde']],text:'Três ou mais cartas da mesma categoria. Multiplicador ×3.'},
+ {name:'Triagem Perfeita',cards:[['2','amarelo'],['4','amarelo'],['6','amarelo'],['8','amarelo'],['J','amarelo']],text:'Cinco cartas da mesma categoria. Multiplicador ×5.'},
+ {name:'Ciclo Completo',cards:[['2','marrom'],['3','marrom'],['4','marrom'],['5','marrom'],['6','marrom']],text:'Cinco cartas da mesma categoria em sequência. Multiplicador ×6.'}
+];
+function showHandGuide(){
+ clearQueue();solo=null;lastBurst=null;
+ const main=document.querySelector('#soloMain'),side=document.querySelector('#soloSide');
+ if(!main||!side)return;
+ side.style.display='none';main.classList.add('arcade-solo');
+ const card=([rank,suit])=>'<span class="guide-mini-card guide-'+suit+'"><b>'+rank+'</b><i>'+({'azul':'▤','vermelho':'⬡','verde':'◇','amarelo':'✦','marrom':'✿'}[suit])+'</i></span>';
+ main.innerHTML='<section class="hand-guide"><div class="guide-kicker">GUIA RÁPIDO / ANTES DE JOGAR</div><h2>COMO FORMAR AS MÃOS?</h2><p>Não precisa saber pôquer. Selecione de 1 a 5 cartas e veja a prévia de pontos antes de jogar. Cada carta tem um <b>valor</b> e uma <b>categoria de resíduo</b> (cor).</p><div class="guide-formula"><span>PONTOS DAS CARTAS</span><strong>×</strong><span>MULTIPLICADOR DA COMBINAÇÃO</span><strong>=</strong><span>PONTUAÇÃO</span></div><div class="guide-collection">'+HAND_GUIDE.map(h=>'<article class="guide-combo"><h3>'+h.name+'</h3><div class="guide-cards">'+h.cards.map(card).join('')+'</div><p>'+h.text+'</p></article>').join('')+'</div><div class="guide-note"><b>ATENÇÃO AOS CHEFES</b><p>Algumas crises anulam cores, exigem um tipo de combinação ou rejeitam mãos de cinco cartas. Se a prévia mostrar <strong>0 pontos</strong>, essa mão não será válida para o chefe. Coringas podem aumentar os pontos e multiplicadores.</p></div><button type="button" class="btn arcade-play guide-next" id="guideContinue">ENTENDI · ESCOLHER DIFICULDADE →</button></section>';
+ main.querySelector('#guideContinue')?.addEventListener('click',chooseDifficulty);
+}
+
 function chooseDifficulty(){
  clearQueue();solo=null;lastBurst=null;
  const main=document.querySelector('#soloMain'),side=document.querySelector('#soloSide');
@@ -141,7 +162,7 @@ function offers(exclude){
 }
 function fill(n){if(!solo)return;for(let k=0;k<n;k++){if(!solo.deck.length)break;solo.hand.push(solo.deck.pop())}/* Keep manual ordering; new cards append at the end. */}
 function start(difficulty='normal'){clearQueue();const modifier=rollDifficultyModifier(difficulty),rules=difficultyRules(difficulty,0,modifier.id);solo={stage:0,difficulty,score:0,coins:rules.coins,hand:[],deck:makeDeck(),selected:[],jokers:[],hands:rules.hands,discards:rules.discards,phase:'play',message:'Escolha de 1 a 5 cartas. Descubra combinações, supere crises e evolua sua estratégia.',runScore:0,comboChain:0,played:0,modifier,rerolls:0,wonStages:0,payout:null,playedCards:[],pendingPhase:null,bossRule:drawBossRule(0)};lastBurst=null;fill(8);render();beep(420,.09)}
-function target(){return difficultyRules(solo.difficulty,solo.stage,solo.modifier.id).goal}
+function target(){return difficultyRules(solo.difficulty,solo.stage,solo.modifier.id,solo.bossRule).goal}
 function moveSolo(from,to){
  if(!solo||solo.phase!=='play'||busy)return;
  solo.hand=window.EcoHandOrder.move(solo.hand,from,to);render();
@@ -245,7 +266,7 @@ function animateScore(result,onDone){
 
 function buy(id){if(solo.phase!=='shop')return;const j=solo.offer.find(x=>x.id===id);if(!j||solo.jokers.length>=5||solo.coins<j.price)return;solo.coins-=j.price;solo.jokers.push(j);solo.offer=solo.offer.filter(x=>x.id!==id);solo.message=j.rarity==='legend'?'✦ LENDÁRIO DESBLOQUEADO: AVENTURA CIRCULAR!':j.name+' adicionado à sua estratégia.';beep(j.rarity==='legend'?1047:730,.27,'triangle');render()}
 function reroll(){const cost=rerollCost();if(!solo||solo.phase!=='shop'||solo.coins<cost)return;solo.coins-=cost;solo.rerolls++;solo.offer=offers(solo.jokers);solo.message='Ofertas renovadas por '+cost+' ecofichas. Próxima troca: '+rerollCost()+'.';render()}
-function next(){if(solo.phase!=='shop')return;if(solo.stage===stages.length-1){solo.phase='won';solo.message='JORNADA CONCLUÍDA! Você venceu as cinco crises ambientais.'}else{solo.stage++;solo.score=0;solo.modifier=rollDifficultyModifier(solo.difficulty);solo.bossRule=drawBossRule(solo.stage,solo.bossRule);const rules=difficultyRules(solo.difficulty,solo.stage,solo.modifier.id);solo.hands=rules.hands;solo.discards=rules.discards;solo.hand=[];solo.deck=makeDeck();solo.selected=[];solo.phase='play';solo.comboChain=0;solo.payout=null;solo.playedCards=[];lastBurst=null;fill(8);solo.message='NOVO DESAFIO: '+stages[solo.stage].title+'!'}beep(570,.18);render()}
+function next(){if(solo.phase!=='shop')return;if(solo.stage===stages.length-1){solo.phase='won';solo.message='JORNADA CONCLUÍDA! Você venceu as sete crises ambientais.'}else{solo.stage++;solo.score=0;solo.modifier=rollDifficultyModifier(solo.difficulty);solo.bossRule=drawBossRule(solo.stage,solo.bossRule);const rules=difficultyRules(solo.difficulty,solo.stage,solo.modifier.id);solo.hands=rules.hands;solo.discards=rules.discards;solo.hand=[];solo.deck=makeDeck();solo.selected=[];solo.phase='play';solo.comboChain=0;solo.payout=null;solo.playedCards=[];lastBurst=null;fill(8);solo.message='NOVO DESAFIO: '+stages[solo.stage].title+'!'}beep(570,.18);render()}
 function fmt(v){return Math.floor(v).toLocaleString('pt-BR')}
 function render(){
  if(!solo)return;
@@ -287,7 +308,7 @@ function render(){
  } else if(solo.phase==='shop'){
   area=ruleBrief+'<div class="arcade-shop"><span class="eyebrow">ENTRE CRISES / MERCADO CIRCULAR</span><h2>MONTE SUA ESTRATÉGIA.</h2><div class="shop-wallet"><strong>'+fmt(solo.coins)+' ✦</strong><span>EM CAIXA</span><span>Juros futuros: +'+Math.min(5,Math.floor(solo.coins/5))+' por crise<br>Guardar ou gastar? Você decide.</span></div><p class="hint">Até 5 coringas em jogo. Você pode vender um coringa por metade do preço.</p><div class="market">'+solo.offer.map(j=>'<div class="market-item '+(j.rarity==='legend'?'shop-legend':'')+'"><span class="label">'+(j.rarity==='legend'?'RARIDADE LENDÁRIA':j.rarity==='uncommon'?'INCOMUM':'COMUM')+'</span><b>'+esc(j.name)+'</b><p>'+esc(j.desc)+'</p><button class="btn" data-buy="'+j.id+'" '+(solo.coins<j.price||solo.jokers.length>=5?'disabled':'')+'>COMPRAR · '+j.price+' ✦</button></div>').join('')+'</div><div class="actions shop-actions"><button class="btn secondary" id="rerollShop" '+(solo.coins<rerollCost()?'disabled':'')+'>NOVAS OFERTAS · '+rerollCost()+' ✦</button><button class="btn arcade-play" id="nextStage">'+(solo.stage===stages.length-1?'CONCLUIR JORNADA →':'PRÓXIMA CRISE →')+'</button></div></div>';
  } else {
-  area=ruleBrief+'<div class="run-result '+(solo.phase==='won'?'won-result':'lost-result')+'"><div class="result-kicker">'+(solo.phase==='won'?'5 DE 5 DESAFIOS CONCLUÍDOS':'TENTATIVA ENCERRADA')+'</div><div class="result-symbol">'+(solo.phase==='won'?'✓':'×')+'</div><h2>'+(solo.phase==='won'?'VOCÊ SALVOU O MUNDO!':'FIM DE JOGO')+'</h2><p>'+(solo.phase==='won'?'A jornada foi concluída. Agora leve essas decisões para o mundo real.':'A meta não foi alcançada. Experimente construir combinações mais fortes e reservar fichas para os juros.')+'</p><div class="result-score"><small>PONTUAÇÃO TOTAL DA JORNADA</small><strong>'+fmt(solo.runScore)+'</strong></div><div class="result-stats"><span>Crises superadas <b>'+solo.wonStages+'/'+stages.length+'</b></span><span>Jogadas realizadas <b>'+solo.played+'</b></span><span>Fichas finais <b>'+solo.coins+'</b></span></div><button class="btn arcade-play" id="restartSolo">JOGAR NOVAMENTE</button></div>';
+  area=ruleBrief+'<div class="run-result '+(solo.phase==='won'?'won-result':'lost-result')+'"><div class="result-kicker">'+(solo.phase==='won'?'7 DE 7 DESAFIOS CONCLUÍDOS':'TENTATIVA ENCERRADA')+'</div><div class="result-symbol">'+(solo.phase==='won'?'✓':'×')+'</div><h2>'+(solo.phase==='won'?'VOCÊ SALVOU O MUNDO!':'FIM DE JOGO')+'</h2><p>'+(solo.phase==='won'?'A jornada foi concluída. Agora leve essas decisões para o mundo real.':'A meta não foi alcançada. Experimente construir combinações mais fortes e reservar fichas para os juros.')+'</p><div class="result-score"><small>PONTUAÇÃO TOTAL DA JORNADA</small><strong>'+fmt(solo.runScore)+'</strong></div><div class="result-stats"><span>Crises superadas <b>'+solo.wonStages+'/'+stages.length+'</b></span><span>Jogadas realizadas <b>'+solo.played+'</b></span><span>Fichas finais <b>'+solo.coins+'</b></span></div><button class="btn arcade-play" id="restartSolo">JOGAR NOVAMENTE</button></div>';
  }
  main.classList.add('arcade-solo');main.innerHTML=area;
  main.querySelectorAll('.arcade-hand [data-card]').forEach(el=>el.addEventListener('click',()=>choose(el.dataset.card)));
@@ -297,15 +318,15 @@ function render(){
  main.querySelector('#collectPayout')?.addEventListener('click',collectPayout);
  main.querySelector('#nextStage')?.addEventListener('click',next);
  main.querySelector('#rerollShop')?.addEventListener('click',reroll);
- main.querySelector('#restartSolo')?.addEventListener('click',chooseDifficulty);
+ main.querySelector('#restartSolo')?.addEventListener('click',showHandGuide);
  main.querySelectorAll('[data-buy]').forEach(el=>el.addEventListener('click',()=>buy(el.dataset.buy)));
  side.querySelectorAll('[data-sell]').forEach(el=>el.addEventListener('click',()=>sellJoker(el.dataset.sell)));
  side.querySelector('#muteAudio')?.addEventListener('change',e=>{muted=!e.target.checked;localStorage.setItem('ecocard-muted',muted?'1':'0')});
 }
 
 // Override prototype functions used by the existing page's view routing.
-startSolo=chooseDifficulty;drawSolo=fill;combo=combination;scoreSolo=cards=>evaluate(cards,solo.stage,solo.jokers,solo.modifier,solo.bossRule);
+startSolo=showHandGuide;drawSolo=fill;combo=combination;scoreSolo=cards=>evaluate(cards,solo.stage,solo.jokers,solo.modifier,solo.bossRule);
 selectSolo=choose;playSolo=play;targetSolo=target;makeOffers=()=>offers(solo.jokers);
 buyJoker=buy;nextSolo=next;renderSolo=render;
-window.EcoCardSolo={combination,evaluate,offers,stages,jokers:upgradedJokers,MODIFIERS,rollModifier,payoutFor,rerollCost,DIFFICULTIES,difficultyRules,rollDifficultyModifier,BOSS_RULES,drawBossRule,bossInvalidReason};
+window.EcoCardSolo={combination,evaluate,offers,stages,jokers:upgradedJokers,MODIFIERS,rollModifier,payoutFor,rerollCost,DIFFICULTIES,difficultyRules,rollDifficultyModifier,BOSS_RULES,drawBossRule,bossInvalidReason,HAND_GUIDE};
 })();
