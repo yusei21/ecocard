@@ -1,0 +1,30 @@
+const assert=require('node:assert/strict');
+const fs=require('node:fs');
+const vm=require('node:vm');
+const html=fs.readFileSync('index.html','utf8');
+const scripts=[...html.matchAll(/<script(?:\\s[^>]*)?>([\\s\\S]*?)<\\/script>/g)].map(m=>m[1]).filter(Boolean);
+scripts.forEach((script,i)=>{new vm.Script(script,{filename:'index-inline-'+i+'.js'})});
+const start=html.indexOf('const SUITS='),end=html.indexOf('function cardHTML(');
+assert(start>=0&&end>start,'card model must exist');
+const snippet=html.slice(start,end);
+const ctx=vm.createContext({Math,console});
+vm.runInContext(snippet,ctx);
+const solo=vm.runInContext('makeDeck(1)',ctx);
+const multi=vm.runInContext('makeDeck(2)',ctx);
+assert.equal(solo.length,65);
+assert.equal(multi.length,130);
+assert.equal(new Set(solo.map(c=>c.id)).size,65);
+assert.equal(new Set(multi.map(c=>c.id)).size,130);
+assert.equal(new Set(solo.map(c=>c.suit)).size,5);
+for(const suit of ['azul','vermelho','verde','amarelo','marrom']){
+ const cards=solo.filter(c=>c.suit===suit);
+ assert.equal(cards.length,13);
+ assert.deepEqual(cards.map(c=>c.rank).sort((a,b)=>a-b),Array.from({length:13},(_,i)=>i+1));
+}
+assert.equal(vm.runInContext('cardRank(1)',ctx),'A');
+assert.equal(vm.runInContext('cardRank(11)',ctx),'J');
+assert.equal(vm.runInContext('cardRank(12)',ctx),'Q');
+assert.equal(vm.runInContext('cardRank(13)',ctx),'K');
+assert(html.includes('room.deck=makeDeck(2)'), 'multiplayer must deal from 2 decks');
+assert(html.includes('ifma-logo'), 'institutional mark must be present');
+console.log('✓ 65-card solo, 130-card multiplayer, five A–K suits and inline JS syntax verified');
