@@ -2,7 +2,7 @@ const assert=require('node:assert/strict');
 const fs=require('node:fs');
 const vm=require('node:vm');
 const html=fs.readFileSync('index.html','utf8');
-const scripts=[...html.matchAll(/<script(?:\\s[^>]*)?>([\\s\\S]*?)<\\/script>/g)].map(m=>m[1]).filter(Boolean);
+const scripts=[...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g)].map(m=>m[1]).filter(Boolean);
 scripts.forEach((script,i)=>{new vm.Script(script,{filename:'index-inline-'+i+'.js'})});
 const start=html.indexOf('const SUITS='),end=html.indexOf('function cardHTML(');
 assert(start>=0&&end>start,'card model must exist');
