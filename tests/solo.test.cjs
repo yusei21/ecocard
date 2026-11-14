@@ -80,7 +80,7 @@ for(const key of Object.keys(DIFFICULTIES)){
  assert(goals.every((value,i)=>i===0||value>goals[i-1]),'each crisis must increase goal on '+key);
 }
 assert.equal(difficultyRules('dificil',0).discards,1);
-assert.equal(difficultyRules('extremo',3,'short').hands,1);
+assert.equal(difficultyRules('extremo',3,'short').hands,2);
 sandbox.solo={rerolls:0,difficulty:'extremo'};
 assert.equal(rerollCost(),6);
 console.log('✓ Seven stages, randomized boss restrictions, difficulty and economic checks passed');
