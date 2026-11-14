@@ -1,0 +1,70 @@
+/* EcoCard · identidade editorial V3
+   Pesquisa visual: legibilidade, hierarquia e coesão antes do brilho.
+   Layout distintivo: tinta vegetal, papel reciclado e sinalização de oficina.
+*/
+:root{--bg:#111915;--panel:#1c2921;--ink:#f6f1df;--muted:#b2bbac;--lime:#d7ee70;--edge:#465a49;--pink:#db956a}
+body{font-family:'IBM Plex Sans',sans-serif;background:radial-gradient(ellipse 70% 45% at 90% 0%,#25382a 0,transparent 90%),#121b16;color:var(--ink)}
+body:before{content:'';position:fixed;inset:0;pointer-events:none;z-index:-1;opacity:.11;background-image:repeating-linear-gradient(90deg,transparent 0 33px,#7d9a7617 34px 35px)}
+.brand,.hero-title,.section-head h2,.game-tile h3,.game-top h1,.boss h3,.arcade-level b,.arcade-shop h2,.arcade-ending h2,.arcade-modifier b,.field-title,.score-chip b,.arcade-numbers strong,.arcade-sticky-score strong,.room-code,.joker b,.market-item b{font-family:'Barlow Condensed',Impact,sans-serif!important;letter-spacing:.015em!important}
+.hero-title{font-size:clamp(75px,10vw,158px)!important;line-height:.83!important;letter-spacing:-.02em!important;text-transform:uppercase}
+.brand{font-size:29px;font-weight:800;letter-spacing:.02em!important}
+.eyebrow,.tile-num,.tag,.label,.section-head .tag,.arena-round,.game-tile p,.arcade-hand-title,.arena-hand-title{font-family:'IBM Plex Mono',monospace;letter-spacing:.075em}
+.tag{border-radius:3px;text-transform:uppercase}
+header{border-bottom:2px solid #778770;align-items:center;gap:20px}
+.ifma{display:flex;align-items:center;gap:10px;letter-spacing:0;font:700 10px 'IBM Plex Mono',monospace;background:#eeeadd;color:#24302a;border-radius:3px;padding:5px 8px}
+.ifma .ifma-logo{display:block;width:157px;height:auto;max-height:47px;object-fit:contain}
+.ifma .ifma-universo{border-left:1px solid #879385;padding-left:9px;max-width:76px;line-height:1.2}
+.ifma-dot{display:none}
+.btn{border-radius:6px;box-shadow:3px 4px 0 #070d09;font-family:'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.03em;font-size:12px}
+.btn.secondary{background:#15241b;border-color:#748974}
+.btn.pink{background:#d8a078}
+.btn:active:not(:disabled){box-shadow:1px 2px 0 #070d09;transform:translateY(2px)}
+.home-hero{border-bottom:1px solid #4c5f4d}
+.hero-title i{color:#cbe470}
+.hero-art{filter:saturate(.76);transform:rotate(-5deg)}
+.orbit{border-color:#819b74;transform:rotate(-9deg)}
+.orbitcard{border-radius:7px;box-shadow:5px 9px 0 #020a07aa;font-family:'IBM Plex Mono',monospace}
+.games{gap:16px}
+.game-tile{border-radius:5px;padding:34px;background:#273b2c;border:1px solid #9aaf7a;box-shadow:5px 6px 0 #080e09}
+.game-tile:nth-child(2){background:#44392e;border-color:#ba9d71}
+.game-tile h3{font-size:clamp(46px,5vw,76px);line-height:.88;text-transform:uppercase}
+.game-tile .tile-stamp{font-family:'Barlow Condensed',sans-serif;opacity:.09}
+.game-tile p{font-family:'IBM Plex Sans',sans-serif}
+.surface,.sidepanel{border-radius:6px}
+#solo .arcade-solo{background:radial-gradient(ellipse 60% 60% at 50% 45%,#26483a,#172a22 70%,#111e19);border:2px solid #697e58;border-radius:5px;box-shadow:inset 0 0 50px #0005,6px 7px 0 #090f0b}
+#solo .arcade-side{border-radius:5px}
+#solo .arcade-level{border-radius:4px;background:#352c23}
+#solo .arcade-sticky-score{border-radius:4px;box-shadow:3px 4px 0 #080e09}
+#solo .score-chip{border-radius:3px;box-shadow:3px 4px 0 #080f0b!important}
+#solo .score-chip small{font-family:'IBM Plex Mono',monospace}
+#solo .arena-orbit{border-style:dotted;filter:none;color:#cfe47b}
+#solo .arena-goal-line{border-radius:3px;font-family:'IBM Plex Mono',monospace}
+#solo .arcade-play{border-radius:4px;box-shadow:3px 5px 0 #466a26;animation:none!important}
+#solo .arcade-play:hover:not(:disabled){filter:brightness(1.08);box-shadow:3px 5px 0 #466a26,0 0 13px #baff4a4a}
+#solo .arcade-hand .playing-card{width:clamp(62px,8.8vw,113px)}
+.playing-card{background:var(--card);color:#122017;border:2px solid #1f3429!important;border-radius:5px!important;box-shadow:3px 5px 0 #07120e!important;position:relative;overflow:hidden;isolation:isolate}
+.playing-card:before{content:'';position:absolute;inset:5px;border:1px solid #15261d66;border-radius:2px;pointer-events:none;z-index:-1}
+.playing-card:after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(125deg,transparent 0 12px,#fff2 13px 14px,transparent 15px 24px);opacity:.25;pointer-events:none;z-index:-1}
+.playing-card .rank{font:900 clamp(24px,3vw,38px)/.9 'Barlow Condensed',sans-serif;letter-spacing:0}
+.playing-card .symbol{font-size:38px;line-height:1.05;filter:drop-shadow(2px 3px 0 #16322533)}
+.playing-card .name{font:700 12px/1.05 'IBM Plex Sans',sans-serif;display:inline-block;text-wrap:balance;min-height:26px}
+.playing-card .category{font:700 9px 'IBM Plex Mono',monospace;letter-spacing:0}
+#solo .arcade-hand .playing-card.selected{box-shadow:0 0 0 3px #e4f89a,4px 8px 0 #07130b!important}
+#solo .arcade-hand .playing-card:hover{box-shadow:0 0 0 2px #c7f393,3px 6px 0 #07130b!important}
+#solo .arena-scores{position:relative;z-index:1}
+#solo .arcade-modifier{border-radius:4px}
+#solo .joker{border-radius:4px}
+#solo .joker.legend{border:2px solid #f6c777}
+#solo .arcade-shop .market-item,.market-item{border-radius:4px;box-shadow:4px 5px 0 #060e09}
+#solo .score-performance{font-family:'Barlow Condensed',sans-serif;letter-spacing:.04em}
+#multi .surface{background:#1a2b21;border:2px solid #6b815b;box-shadow:5px 6px 0 #080e09}
+#multi .sidepanel{background:#18231c;border:1px solid #62735b}
+#multi .room-code{font:900 55px 'Barlow Condensed',sans-serif;color:#dfec9f;letter-spacing:.16em!important}
+#multi .player-chip{border-radius:4px;font-family:'IBM Plex Mono',monospace;font-size:11px}
+#multi .playing-card{width:clamp(88px,10vw,125px);min-height:160px}
+#multi .rulebox{border-radius:4px}
+#multi .pile{border-radius:3px}
+.game-top h1{font-size:clamp(48px,6vw,78px);text-transform:uppercase}
+h1,h2,h3,p{overflow-wrap:break-word}
+@media(max-width:780px){header .header-right{width:100%;justify-content:space-between}.ifma .ifma-logo{width:119px}.hero-title{font-size:clamp(64px,14vw,100px)!important}}
+@media(max-width:550px){#solo .arcade-hand .playing-card{width:calc(12.5% - 2px)}#solo .arcade-hand .playing-card .rank{font-size:20px}#solo .arcade-hand .playing-card .name{font-size:8px;min-height:28px}#solo .arcade-hand .playing-card .symbol{font-size:19px}#solo .arcade-hand .playing-card .category{font-size:7px}.ifma .ifma-logo{width:106px}.ifma .ifma-universo{max-width:58px;font-size:9px}}
