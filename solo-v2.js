@@ -2,12 +2,34 @@
 (() => {
 'use strict';
 const stages=[
- {title:'Contaminação Cruzada',desc:'A separação incorreta dificulta a reciclagem. Misturar categorias perde eficiência nesta etapa.',goal:850,limit:5,tier:'FÁCIL',rule:'mixed',hint:'Mãos de uma cor ganham ×1,35. Misturar quatro ou mais cores reduz ×0,75.'},
- {title:'Descarte Irregular',desc:'Descartes fora de lugar podem atingir solo e água. A atenção ao plástico será decisiva.',goal:2500,limit:4,tier:'MÉDIO',rule:'plastic',blockedSuit:'vermelho',hint:'Cartas de plástico sofrem penalidade de 10 pontos base cada. Coleta limpa recebe +40.'},
- {title:'Desperdício de Recursos',desc:'Antes de reciclar, é preciso reduzir o consumo. Aproveite materiais equivalentes.',goal:4300,limit:4,tier:'MÉDIO',rule:'resource',blockedSuit:'amarelo',hint:'Trinca ou par de valores iguais recebe ×1,5.'},
- {title:'Crise dos Aterros',desc:'A produção crescente de rejeitos pressiona a destinação final.',goal:9300,limit:3,tier:'DIFÍCIL',rule:'hands',blockedSuit:'azul',hint:'Apenas 3 jogadas. Sequências recebem +45 pontos base.'},
- {title:'Mudanças Climáticas',desc:'Produção e descarte têm impactos no clima. Escolha cuidadosamente seus recursos.',goal:20000,limit:3,tier:'FINAL',rule:'climate',blockedSuit:'verde',hint:'Sem 3 orgânicos, sua combinação perde 30% do multiplicador. Com 3 orgânicos, ganha +80 base.'}
+ {title:'Contaminação Cruzada',desc:'Aprenda a separar os materiais e formar combinações.',goal:850,limit:5,tier:'FÁCIL',rule:'mixed',hint:'Uma cor: ×1,35. Quatro cores: ×0,75.'},
+ {title:'Descarte Irregular',desc:'A triagem incorreta causa impactos ambientais.',goal:2200,limit:4,tier:'MÉDIO',rule:'plastic',hint:'Coleta de uma mesma categoria concede +40 base.'},
+ {title:'Desperdício de Recursos',desc:'Reaproveite os materiais disponíveis.',goal:4000,limit:4,tier:'MÉDIO',rule:'resource',hint:'Valores repetidos recebem ×1,5.'},
+ {title:'Crise dos Aterros',desc:'A destinação final exige boas estratégias.',goal:7600,limit:4,tier:'DIFÍCIL',rule:'hands',hint:'Sequências concedem +45 base.'},
+ {title:'Poluição dos Oceanos',desc:'Reduza o impacto dos resíduos nos ambientes aquáticos.',goal:12000,limit:4,tier:'DIFÍCIL',rule:'ocean',hint:'Três categorias diferentes concedem +55 base.'},
+ {title:'Consumo Desenfreado',desc:'Repense o desperdício e o consumo de recursos.',goal:18500,limit:3,tier:'EXTREMO',rule:'consumption',hint:'Três ou mais cartas ativas concedem ×1,25.'},
+ {title:'Mudanças Climáticas',desc:'A última crise combina estratégia e sorte.',goal:28000,limit:3,tier:'FINAL',rule:'climate',hint:'Três orgânicos: +80 base. Menos de três: ×0,7.'}
 ];
+const BOSS_RULES=[
+ ...['azul','vermelho','verde','amarelo','marrom'].map(suit=>({id:'ban_'+suit,name:'Categoria anulada',description:'As cartas dessa categoria não pontuam nem ativam coringas.',kind:'block',suit})),
+ {id:'only_color',name:'Só coleta da mesma cor',description:'Apenas mãos com 3 ou mais cartas da mesma categoria pontuam.',kind:'only_color'},
+ {id:'only_equal',name:'Só valores repetidos',description:'Apenas mãos com 2 ou mais cartas do mesmo valor pontuam.',kind:'only_equal'},
+ {id:'no_five',name:'Cinco cartas anuladas',description:'Mãos de exatamente 5 cartas valem 0 pontos.',kind:'no_five'},
+ {id:'only_three',name:'Exatamente três cartas',description:'Só mãos com exatamente 3 cartas pontuam.',kind:'only_three'}
+];
+function drawBossRule(stage,previous=null,rng=Math.random){
+ if(stage===0)return null;
+ const pool=BOSS_RULES.filter(rule=>rule.id!==previous?.id);
+ return pool[Math.min(pool.length-1,Math.floor(Math.max(0,Math.min(.999999,rng()))*pool.length))];
+}
+function bossInvalidReason(cards,rule){
+ if(!rule||rule.kind==='block')return null;
+ if(rule.kind==='no_five'&&cards.length===5)return 'O chefe anulou uma mão de cinco cartas';
+ if(rule.kind==='only_three'&&cards.length!==3)return 'Só são válidas mãos de três cartas';
+ if(rule.kind==='only_color'&&!cards.some(c=>cards.filter(x=>x.suit===c.suit).length>=3))return 'São necessárias três cartas da mesma categoria';
+ if(rule.kind==='only_equal'&&!cards.some(c=>cards.filter(x=>x.rank===c.rank).length>=2))return 'São necessários dois valores iguais';
+ return null;
+}
 const upgradedJokers=[
  {id:'reduzir',name:'Reduzir',desc:'+3 de multiplicador por carta selecionada.',rarity:'common',price:4},
  {id:'reutilizar',name:'Reutilizar',desc:'+40 pontos base quando houver ao menos 2 cores.',rarity:'common',price:4},
@@ -46,8 +68,8 @@ function chooseDifficulty(){
  const main=document.querySelector('#soloMain'),side=document.querySelector('#soloSide');
  if(!main||!side)return;
  main.classList.add('arcade-solo');side.style.display='none';
- main.innerHTML='<div class="difficulty-screen"><div class="eyebrow">SALVE O MUNDO / NOVA JORNADA</div><h2>ESCOLHA A DIFICULDADE</h2><p>Metas mais altas, menos descartes e condições mais severas. A dificuldade permanece durante as cinco crises.</p><div class="difficulty-options">'+Object.entries(DIFFICULTIES).map(([key,d])=>{const r=difficultyRules(key,0);return '<button type="button" class="difficulty-option '+key+'" data-difficulty="'+key+'"><span class="difficulty-option-top"><b>'+d.name.toUpperCase()+'</b><span>↗</span></span><small>'+d.description+'</small><span class="difficulty-details"><span>META <b>'+r.goal.toLocaleString('pt-BR')+'</b></span><span>JOGADAS <b>'+r.hands+'</b></span><span>DESCARTES <b>'+r.discards+'</b></span><span>FICHAS <b>'+r.coins+'</b></span></span></button>'}).join('')+'</div><p class="difficulty-footnote">Escolha Normal para uma partida equilibrada ou Difícil se já domina os combos.</p></div>';
- side.innerHTML='<div class="arcade-level"><span class="label">PROGRESSÃO: FÁCIL → MÉDIO → MÉDIO → DIFÍCIL → FINAL</span><b>5 CRISES AMBIENTAIS</b><p>Jogue até cinco cartas por mão, forme combinações e gerencie coringas e ecofichas entre as etapas.</p></div><div class="rulebox"><strong>Observação:</strong> em Difícil e Extremo, os eventos negativos também têm maior chance de aparecer. A sorte faz parte da estratégia.</div>';
+ main.innerHTML='<div class="difficulty-screen"><div class="eyebrow">SALVE O MUNDO / NOVA JORNADA</div><h2>ESCOLHA A DIFICULDADE</h2><p>Metas mais altas, menos descartes e condições mais severas. A dificuldade permanece durante as sete crises.</p><div class="difficulty-options">'+Object.entries(DIFFICULTIES).map(([key,d])=>{const r=difficultyRules(key,0);return '<button type="button" class="difficulty-option '+key+'" data-difficulty="'+key+'"><span class="difficulty-option-top"><b>'+d.name.toUpperCase()+'</b><span>↗</span></span><small>'+d.description+'</small><span class="difficulty-details"><span>META <b>'+r.goal.toLocaleString('pt-BR')+'</b></span><span>JOGADAS <b>'+r.hands+'</b></span><span>DESCARTES <b>'+r.discards+'</b></span><span>FICHAS <b>'+r.coins+'</b></span></span></button>'}).join('')+'</div><p class="difficulty-footnote">Escolha Normal para uma partida equilibrada ou Difícil se já domina os combos.</p></div>';
+ side.innerHTML='<div class="arcade-level"><span class="label">PROGRESSÃO: FÁCIL → MÉDIO → MÉDIO → DIFÍCIL → DIFÍCIL → EXTREMO → FINAL</span><b>7 CRISES AMBIENTAIS</b><p>Jogue até cinco cartas por mão, forme combinações e gerencie coringas e ecofichas entre as etapas.</p></div><div class="rulebox"><strong>Observação:</strong> em Difícil e Extremo, os eventos negativos também têm maior chance de aparecer. A sorte faz parte da estratégia.</div>';
  main.querySelectorAll('[data-difficulty]').forEach(b=>b.addEventListener('click',()=>start(b.dataset.difficulty)));
 }
 let busy=false,queue=[];function clearQueue(){queue.forEach(clearTimeout);queue=[];busy=false}
@@ -71,12 +93,13 @@ function combination(cards){
  else if(distinct>=3){name='Diversidade Ambiental';factor=1.5;kind='mixed'}
  return {name,factor,kind,counts,maxColor,maxRank,distinct,straight};
 }
-function evaluate(cards,stage,jokers,modifier=null){
+function evaluate(cards,stage,jokers,modifier=null,bossRule=null){
  if(!cards.length||cards.length>5)throw Error('Selecione entre uma e cinco cartas');
- const phase=stages[stage]||stages.at(-1),blockedSuit=phase.blockedSuit||null;
+ const phase=stages[stage]||stages.at(-1),blockedSuit=bossRule?.kind==='block'?bossRule.suit:null;
  const activeCards=blockedSuit?cards.filter(card=>card.suit!==blockedSuit):cards;
  const negated=cards.length-activeCards.length;
- if(!activeCards.length)return {score:0,type:'CARTAS ANULADAS',base:0,mult:0,events:[{label:'Bloqueio do chefe',chips:0,factor:1,mult:0}],combination:null,negated,blockedSuit};
+ const invalid=bossInvalidReason(activeCards,bossRule);
+ if(!activeCards.length||invalid)return {score:0,type:'MÃO ANULADA',base:0,mult:0,events:[{label:invalid||'Cartas anuladas',chips:0,factor:1,mult:0}],combination:null,negated,blockedSuit,invalidReason:invalid||'Todas as cartas foram anuladas'};
  cards=activeCards;
  const c=combination(cards),events=[];
  let chips=20+cards.reduce((n,k)=>n+k.rank*12*(modifier?.id==='fog'&&k.rank<=2?.5:1),0),mult=c.factor;
@@ -85,6 +108,8 @@ function evaluate(cards,stage,jokers,modifier=null){
  if(phase.rule==='plastic'){let n=cards.filter(x=>x.suit==='vermelho').length;if(n)add('Contaminação de embalagens',()=>chips=Math.max(1,chips-n*10));if(['flush','straightflush'].includes(c.kind))add('Separação cuidadosa',()=>chips+=40)}
  if(phase.rule==='resource'&&c.maxRank>=2)add('Reaproveitamento de valor',()=>mult*=1.5);
  if(phase.rule==='hands'&&c.straight)add('Eficiência na triagem',()=>chips+=45);
+ if(phase.rule==='ocean'&&c.distinct>=3)add('Proteção dos oceanos',()=>chips+=55);
+ if(phase.rule==='consumption'&&cards.length>=3)add('Consumo consciente',()=>mult*=1.25);
  if(phase.rule==='climate'){if(cards.filter(x=>x.suit==='marrom').length>=3)add('Compostagem estratégica',()=>chips+=80);else add('Pressão climática',()=>mult*=.7);}if(modifier?.id==='audit'&&cards.length>=4)add('Auditoria',()=>mult*=.8);if(modifier?.id==='good'&&c.distinct>=3)add('Mutirão',()=>chips+=35);
  // Full deterministic order; Circular repeats each other joker's effect twice, not the entire combined result.
  const repeat=jokers.some(j=>j.id==='circular')?2:1;
@@ -103,7 +128,7 @@ function evaluate(cards,stage,jokers,modifier=null){
  }
  }
  const score=Math.max(0,Math.floor(chips*mult));
- return {score,type:c.name,base:chips,mult,events,combination:c,negated,blockedSuit};
+ return {score,type:c.name,base:chips,mult,events,combination:c,negated,blockedSuit,invalidReason:null};
 }
 function offers(exclude){
  const pool=upgradedJokers.filter(j=>!exclude.some(x=>x.id===j.id)),chosen=[];
@@ -115,7 +140,7 @@ function offers(exclude){
  return chosen;
 }
 function fill(n){if(!solo)return;for(let k=0;k<n;k++){if(!solo.deck.length)break;solo.hand.push(solo.deck.pop())}/* Keep manual ordering; new cards append at the end. */}
-function start(difficulty='normal'){clearQueue();const modifier=rollDifficultyModifier(difficulty),rules=difficultyRules(difficulty,0,modifier.id);solo={stage:0,difficulty,score:0,coins:rules.coins,hand:[],deck:makeDeck(),selected:[],jokers:[],hands:rules.hands,discards:rules.discards,phase:'play',message:'Escolha de 1 a 5 cartas. Descubra combinações, supere crises e evolua sua estratégia.',runScore:0,comboChain:0,played:0,modifier,rerolls:0,wonStages:0,payout:null,playedCards:[],pendingPhase:null};lastBurst=null;fill(8);render();beep(420,.09)}
+function start(difficulty='normal'){clearQueue();const modifier=rollDifficultyModifier(difficulty),rules=difficultyRules(difficulty,0,modifier.id);solo={stage:0,difficulty,score:0,coins:rules.coins,hand:[],deck:makeDeck(),selected:[],jokers:[],hands:rules.hands,discards:rules.discards,phase:'play',message:'Escolha de 1 a 5 cartas. Descubra combinações, supere crises e evolua sua estratégia.',runScore:0,comboChain:0,played:0,modifier,rerolls:0,wonStages:0,payout:null,playedCards:[],pendingPhase:null,bossRule:drawBossRule(0)};lastBurst=null;fill(8);render();beep(420,.09)}
 function target(){return difficultyRules(solo.difficulty,solo.stage,solo.modifier.id).goal}
 function moveSolo(from,to){
  if(!solo||solo.phase!=='play'||busy)return;
@@ -138,7 +163,7 @@ function play(discard=false){
   solo.hand=solo.hand.filter(c=>!solo.selected.includes(c.id));solo.selected=[];fill(cards.length);
   render();return;
  }
- const result=evaluate(cards,solo.stage,solo.jokers,solo.modifier);
+ const result=evaluate(cards,solo.stage,solo.jokers,solo.modifier,solo.bossRule);
  solo.score+=result.score;solo.runScore+=result.score;solo.hands--;solo.played++;solo.comboChain++;
  solo.playedCards=cards;lastBurst=result;
  solo.message=result.type+' · '+fmt(result.score)+' pontos nesta jogada';
@@ -220,7 +245,7 @@ function animateScore(result,onDone){
 
 function buy(id){if(solo.phase!=='shop')return;const j=solo.offer.find(x=>x.id===id);if(!j||solo.jokers.length>=5||solo.coins<j.price)return;solo.coins-=j.price;solo.jokers.push(j);solo.offer=solo.offer.filter(x=>x.id!==id);solo.message=j.rarity==='legend'?'✦ LENDÁRIO DESBLOQUEADO: AVENTURA CIRCULAR!':j.name+' adicionado à sua estratégia.';beep(j.rarity==='legend'?1047:730,.27,'triangle');render()}
 function reroll(){const cost=rerollCost();if(!solo||solo.phase!=='shop'||solo.coins<cost)return;solo.coins-=cost;solo.rerolls++;solo.offer=offers(solo.jokers);solo.message='Ofertas renovadas por '+cost+' ecofichas. Próxima troca: '+rerollCost()+'.';render()}
-function next(){if(solo.phase!=='shop')return;if(solo.stage===stages.length-1){solo.phase='won';solo.message='JORNADA CONCLUÍDA! Você venceu as cinco crises ambientais.'}else{solo.stage++;solo.score=0;solo.modifier=rollDifficultyModifier(solo.difficulty);const rules=difficultyRules(solo.difficulty,solo.stage,solo.modifier.id);solo.hands=rules.hands;solo.discards=rules.discards;solo.hand=[];solo.deck=makeDeck();solo.selected=[];solo.phase='play';solo.comboChain=0;solo.payout=null;solo.playedCards=[];lastBurst=null;fill(8);solo.message='NOVO DESAFIO: '+stages[solo.stage].title+'!'}beep(570,.18);render()}
+function next(){if(solo.phase!=='shop')return;if(solo.stage===stages.length-1){solo.phase='won';solo.message='JORNADA CONCLUÍDA! Você venceu as cinco crises ambientais.'}else{solo.stage++;solo.score=0;solo.modifier=rollDifficultyModifier(solo.difficulty);solo.bossRule=drawBossRule(solo.stage,solo.bossRule);const rules=difficultyRules(solo.difficulty,solo.stage,solo.modifier.id);solo.hands=rules.hands;solo.discards=rules.discards;solo.hand=[];solo.deck=makeDeck();solo.selected=[];solo.phase='play';solo.comboChain=0;solo.payout=null;solo.playedCards=[];lastBurst=null;fill(8);solo.message='NOVO DESAFIO: '+stages[solo.stage].title+'!'}beep(570,.18);render()}
 function fmt(v){return Math.floor(v).toLocaleString('pt-BR')}
 function render(){
  if(!solo)return;
@@ -230,11 +255,11 @@ function render(){
  const stage=stages[solo.stage],goal=target(),shownScore=solo.phase==='scoring'?solo.score-(lastBurst?.score||0):solo.score,remaining=Math.max(0,goal-shownScore);
  const selected=solo.hand.filter(c=>solo.selected.includes(c.id));
  const scoring=solo.phase==='scoring';
- const preview=selected.length?evaluate(selected,solo.stage,solo.jokers,solo.modifier):null;
+ const preview=selected.length?evaluate(selected,solo.stage,solo.jokers,solo.modifier,solo.bossRule):null;
  const progress=Math.min(100,Math.round(100*shownScore/goal));
  const headline=solo.phase==='won'?'JORNADA VENCIDA':solo.phase==='clear'?'CRISE SUPERADA':solo.phase==='lost'?'FIM DA JORNADA':'MISSÃO '+(solo.stage+1)+' DE '+stages.length;
- const blockedSuit=stage.blockedSuit?SUITS.find(item=>item.id===stage.blockedSuit):null;
- const blockMsg=blockedSuit?'<div class="boss-block" role="note"><b>⛔ '+esc(blockedSuit.label.toUpperCase())+' ANULADO</b><span>Cartas '+esc(blockedSuit.id)+' não geram pontos, combinações nem efeitos de coringa nesta crise. Você ainda pode descartá-las.</span></div>':'';
+ const blockedSuit=solo.bossRule?.kind==='block'?SUITS.find(item=>item.id===solo.bossRule.suit):null;
+ const blockMsg=solo.bossRule?'<div class="boss-block" role="note"><b>REGRA SORTEADA · '+esc(solo.bossRule.name.toUpperCase())+(blockedSuit?' ('+esc(blockedSuit.label.toUpperCase())+')':'')+'</b><span>'+esc(solo.bossRule.description)+' Mãos que não cumprem a regra valem 0 pontos.</span></div>':'';
  const ruleBrief='<section class="crisis-rules" aria-label="Regras e modificadores da crise">'+blockMsg+'<div class="crisis-rules-heading"><span>CRISE '+(solo.stage+1)+' / '+stages.length+' · '+esc(stage.tier)+'</span><strong>'+esc(stage.title)+'</strong></div><div class="crisis-rules-grid"><div><small>REGRA DO CHEFE</small><p>'+esc(stage.hint)+'</p></div><div><small>EVENTO DA RODADA · '+esc(solo.modifier.name.toUpperCase())+'</small><p>'+esc(solo.modifier.desc)+'</p></div></div></section>';
  side.classList.add('arcade-side');
  side.innerHTML='<div class="difficulty-label">DIFICULDADE <b>'+DIFFICULTIES[solo.difficulty||'normal'].name.toUpperCase()+'</b></div><div class="arcade-sticky-score"><small>PLACAR DA RODADA</small><strong>'+fmt(shownScore)+' <span>/ '+fmt(goal)+'</span></strong><p>'+(remaining?'FALTAM <b>'+fmt(remaining)+'</b> PONTOS':'<b>META ATINGIDA ✓</b>')+'</p><div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="'+goal+'" aria-valuenow="'+Math.min(goal,shownScore)+'"><div style="width:'+progress+'%"></div></div></div>'+
@@ -279,8 +304,8 @@ function render(){
 }
 
 // Override prototype functions used by the existing page's view routing.
-startSolo=chooseDifficulty;drawSolo=fill;combo=combination;scoreSolo=cards=>evaluate(cards,solo.stage,solo.jokers);
+startSolo=chooseDifficulty;drawSolo=fill;combo=combination;scoreSolo=cards=>evaluate(cards,solo.stage,solo.jokers,solo.modifier,solo.bossRule);
 selectSolo=choose;playSolo=play;targetSolo=target;makeOffers=()=>offers(solo.jokers);
 buyJoker=buy;nextSolo=next;renderSolo=render;
-window.EcoCardSolo={combination,evaluate,offers,stages,jokers:upgradedJokers,MODIFIERS,rollModifier,payoutFor,rerollCost,DIFFICULTIES,difficultyRules,rollDifficultyModifier};
+window.EcoCardSolo={combination,evaluate,offers,stages,jokers:upgradedJokers,MODIFIERS,rollModifier,payoutFor,rerollCost,DIFFICULTIES,difficultyRules,rollDifficultyModifier,BOSS_RULES,drawBossRule,bossInvalidReason};
 })();
