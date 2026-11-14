@@ -84,6 +84,10 @@ Referências usadas na revisão: https://www.reddit.com/r/SoloDevelopment/commen
 
 ## Controles e uso no celular
 
-Os dois modos permitem **reorganizar manualmente a mão** sem alterar quais cartas pertencem ao jogador: no computador, arraste uma carta até outra posição; no celular, toque em **Organizar cartas**, toque na carta que deseja mover e depois na carta que representa a posição de destino. Toque em **Concluir organização** para voltar às ações de jogo. A ordem escolhida permanece durante a compra e descarte das cartas. Na Trinca Circular, a organização é individual por dispositivo e não é transmitida aos adversários.
+Nos dois modos, a ordem da mão pode ser alterada **arrastando uma carta sobre outra**, sem botão adicional. A ordem é local para cada jogador e não altera as cartas recebidas nem as combinações válidas. O suporte a arrastar em navegadores móveis deve ser confirmado em dispositivos reais.
 
 O cabeçalho mobile-first prioriza a identidade do EcoCard, o acesso à EcoResiduários Academy e a marca vetorial do IFMA em uma área institucional com contraste controlado. A nova folha `mobile-v5.css` ajusta o topo e as mãos roláveis para dispositivos menores.
+
+## Abertura e áudio V7
+
+A página inicial usa um menu de videogame em uma mesa 2D, com acesso direto aos dois jogos, marca do IFMA e link do projeto. O estilo está em `landing-v7.css`. O controle extra de organização foi removido nos dois jogos; arrastar continua disponível. Os efeitos sonoros do modo solo e do multiplayer foram amplificados, com ganho limitado no solo para reduzir distorção. O volume final depende das configurações e permissões do dispositivo.
