@@ -142,3 +142,20 @@ header a:hover{color:var(--lime)}
  #solo .result-score strong{font-size:52px}
 }
 @media(prefers-reduced-motion:reduce){#solo .played-cards .playing-card,#solo .result-symbol{animation:none!important}}
+
+/* Home card specimen: real visual link to the game cards instead of a stock-style globe. */
+.hero-deck{position:relative;min-height:390px!important;max-width:560px;min-width:0;overflow:visible;display:block;filter:none;transform:none;isolation:isolate;background:repeating-linear-gradient(0deg,transparent 0 34px,#e1ff7f12 35px 36px),linear-gradient(150deg,#223a2b,#13241c);border:1px solid #5b765a;box-shadow:6px 7px 0 #0a120b}
+.hero-deck:before{content:'ECOCARD / 001';position:absolute;inset:19px auto auto 22px;font:700 11px 'IBM Plex Mono',monospace;letter-spacing:.13em;color:#b3cca5}
+.hero-deck .showcase-label{position:absolute;right:18px;top:19px;font:700 10px 'IBM Plex Mono',monospace;color:#b3cca5}
+.hero-deck .showcase-card{position:absolute;top:23%;left:50%;width:clamp(115px,12vw,165px);height:clamp(170px,18vw,232px);border:3px solid #173025;border-radius:4px;box-shadow:8px 12px 0 #030d08aa;padding:12px;display:flex;flex-direction:column;justify-content:space-between;color:#172b20;text-align:left;font:800 14px 'IBM Plex Sans',sans-serif;transform-origin:50% 100%;transition:transform .23s ease,box-shadow .23s ease}
+.hero-deck .showcase-card:before{content:'';position:absolute;inset:7px;border:1px solid #21413080;pointer-events:none}
+.hero-deck .showcase-rank{font:900 54px/.9 'Barlow Condensed',sans-serif}
+.hero-deck .showcase-card>b{font:800 69px/1 'Barlow Condensed',sans-serif;text-align:center}
+.hero-deck .showcase-card span small{display:block;font:600 9px 'IBM Plex Mono',monospace;margin-top:5px}
+.hero-deck .showcase-blue{background:#8abaf3;z-index:1;transform:translateX(-109%) rotate(-17deg)}
+.hero-deck .showcase-gold{background:#efd987;z-index:3;transform:translateX(-50%) translateY(-11px) rotate(1deg)}
+.hero-deck .showcase-brown{background:#d6ac8c;z-index:2;transform:translateX(7%) rotate(17deg)}
+.hero-deck .showcase-card:hover{z-index:5;transform:translateX(-50%) translateY(-29px) rotate(0);box-shadow:11px 18px 0 #030d0888}
+.hero-deck .showcase-footer{position:absolute;bottom:17px;left:20px;font:700 11px 'IBM Plex Mono',monospace;letter-spacing:.08em;color:#b3cca5}
+@media(max-width:740px){.hero-deck{min-height:310px!important;margin:14px auto 24px;width:min(100%,440px)}.hero-deck .showcase-card{top:22%;width:116px;height:165px;padding:10px}.hero-deck .showcase-rank{font-size:40px}.hero-deck .showcase-card>b{font-size:45px}.hero-deck .showcase-card{font-size:11px}}
+@media(max-width:440px){.hero-deck{min-height:300px!important;width:100%}.hero-deck .showcase-label{top:43px;left:21px;right:auto}.hero-deck .showcase-card{top:29%;width:104px;height:148px;padding:8px}.hero-deck .showcase-rank{font-size:36px}.hero-deck .showcase-card>b{font-size:41px}.hero-deck .showcase-footer{font-size:9px}}
