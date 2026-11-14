@@ -1,6 +1,6 @@
 # EcoCard — EcoResiduários Academy
 
-Plataforma web com dois jogos de cartas ambientais, pensada para demonstração em estande. Interface em português do Brasil, responsiva, com controles por toque, teclado e mouse.
+Plataforma web de jogo de cartas ambiental para demonstração em estande. A experiência principal é **Salve o Mundo**. Interface em português do Brasil, responsiva, com controles por toque, teclado e mouse.
 
 **[Abrir o jogo pelo GitHub Pages](https://yusei21.github.io/ecocard/)** (funciona após habilitar Pages para a branch `main`, pasta raiz).
 
@@ -24,19 +24,6 @@ As regras de pontuação são originais para este projeto. O jogo usa o conceito
 A jornada progride de forma fixa: **crise 1 Fácil (meta normal 850, 5 jogadas)**, **crise 2 Médio (2.500, 4 jogadas)**, **crise 3 Médio (4.300, 4 jogadas)**, **crise 4 Difícil (9.300, 3 jogadas)** e **crise 5 Final (20.000, 3 jogadas)**. A última crise aplica **×0,7** ao multiplicador de jogadas com menos de 3 cartas orgânicas; combinações com 3 ou mais orgânicos recebem +80 pontos base. É um desafio final deliberadamente rigoroso, sem bloquear estratégias alternativas.
 
 As quatro opções de dificuldade (**Aprendiz, Normal, Difícil e Extremo**) aplicam modificadores por cima dessa progressão. Os valores são metas iniciais de balanceamento e precisam ser validados com partidas e métricas de vitória.
-
-### 2. Trinca Circular (2–4 pessoas)
-
-Partida em rede via código de seis caracteres. O anfitrião cria a sala; os demais entram com o código, em dispositivos separados.
-
-- O modo usa **2 baralhos ambientais completos**, totalizando **130 cartas** (inclusive cópias físicas de valores e cores). Cada pessoa recebe **7 cartas**.
-- Em seu turno, compra do monte fechado ou da pilha de descarte, e descarta uma carta.
-- **Trinca válida:** três cartas do **mesmo valor** (ex.: três 3, três 2 ou três reis, independentemente das cores), ou três valores consecutivos **da mesma cor** (ex.: A–2–3). Com dois baralhos, cópias físicas diferentes do mesmo valor também podem formar a trinca.
-- **Ás flexível:** funciona no início da sequência A–2–3 ou no final Q–K–A. K–A–2 não é uma sequência válida.
-- Vence quem primeiro formar **três trincas disjuntas** usando exatamente **9 cartas**. Ao comprar, o jogador terá 10 cartas; depois de descartar uma, o servidor verifica automaticamente se as 9 restantes fecham três trincas. Também é possível clicar em **Bater!** no começo do turno quando já possuir a combinação vencedora.
-- O anfitrião valida compras, descartes, turnos e vitória, mantendo as cartas de outros jogadores ocultas.
-
-**Infraestrutura:** usa PeerJS e um servidor público de sinalização. O anfitrião deve permanecer online, todos devem ter internet, e não há salvamento/reconexão automática. Para produção ou uso intensivo em feira, migrar para servidor próprio com WebSockets, persistência de salas e testes de carga.
 
 ## Como executar
 
@@ -91,10 +78,16 @@ Referências usadas na revisão: https://www.reddit.com/r/SoloDevelopment/commen
 
 ## Controles e uso no celular
 
-Nos dois modos, a ordem da mão pode ser alterada **arrastando uma carta sobre outra**, sem botão adicional. A ordem é local para cada jogador e não altera as cartas recebidas nem as combinações válidas. O suporte a arrastar em navegadores móveis deve ser confirmado em dispositivos reais.
+No Salve o Mundo, a ordem da mão pode ser alterada **arrastando uma carta sobre outra**, sem botão adicional. A ordem é local para cada jogador e não altera as cartas recebidas nem as combinações válidas. O suporte a arrastar em navegadores móveis deve ser confirmado em dispositivos reais.
 
 O cabeçalho mobile-first prioriza a identidade do EcoCard, o acesso à EcoResiduários Academy e a marca vetorial do IFMA em uma área institucional com contraste controlado. A nova folha `mobile-v5.css` ajusta o topo e as mãos roláveis para dispositivos menores.
 
 ## Abertura e áudio V7
 
-A página inicial usa um menu de videogame em uma mesa 2D, com acesso direto aos dois jogos, marca do IFMA e link do projeto. O estilo está em `landing-v7.css`. O controle extra de organização foi removido nos dois jogos; arrastar continua disponível. Os efeitos sonoros do modo solo e do multiplayer foram amplificados, com ganho limitado no solo para reduzir distorção. O volume final depende das configurações e permissões do dispositivo.
+A página inicial usa um menu de videogame em uma mesa 2D, com acesso direto ao Salve o Mundo, marca do IFMA e link do projeto. O estilo está em `landing-v7.css`. O controle extra de organização foi removido; arrastar continua disponível. Os efeitos sonoros do modo solo foram amplificados, com ganho limitado no solo para reduzir distorção. O volume final depende das configurações e permissões do dispositivo.
+
+## Chefes que anulam categorias
+
+A primeira crise apresenta as regras sem anular nenhuma categoria. Na segunda, o chefe anula o plástico (vermelho); na terceira, metal (amarelo); na quarta, papel (azul); e na quinta, vidro (verde). Cartas da categoria anulada **não contribuem para pontos base, combinações ou efeitos de coringas**. É permitido selecioná-las e descartá-las. A indicação aparece acima da mesa e nas cartas afetadas.
+
+A Trinca Circular foi retirada da interface e do código multiplayer. Um futuro jogo infantil ainda será definido e desenvolvido separadamente.
