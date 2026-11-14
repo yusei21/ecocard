@@ -1,0 +1,65 @@
+/* Arcade game layer — confined to solo mode. */
+#solo{--neon:#dbff6d;--pink:#f48bbd;--sky:#88d8fd}
+#solo .game-top{margin:21px 0}
+#solo .game-layout{grid-template-columns:minmax(0,1fr) 310px;align-items:stretch}
+#solo .arcade-solo{position:relative;min-height:670px;border:1px solid #70976c;background:radial-gradient(ellipse at 50% 40%,#274f45 0%,#172d29 53%,#0d191d 100%);box-shadow:inset 0 0 80px #0007,0 20px 65px #0003;overflow:hidden}
+#solo .arcade-solo:before{content:'';position:absolute;inset:0;pointer-events:none;opacity:.12;background:repeating-linear-gradient(transparent 0 4px,#d1ffd2 5px 6px)}
+#solo .arcade-solo.impact{animation:impact .34s ease-out}
+@keyframes impact{0%{transform:translateX(0)}25%{transform:translateX(-3px)}50%{transform:translateX(4px)}75%{transform:translateX(-2px)}100%{transform:translateX(0)}}
+#solo .arcade-banner{position:relative;z-index:1;margin:0 0 16px;padding:11px 15px;border:1px solid #a3c786;background:#334b31d9;border-radius:12px;font-weight:800;color:#e5ffc4}
+#solo .arcade-tabletop{position:relative;z-index:1;text-align:center}
+#solo .arena-header{display:flex;justify-content:space-between;gap:12px;align-items:center;font-size:11px}
+#solo .arena-round{border:1px solid #688578;border-radius:30px;padding:6px 10px;color:#dae9da;font-size:10px;letter-spacing:.1em}
+#solo .arena-orbit{margin:13px auto 0;width:min(100%,410px);height:126px;display:flex;gap:10px;align-items:center;justify-content:center;border:1px dashed #547e67;border-radius:50%;background:radial-gradient(ellipse,#3f856344,transparent 80%);color:#d4ff78;font-size:62px;filter:drop-shadow(0 0 15px #c2ff5a55)}
+#solo .arena-orbit span{display:block;max-width:175px;text-align:left;color:#c4e2ca;font-weight:800;font-size:14px;line-height:1.2;letter-spacing:.09em}
+#solo .arena-scores{display:flex;align-items:stretch;justify-content:center;gap:8px;margin:18px 0 4px}
+#solo .score-chip{background:#244d60;border:2px solid #66bdd7;min-width:110px;border-radius:11px;padding:10px 13px;box-shadow:0 5px 0 #082832}
+#solo .score-chip.magenta{background:#613b60;border-color:#fa9bd0;box-shadow:0 5px 0 #361f35}
+#solo .score-chip.total{background:#3d4c24;border-color:#d6ff71;box-shadow:0 5px 0 #25321c}
+#solo .score-chip small{display:block;font-size:10px;letter-spacing:.09em;font-weight:800;white-space:nowrap}
+#solo .score-chip b{display:block;font:800 clamp(24px,3vw,41px)/1.3 'Space Grotesk';font-variant-numeric:tabular-nums}
+#solo .score-times,#solo .score-equals{font:800 31px 'Space Grotesk';align-self:center;color:#f7e6a3}
+#solo .combo-readout{font:800 clamp(18px,2.4vw,29px) 'Space Grotesk';letter-spacing:.08em;color:#e5ff90;margin:18px 0;text-shadow:0 0 18px #e5ff9066}
+#solo .burst{display:flex;gap:10px;align-items:center;justify-content:center;margin:10px auto;padding:7px 17px;background:#e0ff70;color:#16271d;border-radius:40px;width:fit-content;animation:burst .5s cubic-bezier(.22,1.5,.4,1)}
+#solo .burst strong{font:900 29px 'Space Grotesk'}
+#solo .burst span{font-size:11px;max-width:160px;text-align:left;font-weight:800}
+@keyframes burst{from{transform:scale(.4) rotate(-9deg);opacity:0}to{transform:scale(1);opacity:1}}
+#solo .arena-hand-title{display:flex;justify-content:space-between;align-items:center;margin-top:24px;font-size:12px;letter-spacing:.1em;text-align:left;color:#d3eccf;gap:10px}
+#solo .arcade-hand{flex-wrap:nowrap;justify-content:center;gap:clamp(3px,1vw,10px);margin:16px 0 14px}
+#solo .arcade-hand .playing-card{width:clamp(62px,9.2vw,115px);min-width:0;min-height:clamp(142px,16vw,176px);padding:8px;flex-shrink:1;box-shadow:3px 6px 0 #0007}
+#solo .arcade-hand .playing-card.selected{box-shadow:0 0 0 3px #dfff72,0 0 25px #dfff7288;transform:translateY(-14px) rotate(-2deg)}
+#solo .arcade-hand .playing-card:hover{box-shadow:0 0 16px #ffffff6b}
+#solo .arena-actions{justify-content:center;margin-top:30px}
+#solo .arcade-play{border-radius:10px;background:linear-gradient(160deg,#e6ff83,#b4ef40);font:800 15px 'Space Grotesk';min-height:52px;letter-spacing:.035em;box-shadow:0 5px 0 #597a27,0 0 25px #b7ff4b44}
+#solo .arcade-play:active:not(:disabled){transform:translateY(3px);box-shadow:0 2px 0 #597a27}
+#solo .arcade-side{background:linear-gradient(160deg,#22372e,#17281f);box-shadow:inset 0 0 35px #0004}
+#solo .arcade-level{padding:16px;background:#3c3231;border:1px solid #a17d68;border-radius:13px}
+#solo .arcade-level b{display:block;font:800 23px/1.05 'Space Grotesk';margin:8px 0}
+#solo .arcade-level p{color:#f4ddc7;font-size:13px}
+#solo .arcade-level small{display:block;color:#f4c96b;font-size:12px}
+#solo .arcade-numbers{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+#solo .arcade-numbers>div{background:#0c211c;border:1px solid #5d7865;padding:10px;border-radius:10px;min-width:0}
+#solo .arcade-numbers small{display:block;color:#b7cbb8;font-size:10px}
+#solo .arcade-numbers strong{font:800 27px 'Space Grotesk';color:#e3ff8b;overflow-wrap:anywhere}
+#solo .arcade-counters{display:grid;gap:8px}
+#solo .arcade-counters span{display:flex;justify-content:space-between;border-bottom:1px solid #526658;padding:5px 0}
+#solo .arcade-counters b{color:#dfff72}
+#solo .arcade-side .jokers{display:grid;grid-template-columns:1fr 1fr}
+#solo .arcade-side .joker{min-width:0;max-width:none;padding:10px}
+#solo .arcade-side .joker.legend{box-shadow:0 0 22px #ffe37c66;animation:legend 2.7s ease-in-out infinite alternate}
+@keyframes legend{to{filter:brightness(1.25);box-shadow:0 0 27px #ffe37caa}}
+#solo .arcade-side .joker small{line-height:1.3}
+#solo .sound-control{font-size:13px;display:flex;gap:9px;align-items:center}
+#solo .arcade-shop,#solo .arcade-ending{position:relative;z-index:1;text-align:center;padding:25px 10px}
+#solo .arcade-shop h2,#solo .arcade-ending h2{font:900 clamp(32px,5vw,65px)/1 'Space Grotesk';letter-spacing:-.06em}
+#solo .arcade-shop .market{justify-content:center;text-align:left;margin:25px 0}
+#solo .arcade-shop .market-item{min-height:235px;display:flex;flex-direction:column;justify-content:space-between;box-shadow:4px 8px 0 #0006}
+#solo .arcade-shop .market-item b{font:800 20px 'Space Grotesk';line-height:1.1}
+#solo .arcade-shop .market-item p{min-height:0}
+#solo .arcade-shop .shop-legend{background:linear-gradient(145deg,#7c4c84,#655c2d,#27695e);border:2px solid #ffde7b}
+#solo .arcade-shop .actions{justify-content:center}
+#solo .ending-glyph{font-size:140px;color:#ddff83;text-shadow:0 0 45px #ddff8355}
+#solo .arcade-ending p{font-size:18px;margin:22px 0 35px}
+@media(max-width:1030px){#solo .game-layout{grid-template-columns:1fr}#solo .arcade-side{grid-row:1}#solo .arcade-side .jokers{display:flex}}
+@media(max-width:570px){#solo .arcade-solo{min-height:600px;padding:11px}#solo .arena-orbit{height:95px;font-size:42px}#solo .arena-orbit span{font-size:11px;max-width:120px}#solo .arena-scores{gap:3px}#solo .score-chip{min-width:0;padding:7px 6px;flex:1}#solo .score-chip small{font-size:8px}#solo .score-chip b{font-size:21px}#solo .score-times,#solo .score-equals{font-size:17px}#solo .arcade-hand .playing-card{width:calc(12.5% - 3px);padding:4px;min-height:126px;border-radius:7px}#solo .arcade-hand .playing-card .rank{font-size:18px}#solo .arcade-hand .playing-card .rank small{font-size:8px!important}#solo .arcade-hand .playing-card .symbol{font-size:19px}#solo .arcade-hand .playing-card .name{font-size:9px;overflow-wrap:anywhere}#solo .arcade-hand .playing-card .category{font-size:8px;overflow-wrap:anywhere}#solo .arena-hand-title{font-size:10px}}
+@media(prefers-reduced-motion:reduce){#solo .burst,#solo .arcade-side .joker.legend,#solo .arcade-solo.impact{animation:none!important}}
