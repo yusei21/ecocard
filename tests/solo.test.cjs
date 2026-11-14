@@ -46,6 +46,23 @@ assert(evaluate([make('azul',1),make('azul',2),make('azul',3)],4,[],null,boss('o
 assert.equal(stages.length,7);
 assert.equal(new Set(jokers.map(j=>j.id)).size,jokers.length,'unique joker IDs');
 assert.equal(offers([]).length,3);
+let seed=1234567;
+const rng=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296};
+const counts={common:0,uncommon:0,epic:0,legend:0};
+let allCommon=0;
+for(let iteration=0;iteration<12000;iteration++){
+ const store=offers([],rng);
+ if(store.every(j=>j.rarity==='common'))allCommon++;
+ assert.equal(new Set(store.map(j=>j.id)).size,store.length,'store must not duplicate joker');
+ for(const card of store)counts[card.rarity]++;
+}
+assert.equal(allCommon,0,'a full store must not be exclusively common when upgrades exist');
+assert(counts.uncommon>counts.common*.55,'rare offers must be noticeably more frequent');
+assert(counts.epic>1000,'epic offers must occur regularly');
+assert(counts.legend<counts.epic*.05,'legendary stays vastly rarer than epic');
+const noUpgrades=offers(jokers.filter(j=>j.rarity!=='common'),rng);
+assert(noUpgrades.every(j=>j.rarity==='common'),'common-only fallback must remain possible after upgrades are owned');
+
 assert.throws(()=>evaluate([],0,[]));
 assert.throws(()=>evaluate(Array(6).fill(make('azul',1)),0,[]));
 const {payoutFor,rerollCost}=sandbox.window.EcoCardSolo;
