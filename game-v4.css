@@ -250,3 +250,8 @@ footer a{color:#d9ecab;text-decoration:underline;text-underline-offset:3px}
 #solo .guide-note p{font:500 14px/1.5 'IBM Plex Sans',sans-serif;margin:5px 0 0}
 #solo .guide-next{width:100%;max-width:510px;min-height:56px;white-space:normal}
 @media(max-width:680px){#solo .guide-collection{grid-template-columns:1fr}#solo .guide-mini-card{width:38px;height:58px;flex-basis:38px}#solo .guide-formula{gap:6px 8px}#solo .guide-formula span{font-size:10px}}
+
+/* Each scoring card flashes independently when its note plays. */
+#solo .played-cards .playing-card.counting-card{outline:3px solid #f4ffa0;outline-offset:2px;filter:brightness(1.18) saturate(1.25);z-index:3;transform:translateY(-12px) scale(1.06);box-shadow:0 0 21px #dcff9199,3px 7px 0 #081610!important}
+#solo .played-cards .playing-card.counted-card:not(.counting-card){outline:2px solid #a6dd8a;outline-offset:1px}
+@media(prefers-reduced-motion:reduce){#solo .played-cards .playing-card.counting-card{transform:none}}
