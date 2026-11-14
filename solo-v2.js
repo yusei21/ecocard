@@ -102,9 +102,9 @@ function animateScore(result){
  const zone=document.querySelector('#scorePerformance'),board=document.querySelector('.arcade-tabletop');if(!zone||!board)return;
  clearQueue();busy=true;
  const reduced=window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
- const steps=[result.type,...result.events.map(e=>e.label),'+'+Math.floor(result.score).toLocaleString('pt-BR')+' PONTOS!'];
+ const steps=[{name:result.type,detail:'COMBINAÇÃO'},...result.events.map(e=>({name:e.label,detail:e.chips>0?'+'+e.chips+' BASE':e.chips<0?e.chips+' BASE':e.factor!==1?'×'+e.factor.toFixed(2):e.mult>0?'+'+e.mult.toFixed(2)+' MULT':'EFEITO'})),{name:'+'+Math.floor(result.score).toLocaleString('pt-BR')+' PONTOS!',detail:'TOTAL DA JOGADA'}];
  board.classList.add('scoring');
- steps.forEach((t,i)=>queue.push(setTimeout(()=>{zone.textContent=t;zone.classList.remove('score-step');void zone.offsetWidth;zone.classList.add('score-step');if(!reduced)beep(430+i*45,.07,'triangle',.012);if(i===steps.length-1)zone.classList.add('score-finish')},i*(reduced?0:240))));
+ steps.forEach((t,i)=>queue.push(setTimeout(()=>{zone.textContent=t.name+' · '+t.detail;zone.classList.remove('score-step');void zone.offsetWidth;zone.classList.add('score-step');if(!reduced)beep(430+i*45,.07,'triangle',.012);if(i===steps.length-1){zone.classList.add('score-finish');if(!reduced){const fx=document.createElement('div');fx.className='score-particles';for(let k=0;k<22;k++){const particle=document.createElement('i');particle.style.setProperty('--angle',(k*360/22)+'deg');particle.style.setProperty('--distance',(40+Math.random()*85)+'px');fx.append(particle)}zone.append(fx);queue.push(setTimeout(()=>fx.remove(),900))}}},i*(reduced?0:240))));
  queue.push(setTimeout(()=>{busy=false;board.classList.remove('scoring');zone.classList.remove('score-finish')},steps.length*(reduced?0:240)+150));
 }
 function buy(id){if(solo.phase!=='shop')return;const j=solo.offer.find(x=>x.id===id);if(!j||solo.jokers.length>=5||solo.coins<j.price)return;solo.coins-=j.price;solo.jokers.push(j);solo.offer=solo.offer.filter(x=>x.id!==id);solo.message=j.rarity==='legend'?'✦ LENDÁRIO DESBLOQUEADO: AVENTURA CIRCULAR!':j.name+' adicionado à sua estratégia.';beep(j.rarity==='legend'?1047:730,.27,'triangle');render()}
