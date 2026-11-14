@@ -24,8 +24,9 @@ Partida em rede via código de seis caracteres. O anfitrião cria a sala; os dem
 
 - O modo usa **2 baralhos ambientais completos**, totalizando **130 cartas** (inclusive cópias físicas de valores e cores). Cada pessoa recebe **7 cartas**.
 - Em seu turno, compra do monte fechado ou da pilha de descarte, e descarta uma carta.
-- **Trinca válida:** três cartas do **mesmo valor** e **cores diferentes**, ou três cartas de **valores consecutivos** e da **mesma cor**. A vale 1, J vale 11, Q vale 12 e K vale 13. A não vem após K.
-- Ganha quem tiver **duas trincas disjuntas** entre as sete cartas, sobrando uma, e clicar em **Bater!** no começo do turno.
+- **Trinca válida:** três cartas do **mesmo valor** (ex.: três 3, três 2 ou três reis, independentemente das cores), ou três valores consecutivos **da mesma cor** (ex.: A–2–3). Com dois baralhos, cópias físicas diferentes do mesmo valor também podem formar a trinca.
+- **Ás flexível:** funciona no início da sequência A–2–3 ou no final Q–K–A. K–A–2 não é uma sequência válida.
+- Vence quem primeiro formar **três trincas disjuntas** usando exatamente **9 cartas**. Ao comprar, o jogador terá 10 cartas; depois de descartar uma, o servidor verifica automaticamente se as 9 restantes fecham três trincas. Também é possível clicar em **Bater!** no começo do turno quando já possuir a combinação vencedora.
 - O anfitrião valida compras, descartes, turnos e vitória, mantendo as cartas de outros jogadores ocultas.
 
 **Infraestrutura:** usa PeerJS e um servidor público de sinalização. O anfitrião deve permanecer online, todos devem ter internet, e não há salvamento/reconexão automática. Para produção ou uso intensivo em feira, migrar para servidor próprio com WebSockets, persistência de salas e testes de carga.
