@@ -1,0 +1,106 @@
+/* EcoCard / Landing V6 — two games, one clear decision.
+   Mobile first; restrained editorial visual system.
+   Game mechanics and card UI are intentionally untouched. */
+
+:root{--home-bg:#111b16;--home-cream:#f5f3e7;--home-lime:#d5f078;--home-ink:#19281d}
+body{background:radial-gradient(ellipse 75% 30% at 80% 0%,#233d2c55,transparent 85%),var(--home-bg)}
+.site-header.site-header{display:grid!important;grid-template-columns:1fr auto!important;grid-template-rows:auto auto;gap:12px 10px!important;align-items:center!important;padding:10px 0 12px!important;border-bottom:1px solid #60766355!important}
+.site-header .brand{grid-column:1;grid-row:1;align-self:center;font-size:clamp(23px,5.8vw,30px)!important;gap:8px}
+.site-header .brand .mark{height:36px;width:36px;font-size:25px;border-radius:11px;box-shadow:none;transform:rotate(-7deg)}
+.site-header .brand-lettering{letter-spacing:-.03em;gap:4px}
+.site-header .project-link{grid-row:1;grid-column:2;justify-self:end;align-self:center;min-height:42px;padding:9px 11px;border-radius:100px;background:#d5f07814;border:1px solid #9cb97b55;color:#eaf6cc;font-size:12px;line-height:1}
+.site-header .institutional-wrap{grid-column:1 / -1;grid-row:2;justify-self:stretch;width:100%;margin:0}
+.site-header .institutional-plate{min-height:0;border:0;background:none;box-shadow:none;padding:0;display:flex;align-items:center;justify-content:flex-start;width:100%}
+.site-header .ifma{background:transparent;box-shadow:none;color:#f1efdd;display:flex;gap:10px;align-items:center;padding:4px 0;border-radius:0;max-width:100%;font-family:'IBM Plex Sans',sans-serif}
+.site-header .ifma .ifma-logo{background:#efefe4;border:1px solid #d8dccb;padding:5px;border-radius:3px;width:clamp(126px,36vw,160px);max-height:45px}
+.site-header .ifma .ifma-universo{color:#c4d3b5;border-left:1px solid #759173;max-width:none;min-width:0;padding-left:10px;font:700 10px/1.1 'IBM Plex Sans',sans-serif;letter-spacing:.04em}
+header a:focus-visible,.home-game-action:focus-visible{outline:3px solid #d5f078;outline-offset:3px}
+.landing-v6{padding:0 0 14px}
+.landing-v6 .home-intro{padding:29px 2px 22px}
+.landing-v6 .home-eyebrow{display:flex;gap:9px;align-items:center;color:#b4caab;font:700 10px/1.4 'IBM Plex Mono',monospace;letter-spacing:.065em}
+.landing-v6 .pulse-dot{width:7px;height:7px;background:#e1f78d;border-radius:50%;flex:none;box-shadow:0 0 0 4px #d5ef7b12}
+.landing-v6 .home-intro h1{font:900 clamp(45px,11vw,76px)/.88 'Barlow Condensed','Arial Narrow',Impact,sans-serif;letter-spacing:-.015em;margin:18px 0 15px;max-width:16ch;color:#f5f3e6;text-wrap:balance}
+.landing-v6 .home-intro h1 em{font-style:normal;color:#d3ed7b}
+.landing-v6 .home-intro>p{font:500 15px/1.48 'IBM Plex Sans',sans-serif;color:#c0cebd;margin:0;max-width:45ch}
+.landing-v6 .home-quick{display:flex;align-items:center;gap:10px 16px;flex-wrap:wrap;margin:22px 0 0;color:#aebdab;font:600 11px 'IBM Plex Sans',sans-serif}
+.landing-v6 .home-quick span{display:inline-flex;gap:5px;align-items:baseline;white-space:nowrap}
+.landing-v6 .home-quick b{color:#e6f7c5;font:800 16px 'Barlow Condensed',sans-serif}
+.landing-v6 .home-choices{display:grid;grid-template-columns:minmax(0,1fr);gap:14px}
+.landing-v6 .home-game{display:flex;flex-direction:column;min-width:0;overflow:hidden;border-radius:16px;padding:19px 18px 0;position:relative;isolation:isolate;box-shadow:none;min-height:340px}
+.landing-v6 .home-game-solo{background:#d8eab4;color:#1c3125}
+.landing-v6 .home-game-multi{background:#eed7c4;color:#2d281f}
+.landing-v6 .home-game::before{content:'';position:absolute;inset:0;pointer-events:none;z-index:-1;opacity:.28;background:radial-gradient(circle at 82% 47%,#ffffff99 0 8%,transparent 44%)}
+.landing-v6 .home-game-top{display:flex;align-items:center;justify-content:space-between;gap:8px;font:700 10px/1.2 'IBM Plex Mono',monospace;letter-spacing:.02em;position:relative;z-index:2}
+.landing-v6 .game-index{display:inline-flex;align-items:center;gap:9px}
+.landing-v6 .game-index i{width:20px;height:1px;background:currentColor;opacity:.45}
+.landing-v6 .game-state{border:1px solid #253c2a57;border-radius:100px;padding:6px 8px;font-size:9px}
+.landing-v6 .home-game-content{position:relative;flex:1;min-height:223px;display:grid;grid-template-columns:minmax(0,1fr) minmax(90px,36%);gap:4px;align-items:center}
+.landing-v6 .home-game-copy{z-index:2;padding:9px 0 11px;min-width:0}
+.landing-v6 .home-game h2{font:900 clamp(39px,10vw,64px)/.83 'Barlow Condensed','Arial Narrow',Impact,sans-serif;letter-spacing:-.02em;margin:0 0 13px;text-transform:uppercase;max-width:9ch}
+.landing-v6 .home-game .period{color:#577f4d}
+.landing-v6 .home-game-multi .period{color:#b86543}
+.landing-v6 .home-game-copy p{font:500 13px/1.45 'IBM Plex Sans',sans-serif;margin:0;max-width:31ch;color:#3b513f}
+.landing-v6 .home-game-multi p{color:#665247}
+.landing-v6 .home-game-art{height:206px;width:100%;position:relative;align-self:center;justify-self:center;min-width:0;pointer-events:none;transform:translateX(3%)}
+.landing-v6 .fan-card,.landing-v6 .stack-card{position:absolute;display:flex;flex-direction:column;justify-content:space-between;align-items:center;width:92px;height:142px;padding:10px;border:2px solid #1d3024;border-radius:6px;color:#1e3229;box-shadow:3px 6px 0 #12291c3a;top:34px;left:calc(50% - 46px);transform-origin:50% 110%}
+.landing-v6 .fan-card strong,.landing-v6 .stack-card b{font:900 31px/.9 'Barlow Condensed',sans-serif;align-self:flex-start}
+.landing-v6 .fan-card span,.landing-v6 .stack-card span{font-size:35px;line-height:1}
+.landing-v6 .fan-card small{font:700 9px 'IBM Plex Mono',monospace;align-self:stretch;text-align:center}
+.landing-v6 .fan-a{background:#a0caff;transform:translate(-19px,12px) rotate(-22deg);z-index:1}
+.landing-v6 .fan-k{background:#f4dc80;transform:translate(-2px,-4px) rotate(0);z-index:3}
+.landing-v6 .fan-q{background:#c8a18b;transform:translate(21px,13px) rotate(23deg);z-index:2}
+.landing-v6 .stack-card{width:91px;height:133px;top:36px;background:#fff4e3}
+.landing-v6 .stack-one{background:#d7ecc7;transform:translate(-20px,10px) rotate(-17deg)}
+.landing-v6 .stack-two{background:#a7c4ea;transform:translate(0,-6px) rotate(0)}
+.landing-v6 .stack-three{background:#e6d48f;transform:translate(20px,10px) rotate(17deg)}
+.landing-v6 .stack-tag{position:absolute;left:0;right:0;bottom:6px;text-align:center;font:800 10px 'IBM Plex Mono',monospace}
+.landing-v6 .home-game-action{flex:none;display:flex;align-items:center;justify-content:space-between;gap:15px;min-height:62px;width:calc(100% + 36px);margin:0 -18px;background:#213a2d;color:#f2f5da;border:0;border-top:1px solid #ffffff44;padding:10px 18px;text-align:left;border-radius:0;font:800 14px 'IBM Plex Sans',sans-serif;letter-spacing:.02em;cursor:pointer}
+.landing-v6 .home-game-multi .home-game-action{background:#40332b;color:#ffefe0}
+.landing-v6 .home-game-action .action-circle{width:35px;height:35px;background:#d7ef8b;border-radius:50%;display:grid;place-items:center;color:#24382b;font-size:22px;font-weight:500;flex:none;transition:transform .18s}
+.landing-v6 .home-game-multi .action-circle{background:#f4b894;color:#36251f}
+.landing-v6 .home-game-action:hover .action-circle{transform:translate(3px,-3px)}
+.landing-v6 .home-game-action:active{filter:brightness(1.14)}
+.landing-v6 .home-credit{display:flex;align-items:flex-start;gap:12px;margin:20px 0 5px;padding:15px 2px 10px;border-top:1px solid #47614d}
+.landing-v6 .credit-dot{color:#dbed92;font-size:23px;line-height:1}
+.landing-v6 .home-credit p{font:500 13px/1.55 'IBM Plex Sans',sans-serif;color:#b9c9b8;margin:0;max-width:72ch}
+.landing-v6 .home-credit a{color:#e0efae;text-decoration:underline;text-underline-offset:3px;font-weight:700}
+footer{margin-top:0!important;padding:14px 0 20px!important;border-top:1px solid #47614d!important;display:flex!important;flex-direction:column!important;align-items:flex-start!important;gap:5px!important}
+footer span{font:500 11px/1.45 'IBM Plex Sans',sans-serif;color:#9cb19d;text-align:left!important}
+footer span:last-child{display:none}
+footer a{text-decoration:none;color:#cbe3a7}
+@media(min-width:560px){
+ .landing-v6 .home-game{padding:23px 24px 0}
+ .landing-v6 .home-game-action{width:calc(100% + 48px);margin-inline:-24px;padding-inline:24px}
+ .landing-v6 .home-game h2{font-size:clamp(50px,8vw,82px)}
+ .landing-v6 .home-game-copy p{font-size:15px}
+ .landing-v6 .home-game-content{min-height:270px}
+ .landing-v6 .home-game-art{height:230px}
+ .landing-v6 .fan-card,.landing-v6 .stack-card{top:44px}
+}
+@media(min-width:780px){
+ .site-header.site-header{grid-template-columns:minmax(0,1fr) auto auto!important;grid-template-rows:auto;gap:20px!important;padding:13px 0!important}
+ .site-header .brand{grid-row:1;grid-column:1}
+ .site-header .institutional-wrap{grid-row:1;grid-column:2;justify-self:end;width:auto}
+ .site-header .institutional-plate{width:auto}
+ .site-header .project-link{grid-row:1;grid-column:3}
+ .site-header .ifma .ifma-logo{width:144px}
+ .landing-v6 .home-intro{padding:50px 2px 33px}
+ .landing-v6 .home-intro h1{font-size:clamp(72px,8vw,116px);max-width:19ch;margin-block:17px}
+ .landing-v6 .home-intro>p{font-size:18px}
+ .landing-v6 .home-choices{grid-template-columns:1fr 1fr;gap:18px}
+ .landing-v6 .home-game{min-height:420px}
+ .landing-v6 .home-game-content{min-height:310px}
+ .landing-v6 .home-game h2{font-size:clamp(56px,5.8vw,90px)}
+ .landing-v6 .home-game-art{height:245px}
+ .landing-v6 .home-credit{margin-top:24px}
+ footer{flex-direction:row!important;justify-content:space-between!important}
+}
+@media(max-width:360px){
+ .site-header .brand{font-size:22px!important}
+ .site-header .project-link{font-size:10px;padding:9px}
+ .landing-v6 .home-game-content{grid-template-columns:minmax(0,1fr) 90px}
+ .landing-v6 .home-game h2{font-size:37px}
+ .landing-v6 .home-game-art{transform:translateX(14%) scale(.8)}
+ .landing-v6 .home-game-copy p{font-size:12px}
+}
+@media(prefers-reduced-motion:reduce){.landing-v6 .home-game-action .action-circle{transition:none}}
