@@ -18,6 +18,13 @@ Roguelike de pontuação com cartas de cinco categorias de resíduos: **azul/pap
 
 As regras de pontuação são originais para este projeto. O jogo usa o conceito geral de construção de combinações e progressão roguelike, sem reutilizar assets de Balatro.
 
+
+### Escalada de dificuldade das crises
+
+A jornada progride de forma fixa: **crise 1 Fácil (meta normal 850, 5 jogadas)**, **crise 2 Médio (2.500, 4 jogadas)**, **crise 3 Médio (4.300, 4 jogadas)**, **crise 4 Difícil (9.300, 3 jogadas)** e **crise 5 Final (20.000, 3 jogadas)**. A última crise aplica **×0,7** ao multiplicador de jogadas com menos de 3 cartas orgânicas; combinações com 3 ou mais orgânicos recebem +80 pontos base. É um desafio final deliberadamente rigoroso, sem bloquear estratégias alternativas.
+
+As quatro opções de dificuldade (**Aprendiz, Normal, Difícil e Extremo**) aplicam modificadores por cima dessa progressão. Os valores são metas iniciais de balanceamento e precisam ser validados com partidas e métricas de vitória.
+
 ### 2. Trinca Circular (2–4 pessoas)
 
 Partida em rede via código de seis caracteres. O anfitrião cria a sala; os demais entram com o código, em dispositivos separados.
