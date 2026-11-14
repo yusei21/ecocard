@@ -99,7 +99,20 @@ assert.equal(scoringFrames(cardsToCount,nulledResult).filter(x=>x.kind==='card')
 const {RARITY_INFO,jokerArt}=sandbox.window.EcoCardSolo;
 assert.equal(RARITY_INFO.common.label,'COMUM');
 assert.equal(RARITY_INFO.uncommon.label,'RARO');
+assert.equal(RARITY_INFO.epic.label,'ÉPICO');
 assert.equal(RARITY_INFO.legend.label,'LENDÁRIO');
+assert(jokers.some(j=>j.rarity==='epic'),'epic cards must exist in game');
+assert(jokers.some(j=>j.id==='biomas'&&j.rarity==='epic'));
+assert(jokers.some(j=>j.id==='usina'&&j.rarity==='epic'));
+assert(!source.includes("RARITY_INFO[j.rarity].tier"),'numeric rarity suffix must be removed');
+const trio=[make('azul',3),make('verde',4),make('marrom',5)];
+const epicResult=evaluate(trio,0,[jokers.find(j=>j.id==='biomas')]);
+assert(epicResult.events.some(e=>e.label==='Aliança dos Biomas'),'epic multiplier activates');
+const triple=[make('azul',3),make('verde',3),make('marrom',3)];
+assert(evaluate(triple,0,[jokers.find(j=>j.id==='usina')]).events.some(e=>e.label==='Usina Circular'),'epic chip bonus activates');
+const circularEpic=evaluate(trio,0,[jokers.find(j=>j.id==='biomas'),jokers.find(j=>j.id==='circular')]);
+assert.equal(circularEpic.events.filter(e=>e.label==='Aliança dos Biomas').length,2,'legendary retriggers epic');
+
 for(const j of jokers){
  const art=jokerArt(j);
  assert(art.includes('<svg')&&art.includes('</svg>'),'vector art for '+j.id);
