@@ -22,8 +22,14 @@ assert.equal(double.events.filter(e=>e.label==='Reduzir').length,2,'Coringa must
 assert.equal(evaluate(set,0,[jokers.find(j=>j.id==='circular')]).score,zero.score,'Circular alone has no effect');
 const plastic=[make('vermelho',1),make('vermelho',2)];
 const testPlastic=evaluate(plastic,1,[]);
-const base=evaluate(plastic,0,[]);
-assert.equal(testPlastic.base,base.base-20,'Plastic boss reduces base score by 10 per plastic card');
+assert.equal(testPlastic.score,0,'plastic boss completely negates red cards');
+assert.equal(testPlastic.negated,2);
+assert.equal(evaluate([make('vermelho',13),make('azul',8)],1,[]).base,evaluate([make('azul',8)],1,[]).base,'negated suit must not affect scoring combinations');
+assert.equal(evaluate([make('amarelo',8)],2,[]).score,0,'third boss negates metal');
+assert.equal(evaluate([make('azul',8)],3,[]).score,0,'fourth boss negates paper');
+assert.equal(evaluate([make('verde',8)],4,[]).score,0,'final boss negates glass');
+assert.equal(evaluate([make('marrom',8)],4,[]).negated,0,'organic cards remain available at finale');
+assert.equal(evaluate([make('vermelho',8)],0,[]).negated,0,'opening boss leaves all suits active');
 assert.equal(stages.length,5);
 assert.equal(new Set(jokers.map(j=>j.id)).size,jokers.length,'unique joker IDs');
 assert.equal(offers([]).length,3);
