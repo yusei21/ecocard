@@ -1,0 +1,19 @@
+name: Testar lógica do EcoCard
+on:
+  push:
+    branches: [main]
+  pull_request:
+jobs:
+  unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validar sintaxe
+        run: |
+          node --check solo-v2.js
+          node --check tests/solo.test.cjs
+      - name: Executar testes de combos e coringas
+        run: node tests/solo.test.cjs
