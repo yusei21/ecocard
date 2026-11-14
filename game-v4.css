@@ -1,0 +1,144 @@
+/* EcoCard V4 — layout de jogo, não dashboard. Acessibilidade e responsividade. */
+:root{--focus:#e3fa93}
+*{min-width:0}
+html,body{max-width:100%;overflow-x:clip}
+body{font-size:16px;line-height:1.5}
+.shell{width:100%;max-width:1600px;margin:auto;padding:18px clamp(16px,3.4vw,52px)}
+header{display:grid;grid-template-columns:max-content minmax(0,1fr);align-items:center;gap:clamp(14px,2vw,28px);padding-block:12px 18px}
+.header-right{display:flex;align-items:center;justify-content:flex-end;gap:clamp(12px,1.5vw,24px);min-width:0;flex-wrap:nowrap}
+.header-right .tag{font-size:10px;flex-shrink:1}
+.header-right .ifma{flex-shrink:0}
+.header-right .ifma-logo{width:clamp(112px,10vw,143px)}
+.ifma .ifma-universo{font-size:10px;max-width:70px;word-break:normal;white-space:normal}
+.header-right .mini-link{white-space:nowrap;flex-shrink:0;font-size:12px;font-weight:700;border-bottom:1px solid #c8d996;text-decoration:none}
+.brand{white-space:nowrap}
+header a:hover{color:var(--lime)}
+.home-hero{padding-block:clamp(28px,5vw,70px)}
+.hero-title{max-width:10ch}
+.game-tile{overflow:hidden}
+.game-tile p{font-size:16px;line-height:1.48}
+#solo .game-layout{grid-template-columns:minmax(0,1fr) clamp(270px,23vw,322px);gap:clamp(12px,1.5vw,24px);align-items:start}
+#solo .arcade-side{display:flex;flex-direction:column;gap:13px;padding:14px}
+#solo .arcade-solo{padding:clamp(12px,2vw,25px);min-height:580px}
+#solo .arcade-sticky-score{top:12px}
+#solo .arcade-level{padding:12px}
+#solo .arcade-level b{font-size:clamp(19px,2vw,27px)}
+#solo .arcade-level p,#solo .arcade-modifier small,#solo .joker small{font-size:13px;line-height:1.38}
+#solo .arcade-counters{padding:0}
+#solo .arcade-counters span{font:500 13px 'IBM Plex Sans',sans-serif}
+#solo .arcade-counters b{font-family:'IBM Plex Mono',monospace}
+#solo .arcade-side .jokers{grid-template-columns:1fr 1fr;gap:9px}
+#solo .joker{background:#2e3441;border-color:#7e8892;padding:11px}
+#solo .joker b{font-size:18px;line-height:1.06}
+#solo .joker small{font-size:11px}
+#solo .sell-joker{display:block;margin-top:10px;width:100%;font:700 11px 'IBM Plex Mono',monospace;padding:8px 3px;border:1px solid #c7db92;border-radius:2px;background:#263625;color:#f2ffc8}
+#solo .sell-joker:hover{background:#3a5032}
+#solo .table-score{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:18px 0 12px}
+#solo .table-score>div{border:1px solid #5e7c71;background:#0a211d;padding:12px 7px;text-align:center}
+#solo .table-score small{font:700 clamp(9px,1vw,11px) 'IBM Plex Mono',monospace;letter-spacing:.03em;display:block;color:#cfdfcb}
+#solo .table-score strong{font:900 clamp(25px,4vw,46px)/1.1 'Barlow Condensed',sans-serif;color:#f3f5df;font-variant-numeric:tabular-nums}
+#solo .table-score-left strong{color:#d7ec7b}
+#solo .arena-orbit,#solo .arena-goal-line{display:none}
+#solo .arena-scores{margin:9px 0 4px}
+#solo .score-chip{min-width:0;flex:1;max-width:180px;padding:10px 6px}
+#solo .score-chip b{font-size:clamp(25px,4vw,48px);line-height:1}
+#solo .score-chip small{font-size:10px}
+#solo .score-times,#solo .score-equals{font-size:clamp(20px,3vw,30px)}
+#solo .combo-readout{margin:11px 0 3px;font-family:'Barlow Condensed',sans-serif;font-size:clamp(21px,3.4vw,41px);line-height:1.02;letter-spacing:.01em;text-shadow:none}
+#solo .score-performance{margin:6px auto;min-height:47px;font-size:clamp(18px,2.4vw,31px);max-width:100%;overflow-wrap:anywhere;line-height:1.12}
+#solo .arena-hand-title{margin:12px 0 0;gap:6px}
+#solo .arcade-hand{display:flex;flex-wrap:nowrap;gap:8px;justify-content:center;margin:16px 0;overflow-x:auto;overflow-y:visible;padding:18px 6px 12px;scrollbar-width:thin;scrollbar-color:#839975 transparent}
+#solo .arcade-hand .playing-card{flex:0 1 108px;width:min(11vw,108px);min-width:66px;min-height:169px}
+#solo .playing-card .name{font-size:12px;overflow-wrap:anywhere}
+#solo .played-label{font:700 11px 'IBM Plex Mono',monospace;color:#e5ebae;letter-spacing:.08em;margin:10px 0}
+#solo .played-cards{justify-content:center;margin:8px 0;gap:8px;flex-wrap:wrap}
+#solo .played-cards .playing-card{min-height:125px;width:78px;opacity:1;cursor:default;animation:played-enter .4s both}
+#solo .played-cards .playing-card:nth-child(2){animation-delay:.07s}
+#solo .played-cards .playing-card:nth-child(3){animation-delay:.14s}
+#solo .played-cards .playing-card:nth-child(4){animation-delay:.21s}
+#solo .played-cards .playing-card:nth-child(5){animation-delay:.28s}
+#solo .played-cards .playing-card .symbol{font-size:25px}
+#solo .played-cards .playing-card .name{font-size:10px;min-height:auto}
+#solo .played-cards .playing-card .rank{font-size:25px}
+#solo .arcade-solo .arena-actions{margin:12px 0 6px}
+#solo .arcade-solo .arena-actions button{min-height:48px;font-size:13px}
+#solo .arcade-solo .arena-actions button:disabled{opacity:.55}
+#solo .run-result{display:flex;flex-direction:column;align-items:center;justify-content:center;max-width:710px;min-height:520px;margin:0 auto;text-align:center;padding:clamp(15px,4vw,44px);position:relative;isolation:isolate}
+#solo .won-result:before{content:'';position:absolute;z-index:-1;inset:0;background:radial-gradient(circle at center,#6d9e366b,transparent 60%);pointer-events:none}
+#solo .lost-result:before{content:'';position:absolute;z-index:-1;inset:0;background:radial-gradient(circle at center,#78483c66,transparent 60%);pointer-events:none}
+#solo .result-kicker{font:800 12px 'IBM Plex Mono',monospace;letter-spacing:.1em;color:#dfff9e}
+#solo .result-symbol{display:grid;place-items:center;border:4px solid #d6f279;border-radius:50%;width:92px;height:92px;margin:17px auto 12px;background:#bedf5770;color:white;font:900 70px 'Barlow Condensed',sans-serif;animation:result-pop .5s cubic-bezier(.2,1.4,.4,1)}
+#solo .lost-result .result-symbol{border-color:#e9aa9b;background:#743e3e}
+#solo .run-result h2{font:900 clamp(46px,7vw,100px)/.87 'Barlow Condensed',sans-serif;letter-spacing:.01em;margin:8px 0 14px}
+#solo .run-result p{font-size:16px;line-height:1.48;margin:4px 0 15px;max-width:470px;color:#e8e7d9}
+#solo .result-score{display:flex;flex-direction:column;gap:3px;margin:12px 0 18px;padding:15px 22px;border:1px solid #b3c382;background:#121f19;min-width:min(100%,260px)}
+#solo .result-score small{font:700 12px 'IBM Plex Mono',monospace}
+#solo .result-score strong{font:900 clamp(45px,6vw,75px) 'Barlow Condensed',sans-serif;color:#edffa8;font-variant-numeric:tabular-nums}
+#solo .payout-ledger{width:min(100%,520px);background:#1b2a23;border:1px solid #8c9f72;margin:7px 0 25px;text-align:left}
+#solo .payout-ledger div{padding:10px 13px;display:flex;justify-content:space-between;gap:14px;border-bottom:1px solid #4c6250;font-size:14px}
+#solo .payout-ledger div:last-child{border:0}
+#solo .payout-ledger b{font:800 16px 'IBM Plex Mono',monospace;color:#dfff9e;white-space:nowrap}
+#solo .payout-ledger .total{background:#365432;font-weight:800}
+#solo .result-stats{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin:18px 0}
+#solo .result-stats span{border:1px solid #6c7e67;padding:8px 12px;font-size:13px}
+#solo .result-stats b{color:#e8ff9f}
+#solo .shop-wallet{display:grid;grid-template-columns:auto 1fr;align-items:center;gap:0 16px;text-align:left;padding:13px 18px;background:#1e382d;border:1px solid #879c74;margin:14px 0}
+#solo .shop-wallet strong{font:900 50px 'Barlow Condensed',sans-serif;color:#ebffa1;grid-row:span 2}
+#solo .shop-wallet span{font-size:13px;color:#e4e6d8}
+#solo .arcade-shop .market-item{min-width:160px;flex:1 1 190px}
+#solo .arcade-shop .market-item p{min-height:52px;font-size:13px}
+#solo .arcade-shop .shop-actions{justify-content:space-between;gap:12px}
+#solo .arcade-shop .shop-actions button{min-height:48px}
+#solo .arcade-shop .shop-actions .arcade-play{flex:1}
+#solo .arcade-sticky-score .progress{margin:10px 0 0}
+@keyframes result-pop{from{transform:scale(.3) rotate(-17deg);opacity:0}to{transform:scale(1);opacity:1}}
+@keyframes played-enter{from{transform:translateY(40px) rotate(-8deg);opacity:0}to{transform:translateY(0);opacity:1}}
+@media(max-width:1240px){.header-right .tag{display:none}.ifma .ifma-logo{width:135px}}
+@media(max-width:1050px){
+ #solo .game-layout{grid-template-columns:1fr}
+ #solo .arcade-side{grid-row:2;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+ #solo .arcade-side .arcade-sticky-score,#solo .arcade-side .jokers,#solo .arcade-side h3{grid-column:1/-1}
+ #solo .arcade-side .arcade-sticky-score{position:static}
+ #solo .arcade-solo{grid-row:1}
+ #solo .arcade-hand .playing-card{width:clamp(76px,10.2vw,112px)}
+}
+@media(max-width:740px){
+ header{grid-template-columns:1fr;gap:12px}
+ .header-right{display:grid;grid-template-columns:minmax(0,1fr) max-content;justify-items:start;gap:10px;width:100%}
+ .header-right .ifma{justify-self:start;min-width:0}
+ .header-right .ifma-logo{width:132px}
+ .ifma .ifma-universo{max-width:90px;font-size:10px}
+ .header-right .mini-link{justify-self:end;font-size:12px}
+ .shell{padding-inline:16px}
+ .home-hero{grid-template-columns:1fr}
+ .hero-art{max-width:100%;overflow:hidden;min-height:310px}
+ .game-top{margin-top:14px}
+ #solo .arcade-side{padding:12px}
+ #solo .arcade-hand .playing-card{min-width:84px;flex-basis:91px}
+ #solo .arcade-hand{justify-content:flex-start}
+ #solo .score-chip b{font-size:clamp(24px,6vw,38px)}
+}
+@media(max-width:440px){
+ .shell{padding-inline:12px}
+ header{grid-template-columns:1fr}
+ .header-right{grid-template-columns:1fr}
+ .header-right .ifma,.header-right .mini-link{justify-self:start}
+ .header-right .mini-link{padding:4px 0}
+ .hero-title{font-size:clamp(62px,15vw,95px)!important}
+ #solo .arcade-side{grid-template-columns:1fr}
+ #solo .arcade-side>*{grid-column:1/-1}
+ #solo .table-score{gap:4px}
+ #solo .table-score>div{padding:8px 4px}
+ #solo .table-score strong{font-size:clamp(23px,8vw,36px)}
+ #solo .score-chip{padding:9px 4px}
+ #solo .score-chip b{font-size:clamp(21px,7vw,31px)}
+ #solo .score-chip small{font-size:9px}
+ #solo .score-times,#solo .score-equals{font-size:18px}
+ #solo .arena-hand-title{flex-wrap:wrap;font-size:11px}
+ #solo .arcade-hand{padding:16px 6px}
+ #solo .arcade-hand .playing-card{min-width:82px;min-height:160px}
+ #solo .arcade-shop .shop-actions{flex-direction:column}
+ #solo .arcade-shop .shop-actions button{width:100%}
+ #solo .result-score strong{font-size:52px}
+}
+@media(prefers-reduced-motion:reduce){#solo .played-cards .playing-card,#solo .result-symbol{animation:none!important}}
