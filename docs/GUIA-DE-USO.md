@@ -11,6 +11,8 @@ Este guia explica **como usar** os dois jogos. Não é necessário ter conhecime
 3. Utilize toque, mouse ou teclado para selecionar cartas e botões.
 4. Use o botão **Voltar** para retornar à escolha de jogos.
 
+**No Salve o Mundo pelo celular:** ao começar uma crise com a tela na vertical, aparecerá um aviso sugerindo girar o aparelho para a horizontal. O modo paisagem apresenta todas as cartas da mão em uma única fileira, com os coringas no alto e a pontuação ao centro. A orientação não é forçada; é possível selecionar **Continuar na vertical** e jogar com a mão rolável. O aviso não se repete na mesma sessão após ser dispensado.
+
 A interface é voltada para navegadores modernos. Para evitar interrupções em atividades coletivas, mantenha o dispositivo carregado e confira a conexão antes da sessão.
 
 ## Como jogar Missão Coleta
