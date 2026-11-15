@@ -27,6 +27,12 @@ Os lendários são: **Aventura Circular, Planeta Vivo, Renascimento Verde e Pact
 
 A distribuição de sorteio é ponderada, não uniforme. A raridade não garante automaticamente um resultado melhor em qualquer situação: cartas mais raras exigem condições específicas de combinação.
 
+### Coringas evolutivos e certificado final
+
+Sete dos 40 coringas agora são **evolutivos**: Papel Recuperado, Retorno do Vidro, Valor do Metal, Coleta Integrada, Biofertilizante, Aliança dos Biomas e Usina Circular. Eles começam com os bônus de origem e aumentam o efeito em cada jogada válida na qual a habilidade é ativada, até **8 evoluções**. O progresso aparece diretamente no coringa equipado, com contador e barra. Pré-visualizar cartas ou jogar uma mão anulada não aumenta o nível; a Aventura Circular continua repetindo o bônus, mas não duplica o avanço de nível. As evoluções pertencem ao coringa comprado e reiniciam numa nova campanha.
+
+O **certificado de conclusão**, a imagem compartilhável e os botões para compartilhar ou copiar a vitória aparecem **somente depois da sétima crise da campanha Extremo**, isto é, depois das quatro campanhas (28 crises). Vencer Fácil, Médio ou Difícil apenas desbloqueia a próxima campanha. O certificado final mostra o feito de 28 crises vencidas e os pontos obtidos durante a campanha Extremo.
+
 ### Campanhas de dificuldade (7 crises por nível)
 
 O jogo começa no **Fácil** e mostra um seletor com as campanhas **Fácil → Médio → Difícil → Extremo**. Cada campanha contém **as mesmas sete crises**, mantendo a progressão de metas dentro do nível escolhido. Ao concluir a sétima crise, o jogo desbloqueia a campanha seguinte e oferece um botão para avançar. Cada nova campanha começa com cartas, coringas e ecofichas novos, para evitar que a dificuldade seja trivializada por uma coleção pronta.
