@@ -128,7 +128,7 @@ function getMain(){return document.querySelector('#kidsMain')}
 function getSide(){return document.querySelector('#kidsSide')}
 function category(id){return CATEGORIES.find(c=>c.id===id)}
 function newGame(){
- game={phase:'intro',rounds:createRound(),index:0,points:0,correct:0,misses:0,retry:false,feedback:null,selected:null};
+ game={phase:'intro',rounds:createRound(),index:0,points:0,correct:0,misses:0,retry:false,feedback:null,selected:null,levelsCompleted:0};
  render();return game;
 }
 function begin(){
@@ -140,12 +140,12 @@ function chooseBin(id){
  const item=game.rounds[game.index],answer=scoreAnswer(item,id);
  if(answer.correct){
   game.points+=answer.points;game.correct++;game.retry=false;
-  game.feedback={correct:true,message:'Boa escolha! '+answer.tip};
+  game.feedback={correct:true,message:JOKES_CORRECT[game.index%JOKES_CORRECT.length]+' '+answer.tip};
   game.phase='feedback';
   playNote(660);
  }else{
   game.misses++;
-  game.feedback={correct:false,message:'Vamos tentar de novo! Observe o material do objeto e escolha outra lixeira.'};
+  game.feedback={correct:false,message:JOKES_RETRY[(game.index+game.misses-1)%JOKES_RETRY.length]};
   game.phase='feedback';
   game.retry=true;
   playNote(280);
@@ -157,10 +157,12 @@ function continueGame(){
  if(game.retry){game.phase='playing';game.feedback=null;render();return}
  game.index++;
  game.feedback=null;
- game.phase=game.index>=game.rounds.length?'complete':'playing';
- if(game.phase==='complete')playNote(880);
+ if(game.index>=game.rounds.length){game.phase='complete';game.levelsCompleted=LEVELS.length;playNote(880)}
+ else if(game.index%5===0){game.phase='levelup';game.levelsCompleted=game.index/5;playNote(770)}
+ else game.phase='playing';
  render();
 }
+function startNextLevel(){if(game?.phase!=='levelup')return;game.phase='playing';render()}
 function playNote(freq){
  try{
   const Ctx=window.AudioContext||window.webkitAudioContext;
@@ -179,17 +181,22 @@ function render(){
  const data=game;
  side.innerHTML='<div class="kids-help"><h3>GUIA DA COLETA</h3><p>Observe do que cada objeto é feito. Toque na lixeira da categoria correta. Você pode tentar novamente sem perder pontos.</p><div class="kids-legend">'+CATEGORIES.map(c=>'<div><span style="--bin:'+c.color+'"></span><strong>'+c.name+'</strong><small>'+c.desc+'</small></div>').join('')+'</div><p>As regras de coleta variam conforme a cidade. Resíduos devem estar limpos e secos quando necessário. A compostagem também depende das condições locais.</p></div>';
  if(data.phase==='intro'){
-  main.innerHTML='<div class="kids-intro"><span class="kids-kicker">ECOCARD / MODO INFANTIL</span><h2>MISSÃO COLETA</h2><p>Você consegue colocar cada objeto na lixeira correta?</p><div class="kids-intro-art" aria-hidden="true">'+CATEGORIES.map(c=>'<span style="--bin:'+c.color+'"></span>').join('')+'</div><p><strong>15 objetos · 3 etapas · Sem cronômetro</strong></p><p>Observe, escolha a lixeira e descubra o motivo da resposta. Errou? Pode tentar de novo.</p><button class="btn kids-primary" id="kidsBegin">COMEÇAR MISSÃO</button></div>';
+  main.innerHTML='<div class="kids-intro"><span class="kids-kicker">ECOCARD / MODO INFANTIL</span><h2>MISSÃO COLETA</h2><p>Você consegue colocar cada objeto na lixeira correta?</p><div class="kids-intro-art" aria-hidden="true">'+CATEGORIES.map(c=>'<span style="--bin:'+c.color+'"></span>').join('')+'</div><p><strong>25 objetos · 5 etapas · Sem cronômetro</strong></p><p>Observe, escolha a lixeira e descubra o motivo da resposta. Errou? Pode tentar de novo.</p><button class="btn kids-primary" id="kidsBegin">COMEÇAR MISSÃO</button></div>';
   main.querySelector('#kidsBegin')?.addEventListener('click',begin);return;
  }
  if(data.phase==='complete'){
-  main.innerHTML='<section class="kids-finish"><span class="kids-kicker">MISSÃO CONCLUÍDA</span><div class="kids-finish-symbol" aria-hidden="true">15/15</div><h2>PARABÉNS, GUARDIÃO!</h2><p>Você separou os 15 objetos e ajudou a cuidar do planeta.</p><div class="kids-final-score"><strong>'+data.points.toLocaleString('pt-BR')+'</strong><span>PONTOS</span><strong>'+data.correct+'/15</strong><span>ACERTOS</span></div><p>O próximo passo é aprender onde os resíduos são coletados na sua cidade.</p><button class="btn kids-primary" id="kidsAgain">JOGAR OUTRA VEZ</button></section>';
+  main.innerHTML='<section class="kids-finish"><span class="kids-kicker">MISSÃO CONCLUÍDA</span><div class="kids-finish-symbol" aria-hidden="true">25/25</div><h2>PARABÉNS, GUARDIÃO!</h2><p>Você separou 25 objetos e completou as cinco etapas da missão.</p><div class="kids-final-score"><strong>'+data.points.toLocaleString('pt-BR')+'</strong><span>PONTOS</span><strong>'+data.correct+'/25</strong><span>ACERTOS</span></div><p>O próximo passo é aprender onde os resíduos são coletados na sua cidade.</p><button class="btn kids-primary" id="kidsAgain">JOGAR OUTRA VEZ</button></section>';
   main.querySelector('#kidsAgain')?.addEventListener('click',newGame);return;
  }
- const item=data.rounds[data.index],cat=category(item.category),at=data.index+1,level=Math.ceil(at/5);
- main.innerHTML='<div class="kids-arena"><div class="kids-topline"><span>ETAPA '+level+' / 3</span><span>OBJETO '+at+' / 15</span><span>'+data.points.toLocaleString('pt-BR')+' PTS</span></div>'+
- '<div class="kids-progress"><span style="width:'+((data.index+1)/15*100)+'%"></span></div>'+
- '<div class="kids-item" role="group" aria-label="Objeto para separar"><span class="kids-label">ONDE DEVO COLOCAR?</span><div class="kids-illustration">'+illustration(item.shape)+'</div><h2>'+item.name+'</h2></div>'+
+ if(data.phase==='levelup'){
+  const level=data.index/5;
+  main.innerHTML='<section class="kids-levelup"><span class="kids-kicker">ETAPA '+(level+1)+' / '+LEVELS.length+'</span><div class="kids-levelup-number">'+(level+1)+'</div><h2>'+LEVELS[level].name.toUpperCase()+'</h2><p>'+LEVELS[level].description+'</p><div class="kids-levelup-progress">'+level+' de '+LEVELS.length+' etapas concluídas</div><button type="button" class="btn kids-primary" id="kidsContinueLevel">CONTINUAR MISSÃO</button></section>';
+  main.querySelector('#kidsContinueLevel')?.addEventListener('click',startNextLevel);return;
+ }
+ const item=data.rounds[data.index],cat=category(item.category),at=data.index+1,level=Math.ceil(at/5),levelInfo=LEVELS[level-1];
+ main.innerHTML='<div class="kids-arena"><div class="kids-topline"><span>ETAPA '+level+' / '+LEVELS.length+'</span><span>OBJETO '+at+' / '+data.rounds.length+'</span><span>'+data.points.toLocaleString('pt-BR')+' PTS</span></div>'+
+ '<div class="kids-progress"><span style="width:'+((data.index+1)/data.rounds.length*100)+'%"></span></div>'+
+ '<div class="kids-item" role="group" aria-label="Objeto para separar"><span class="kids-label">ONDE DEVO COLOCAR?</span><div class="kids-illustration">'+illustration(item.shape)+'</div><h2>'+item.name+'</h2>'+(levelInfo.hint?'<p class="kids-item-tip">Dica: descubra qual é o material principal deste objeto.</p>':'<p class="kids-item-tip kids-item-tip-hard">DESAFIO: SEM PISTAS</p>')+'</div>'+
  (data.phase==='feedback'?'<section class="kids-answer '+(data.feedback.correct?'correct':'retry')+'" role="status"><h3>'+(data.feedback.correct?'ACERTOU!':'TENTE MAIS UMA VEZ')+'</h3><p>'+data.feedback.message+'</p><button class="btn kids-primary" id="kidsNext">'+(data.retry?'ESCOLHER OUTRA LIXEIRA':'PRÓXIMO OBJETO')+'</button></section>':
  '<h3 class="kids-question">ESCOLHA UMA LIXEIRA</h3><div class="kids-bins">'+CATEGORIES.map(c=>'<button type="button" class="kids-bin" style="--bin:'+c.color+'" data-bin="'+c.id+'" aria-label="Lixeira de '+c.name+'"><span class="kids-bin-lid"></span><span class="kids-bin-body"><span class="kids-bin-mark" aria-hidden="true">ECO</span><strong>'+c.name+'</strong></span></button>').join('')+'</div><p class="kids-hint">Toque na lixeira correta. Não existe limite de tempo.</p>')+
  '</div>';
@@ -197,5 +204,5 @@ function render(){
  main.querySelectorAll('[data-bin]').forEach(el=>el.addEventListener('click',()=>chooseBin(el.dataset.bin)));
 }
 function show(){if(!game)newGame();else render()}
-root.EcoKids={CATEGORIES,ITEMS,SHAPES,illustration,createRound,scoreAnswer,newGame,begin,chooseBin,continueGame,show,getState:()=>game};
+root.EcoKids={CATEGORIES,ITEMS,SHAPES,LEVELS,JOKES_CORRECT,JOKES_RETRY,illustration,createRound,scoreAnswer,newGame,begin,chooseBin,continueGame,startNextLevel,show,getState:()=>game};
 })(window);
