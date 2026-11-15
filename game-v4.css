@@ -378,3 +378,22 @@ footer a{color:#d9ecab;text-decoration:underline;text-underline-offset:3px}
 #solo .arcade-shop .rarity-common button:not(:disabled){background:#bbdc7b;color:#172417}
 #solo .arcade-shop .rarity-uncommon button:not(:disabled){background:#8cdeec;color:#153242}
 #solo .arcade-shop .rarity-legend button:not(:disabled){background:#f4d27e;color:#28200f}
+
+/* Difficulty ladder: seven distinct environmental crises in every campaign. */
+#solo .campaign-select{padding:clamp(14px,3vw,35px);text-align:left}
+#solo .campaign-select h2{font:900 clamp(40px,6vw,76px)/.94 'Barlow Condensed','Arial Narrow',sans-serif;margin:13px 0 12px}
+#solo .campaign-select>p{font:500 15px/1.55 'IBM Plex Sans',sans-serif;color:#d5e4d0;max-width:690px}
+#solo .campaign-choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px;margin:22px 0}
+#solo .campaign-choice{display:flex;flex-direction:column;align-items:flex-start;text-align:left;gap:12px;min-height:200px;padding:18px;border:2px solid #a3cd76;background:linear-gradient(140deg,#284532,#1c3228);color:#f0f7e5;cursor:pointer;border-radius:6px}
+#solo .campaign-choice.campaign-medium{border-color:#8dcae9;background:linear-gradient(140deg,#244457,#1b3440)}
+#solo .campaign-choice.campaign-hard{border-color:#dd9b87;background:linear-gradient(140deg,#53372c,#342924)}
+#solo .campaign-choice.campaign-extreme{border-color:#c88adf;background:linear-gradient(140deg,#4f2b55,#30253b)}
+#solo .campaign-choice .campaign-status{font:800 10px 'IBM Plex Mono',monospace;border:1px solid currentColor;border-radius:50px;padding:5px 8px}
+#solo .campaign-choice b{font:900 clamp(30px,4vw,48px)/.9 'Barlow Condensed',sans-serif}
+#solo .campaign-choice small{font:500 13px/1.5 'IBM Plex Sans',sans-serif;color:#e7e8dd}
+#solo .campaign-choice>span:last-child{font:800 11px 'IBM Plex Mono',monospace;color:#e6f6bb;margin-top:auto}
+#solo .campaign-choice:disabled{opacity:.5;filter:grayscale(.45);cursor:not-allowed}
+#solo .campaign-choice:not(:disabled):hover,#solo .campaign-choice:not(:disabled):focus-visible{outline:3px solid #dff6a1;outline-offset:2px;transform:translateY(-2px)}
+#solo .campaign-note{font-size:12px!important;color:#c0d4b5!important}
+@media(max-width:640px){#solo .campaign-choices{grid-template-columns:1fr}#solo .campaign-choice{min-height:152px;padding:14px}#solo .campaign-choice b{font-size:38px}}
+@media(prefers-reduced-motion:reduce){#solo .campaign-choice{transition:none;transform:none!important}}
