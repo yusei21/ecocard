@@ -12,6 +12,12 @@ Jogo independente do Salve o Mundo, acessível pelo segundo botão na página in
 
 A interface usa **ilustrações vetoriais desenhadas no código**, texto em alto contraste, botões grandes e controles compatíveis com toque, mouse e teclado. Não exige conta, rede multiplayer ou bibliotecas externas. As explicações reconhecem que a coleta e a compostagem dependem das regras locais. Os arquivos são `kids-game.js` e `kids-game.css`, com testes em `tests/kids-game.test.cjs`.
 
+### Cartas ilustradas e identidade sem emojis
+
+Todas as **65 cartas ambientais** do Salve o Mundo exibem uma ilustração vetorial do objeto retratado, em vez de apenas um símbolo genérico da categoria. O arquivo `card-art.js` associa cada carta a um desenho de jornal, caixa, garrafa, lata, casca, frasco e outras silhuetas, preservando nome, valor e categoria para quem lê ou utiliza recursos de acessibilidade. A arte também acompanha a animação de pontuação e aparece em telas pequenas.
+
+**Não são usados emojis na interface do projeto.** Símbolos decorativos foram substituídos por tipografia e desenhos SVG, inclusive na tela inicial e no jogo infantil. Um teste automatizado verifica a presença dos desenhos nas 65 cartas e rejeita caracteres de emoji nos arquivos de código e documentação.
+
 ### Salve o Mundo (solo)
 
 Roguelike de pontuação com cartas de cinco categorias de resíduos: **azul/papel**, **vermelho/plástico**, **verde/vidro**, **amarelo/metal**, **marrom/orgânicos**. São **65 cartas**, com **A, 2–10, J, Q, K** por categoria. A=1, J=11, Q=12, K=13 para sequências e pontuação. As combinações de 1–5 cartas recebem pontos base e multiplicadores, com ajustes dos coringas e dos chefes.
