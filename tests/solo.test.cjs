@@ -50,9 +50,9 @@ assert(evaluate([make('azul',1),make('azul',2),make('azul',3)],4,[],null,boss('o
 assert.equal(stages.length,7);
 assert.equal(new Set(jokers.map(j=>j.id)).size,jokers.length,'unique joker IDs');
 
-const expectedRarities={common:16,uncommon:12,epic:8,legend:4};
-assert.equal(jokers.length,40,'the game must contain exactly 40 jokers');
-assert.equal(new Set(jokers.map(j=>j.id)).size,40,'all 40 joker IDs must be unique');
+const expectedRarities={common:20,uncommon:15,epic:10,legend:5};
+assert.equal(jokers.length,50,'the game must contain exactly 50 jokers');
+assert.equal(new Set(jokers.map(j=>j.id)).size,50,'all 50 joker IDs must be unique');
 for(const [rarity,count] of Object.entries(expectedRarities)){
  assert.equal(jokers.filter(j=>j.rarity===rarity).length,count,'correct '+rarity+' distribution');
 }
@@ -104,6 +104,39 @@ for(const [id,handName] of Object.entries(triggerCases)){
  assert.equal(circular.events.filter(e=>e.label===joker.name).length,2,
   'Aventura Circular should activate '+id+' exactly twice');
 }
+const tenNewCases={
+ mutirao_bairro:[make('azul',2),make('verde',3),make('marrom',4)],
+ retorno_embalagens:[make('azul',2),make('verde',4)],
+ uso_consciente:[make('azul',6)],
+ pequenos_reparos:[make('azul',1),make('verde',5)],
+ rota_limpa:[make('azul',2),make('verde',3),make('marrom',4),make('amarelo',5)],
+ materiais_pares:[make('azul',6),make('verde',6)],
+ compostagem_coletiva:[make('marrom',4),make('marrom',5),make('azul',6)],
+ circuito_valores:[make('azul',2),make('verde',3),make('marrom',4),make('amarelo',5)],
+ ponte_materiais:[make('azul',2),make('azul',3),make('verde',4),make('verde',5)],
+ guardioes_terra:[make('azul',2),make('vermelho',4),make('verde',6),make('amarelo',8),make('marrom',10)]
+};
+assert.equal(Object.keys(tenNewCases).length,10,'ten new joker abilities are tested');
+for(const [id,cards] of Object.entries(tenNewCases)){
+ const joker=jokers.find(x=>x.id===id);
+ assert(joker,'new joker exists: '+id);
+ const base=evaluate(cards,0,[]);
+ const result=evaluate(cards,0,[joker]);
+ assert(result.score>base.score,'ability raises the score: '+id);
+ assert(result.events.some(e=>e.label===joker.name),'activation appears in scoring events: '+id);
+ const circular=evaluate(cards,0,[joker,jokers.find(x=>x.id==='circular')]);
+ assert.equal(circular.events.filter(e=>e.label===joker.name).length,2,
+  'Circular retriggers new joker: '+id);
+ assert.equal(typeof joker.price,'number');
+ assert(joker.price>=4&&joker.price<=20);
+ assert(sandbox.window.EcoCardSolo.jokerArt(joker).includes('<svg'),'unique art available: '+id);
+}
+const guardian=jokers.find(j=>j.id==='guardioes_terra');
+assert.equal(evaluate(tenNewCases.guardioes_terra,1,[guardian],null,boss('ban_azul')).events.some(e=>e.label===guardian.name),false,
+ 'legendary requiring all colors cannot activate if one category is blocked');
+assert.equal(evaluate(tenNewCases.guardioes_terra.slice(0,4),0,[guardian]).events.some(e=>e.label===guardian.name),false,
+ 'legendary activates only with all five categories');
+
 const blockedRed=evaluate(hands.red2,1,[jokers.find(j=>j.id==='plastico_responsavel')],
  null,boss('ban_vermelho'));
 assert.equal(blockedRed.score,0,'a negated category cannot trigger its joker');
