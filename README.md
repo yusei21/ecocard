@@ -33,13 +33,19 @@ Sete dos 40 coringas agora são **evolutivos**: Papel Recuperado, Retorno do Vid
 
 O **certificado de conclusão**, a imagem compartilhável e os botões para compartilhar ou copiar a vitória aparecem **somente depois da sétima crise da campanha Extremo**, isto é, depois das quatro campanhas (28 crises). Vencer Fácil, Médio ou Difícil apenas desbloqueia a próxima campanha. O certificado final mostra o feito de 28 crises vencidas e os pontos obtidos durante a campanha Extremo.
 
+### Especialização do baralho e proteção contra recarregamentos
+
+Após vencer uma crise, a loja permite ajustar o baralho para uma estratégia específica. Por **4 ecofichas**, escolha **Papel, Plástico, Vidro, Metal ou Orgânicos**: entram **2 cartas** dessa categoria e saem **3 cartas de outras categorias**. São permitidos até **5 ajustes por campanha**; as mudanças valem nas crises seguintes e recomeçam com a próxima dificuldade. A loja apresenta a quantidade atual de cartas de cada categoria para ajudar nas decisões.
+
+Em dispositivos móveis, o estado da partida é armazenado em `sessionStorage` e recuperado quando a página recarrega na mesma aba. A recuperação preserva a campanha, crise, baralho, coringas, evoluções, pontos e loja. Se o recarregamento ocorrer durante a animação de pontos, o resultado já registrado é recuperado uma única vez. O progresso não depende de uma conta e pode desaparecer ao encerrar a sessão do navegador. O botão de reinício explícito limpa o estado salvo.
+
 ### Campanhas de dificuldade (7 crises por nível)
 
 O jogo começa no **Fácil** e mostra um seletor com as campanhas **Fácil → Médio → Difícil → Extremo**. Cada campanha contém **as mesmas sete crises**, mantendo a progressão de metas dentro do nível escolhido. Ao concluir a sétima crise, o jogo desbloqueia a campanha seguinte e oferece um botão para avançar. Cada nova campanha começa com cartas, coringas e ecofichas novos, para evitar que a dificuldade seja trivializada por uma coleção pronta.
 
 As metas de resistência do chefe da sétima crise são: Fácil **54.000**, Médio **97.500**, Difícil **150.000**, Extremo **240.000**. O chefe aleatório **Crise agravada** pode dobrar essas metas. Fácil tem uma jogada e um descarte extra por crise; Extremo reduz um de cada. Nenhuma campanha é desbloqueada automaticamente sem vencer as sete fases da anterior.
 
-O desbloqueio é **temporário para a visita atual**, sem persistência no navegador, em conformidade com a regra de reiniciar o site ao atualizar ou fechá-lo. Ainda falta validar a curva completa com partidas reais.
+A partida e os desbloqueios são recuperados após **recarregar a página na mesma aba** (armazenamento de sessão). Fechar a aba pode encerrar a sessão; o botão Reiniciar continua disponível para começar novamente. Ainda falta validar a curva completa com partidas reais.
 
 ### Escalada e regras rotativas (7 crises)
 
