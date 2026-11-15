@@ -1,128 +1,93 @@
-# EcoCard — EcoResiduários Academy
+# EcoCard
 
-Plataforma de jogos educativos sobre resíduos sólidos, desenvolvida para uso em navegador, inclusive em celulares e em atividades de demonstração no IFMA. O projeto oferece dois jogos independentes:
+**Plataforma web de jogos educativos sobre separação de resíduos e sustentabilidade.**
 
-- **Salve o Mundo:** estratégia com cartas, combinações, coringas e campanhas progressivas.
-- **Missão Coleta:** classificação de resíduos em lixeiras coloridas, com etapas de aprendizado para crianças.
+[**Jogar no navegador**](https://yusei21.github.io/ecocard/) · [Guia de uso](docs/GUIA-DE-USO.md) · [Arquitetura](docs/ARQUITETURA.md) · [Referência técnica](docs/REFERENCIA-TECNICA.md) · [Contribuições](docs/CONTRIBUINDO.md)
 
-**Jogar:** https://yusei21.github.io/ecocard/
+O EcoCard reúne dois jogos independentes em português brasileiro. **Salve o Mundo** utiliza estratégia, cartas e evolução de campanhas; **Missão Coleta** introduz a coleta seletiva a crianças por meio de objetos ilustrados e escolhas de lixeiras.
 
-Não requer cadastro. A interface está em português do Brasil e não utiliza emojis: os objetos e elementos de jogo são desenhados com SVG e CSS.
+O projeto foi pensado para uso em navegadores de computador e celular, inclusive em demonstrações educativas. Não exige cadastro nem instalação para jogar na versão publicada.
 
-## Missão Coleta — jogo infantil
+> **Escopo ambiental:** os jogos simplificam a coleta seletiva para fins didáticos. As regras de descarte e a aceitação de materiais variam conforme a cidade e o serviço de coleta. O projeto não substitui orientações locais.
 
-Na Missão Coleta, cada objeto ilustrado deve ser colocado na lixeira correta. O jogo trabalha com cinco categorias:
+## Visão geral
 
-| Cor da lixeira | Material |
-| --- | --- |
-| Azul | Papel |
-| Vermelho | Plástico |
-| Verde | Vidro |
-| Amarelo | Metal |
-| Marrom | Orgânicos |
-
-O catálogo contém **40 objetos**, oito por categoria. Cada partida apresenta **25 objetos diferentes**, divididos em cinco etapas com cinco objetos cada. Cada resposta correta vale **100 pontos**; um erro permite outra tentativa, sem perda de pontos, cronômetro ou encerramento da partida. Há explicações educativas, respostas bem-humoradas e uma tela de passagem de etapa.
-
-### Progressão das cinco etapas
-
-| Etapa | Nome | Desafio |
+| | Salve o Mundo | Missão Coleta |
 | --- | --- | --- |
-| 1 | Primeiros Passos | Materiais familiares, com nomes nas lixeiras e dica |
-| 2 | Olho de Águia | Mais observação, ainda com nomes e dica |
-| 3 | Detetive da Coleta | Os nomes continuam; a dica do objeto é retirada |
-| 4 | Desafio dos Materiais | Objetos menos óbvios, com nomes nas lixeiras, sem dica |
-| 5 | Mestre da Separação | **Apenas as cores das lixeiras**, sem nomes dos materiais e sem legenda lateral |
+| Público | Jogadores interessados em estratégia | Crianças e atividades introdutórias |
+| Objetivo | Superar metas de pontuação em crises ambientais | Associar objetos às cores das lixeiras |
+| Mecânica | Combinações de cartas, coringas, economia e chefes | Escolher entre cinco lixeiras, com explicações |
+| Conteúdo | 65 cartas e 50 coringas | Catálogo de 40 objetos |
+| Progressão | Quatro campanhas com sete crises cada | Cinco etapas, 25 objetos por partida |
+| Conclusão | Certificado após vencer a campanha Extremo | Tela de parabéns após a quinta etapa |
 
-A quinta etapa verifica o aprendizado das cores. Os controles continuam com descrições acessíveis para leitores de tela, usando o nome **da cor** de cada lixeira, sem revelar a categoria. Ao concluir as cinco etapas, aparece a tela de parabéns com os 25 acertos e a pontuação.
+### Salve o Mundo
 
-O jogo utiliza ilustrações SVG locais, sem imagens externas ou dependência de conexão multiplayer. As recomendações sobre coleta seletiva têm caráter didático: o destino de um material pode variar segundo a infraestrutura e as orientações municipais.
+- **65 cartas ambientais**: 13 valores em cada uma das categorias papel, plástico, vidro, metal e orgânicos.
+- **50 coringas** distribuídos entre Comum (20), Raro (15), Épico (10) e Lendário (5); sete possuem evolução por uso.
+- **Quatro campanhas sequenciais**: Fácil, Médio, Difícil e Extremo, cada uma com sete crises.
+- Loja com ecofichas, juros, compra e venda de coringas e **especialização do baralho** entre crises.
+- Regras de chefes, efeitos sonoros de pontuação e certificado compartilhável **apenas após concluir o Extremo**.
 
-**Arquivos:** `kids-game.js`, `kids-game.css` e `tests/kids-game.test.cjs`.
+### Missão Coleta
 
-## Salve o Mundo — estratégia de cartas
+- **Cinco lixeiras** identificadas pelas cores azul, vermelho, verde, amarelo e marrom.
+- **40 objetos ilustrados** no catálogo; cada partida seleciona 25, sem repetir objetos.
+- **Cinco etapas de cinco objetos**, respostas educativas, mensagens de incentivo e possibilidade de corrigir erros.
+- Na **quinta etapa**, as lixeiras mostram **somente as cores**, sem nome do material nem legenda lateral; as descrições acessíveis dos botões identificam a cor, sem entregar a resposta.
 
-O Salve o Mundo combina formação de mãos, pontuação, gestão de ecofichas e construção de estratégias com coringas.
+## Início rápido
 
-### Baralho e pontuação
+**Online:** abra [EcoCard no GitHub Pages](https://yusei21.github.io/ecocard/) e escolha um dos dois jogos.
 
-- São **65 cartas**: 13 valores por cada uma das cinco categorias de resíduos.
-- Valores: **A (1), 2 a 10, J (11), Q (12), K (13)**.
-- Cada carta apresenta nome do objeto, categoria, valor e uma ilustração vetorial.
-- O jogador seleciona de uma a cinco cartas para formar combinações e somar pontos base e multiplicadores.
-- Há um tutorial visual antes de escolher a campanha, com exemplos de pares, trincas, sequências e mãos de uma só categoria.
-- Cada crise possui um limite de jogadas e descartes. A prévia de pontuação considera efeitos e restrições, incluindo jogadas anuladas.
-
-As combinações principais são **Separação Inicial**, **Materiais Equivalentes**, **Reaproveitamento**, **Fluxo Circular**, **Coleta Seletiva**, **Triagem Perfeita** e **Ciclo Completo**. O jogo também reconhece **Diversidade Ambiental** e **Mutirão Quádruplo**.
-
-### Quatro campanhas de sete crises
-
-O progresso é sequencial: **Fácil, Médio, Difícil e Extremo**. Cada campanha percorre as mesmas sete crises, com metas e recursos ajustados à dificuldade. Vencer a sétima crise desbloqueia a campanha seguinte.
-
-| Crise | Nome | Meta-base (Difícil) |
-| --- | --- | ---: |
-| 1 | Contaminação Cruzada | 850 |
-| 2 | Descarte Irregular | 2.200 |
-| 3 | Desperdício de Recursos | 4.000 |
-| 4 | Crise dos Aterros | 7.600 |
-| 5 | Poluição dos Oceanos | 12.000 |
-| 6 | Consumo Desenfreado | 18.500 |
-| 7 | Mudanças Climáticas | 150.000 |
-
-A meta da última crise, sem a regra de dobrar pontos, é **54.000 no Fácil**, **97.500 no Médio**, **150.000 no Difícil** e **240.000 no Extremo**. Os modificadores da campanha também ajustam a quantidade de jogadas, descartes e ecofichas iniciais.
-
-Da segunda à sétima crise, os chefes podem impor restrições aleatórias: anular uma categoria, exigir valores iguais ou categorias específicas, limitar a composição da mão ou dobrar a meta (**Crise agravada**). Cartas anuladas não participam dos efeitos dos coringas.
-
-São **28 crises ao todo** para zerar todas as campanhas. O **certificado de conclusão** e os recursos de compartilhar, copiar ou salvar a imagem de vitória aparecem **somente após concluir a sétima crise do Extremo**. As vitórias nas campanhas anteriores apenas permitem avançar.
-
-### Coleção de 50 coringas
-
-| Raridade | Quantidade | Cor |
-| --- | ---: | --- |
-| Comum | 20 | Verde |
-| Raro | 15 | Azul |
-| Épico | 10 | Roxo |
-| Lendário | 5 | Dourado |
-| **Total** | **50** | |
-
-Cada coringa oferece uma habilidade própria de pontuação e uma ilustração vetorial. A loja apresenta três ofertas por visita, e o jogador pode equipar até **cinco coringas** simultaneamente. O sorteio é ponderado por raridade, e a **Aventura Circular** tem o menor peso individual da coleção. Seu efeito repete duas vezes os efeitos dos outros coringas equipados.
-
-Os cinco lendários são **Aventura Circular**, **Planeta Vivo**, **Renascimento Verde**, **Pacto Global** e **Guardiões da Terra**.
-
-Sete coringas são **evolutivos**: Papel Recuperado, Retorno do Vidro, Valor do Metal, Coleta Integrada, Biofertilizante, Aliança dos Biomas e Usina Circular. Uma jogada válida que ativa a habilidade aumenta seu nível até o limite de **oito evoluções**, indicado por contador e barra no coringa. A prévia de pontuação e mãos anuladas não geram evolução; a Aventura Circular repete o efeito sem duplicar o avanço de nível.
-
-### Loja, economia e especialização do baralho
-
-Ao vencer uma crise, o jogador recebe ecofichas e acessa a loja para comprar ou vender coringas. Há juros por ecofichas guardadas, conforme as regras do jogo. No celular, o painel de **saldo** e **juros** é apresentado em blocos empilhados para evitar texto espremido.
-
-Na loja, por **4 ecofichas**, é possível escolher uma categoria para **acrescentar duas cartas dela e retirar três de outras categorias**. São permitidos até **cinco ajustes por campanha**. A especialização passa a valer a partir da próxima crise, ajudando a construir baralhos alinhados aos coringas adquiridos.
-
-### Progresso no celular
-
-O jogo utiliza `sessionStorage` para tentar recuperar campanha, crise, baralho, coringas, evoluções, pontuação e estado da loja quando a página é recarregada **na mesma aba**. O progresso pode deixar de estar disponível ao encerrar a sessão do navegador. O reinício explícito limpa a partida salva.
-
-A mão pode ser reorganizada arrastando cartas; a pontuação possui animação e sons curtos para cartas contabilizadas. O comportamento em navegadores e aparelhos específicos deve ser verificado com testes reais.
-
-**Arquivos:** `solo-v2.js`, `card-art.js`, `hand-order.js`, `victory-share.js`, `game-v4.css` e folhas auxiliares de estilo.
-
-## Executar localmente
-
-Não há etapa de compilação, nem dependências JavaScript a instalar para jogar. Abra `index.html` em um navegador moderno. Para testes completos dos recursos de navegador (como compartilhamento e área de transferência), prefira um servidor local ou o endereço HTTPS do GitHub Pages.
-
-Exemplo com Python instalado:
+**Localmente:** clone o repositório e execute um servidor HTTP estático na raiz.
 
 ```bash
+git clone https://github.com/yusei21/ecocard.git
+cd ecocard
 python3 -m http.server 8000
 ```
 
-Depois abra `http://localhost:8000`.
+Acesse `http://localhost:8000`. Para jogar não há compilação, instalação de pacotes JavaScript nem serviço de backend próprio. A página solicita fontes do Google Fonts; na ausência de internet, o navegador pode usar fontes alternativas. Alguns recursos do navegador, como a área de transferência e o compartilhamento, dependem do contexto e das permissões.
 
-Para publicar pelo GitHub Pages, use **Settings > Pages > Deploy from a branch > main > /(root)**, caso a publicação da branch ainda não esteja configurada.
+**Requisitos recomendados:** navegador moderno com JavaScript habilitado, suporte a SVG e armazenamento de sessão. O áudio depende das permissões e configurações do dispositivo.
 
-## Testes automatizados
+## Documentação
 
-O repositório usa **Node.js 22** na GitHub Actions, no arquivo `.github/workflows/test.yml`. Os testes verificam regras das combinações, coringas, baralhos, ordenação de cartas, ilustrações e jogabilidade infantil. Também existe uma verificação de ausência de caracteres de emoji nos arquivos-fonte e na documentação.
+| Documento | Para quem | Conteúdo |
+| --- | --- | --- |
+| [Guia de uso](docs/GUIA-DE-USO.md) | Jogadores, professores e mediadores | Como jogar os dois modos e resolver dúvidas comuns |
+| [Arquitetura](docs/ARQUITETURA.md) | Desenvolvedores | Organização dos arquivos, estados e fluxos principais |
+| [Referência técnica](docs/REFERENCIA-TECNICA.md) | Desenvolvedores e revisores | Regras, números, armazenamento, testes e limitações |
+| [Fundamentação educacional](docs/FUNDAMENTACAO.md) | Educadores e revisores | Objetivos de aprendizagem, CONAMA 275/2001, limites da simulação |
+| [Guia de contribuição](docs/CONTRIBUINDO.md) | Colaboradores | Desenvolvimento, testes, relatos de problema e revisão |
 
-Para rodar os testes localmente, com Node.js instalado:
+A organização distingue **aprendizado**, **procedimentos**, **referência** e **explicação**, inspirada no [Diátaxis](https://diataxis.fr/), para que cada público encontre rapidamente a informação necessária.
+
+## Estrutura resumida
+
+```text
+index.html                 Página inicial e estrutura das telas
+solo-v2.js                 Regras, campanhas, loja e pontuação do Salve o Mundo
+kids-game.js               Regras e telas da Missão Coleta
+card-art.js                Desenhos vetoriais das cartas ambientais
+hand-order.js              Reordenação visual da mão
+victory-share.js           Certificado e compartilhamento da vitória final
+game-v4.css                Estilos do Salve o Mundo
+kids-game.css              Estilos da Missão Coleta
+identity-v3.css            Identidade visual
+mobile-v5.css              Ajustes para dispositivos móveis
+landing-v6.css, landing-v7.css  Página inicial
+tests/                     Testes automatizados
+.github/workflows/test.yml Integração contínua
+docs/                      Documentação detalhada
+```
+
+## Qualidade e testes
+
+O projeto usa testes automatizados em **Node.js 22** no GitHub Actions. Eles cobrem combos, efeitos de coringas, progressão, ordenação de cartas, ilustrações e jogabilidade infantil, incluindo a última etapa apenas com cores.
+
+Para executar os testes na raiz do repositório:
 
 ```bash
 node tests/card-art.test.cjs
@@ -132,28 +97,24 @@ node tests/decks.test.cjs
 node tests/hand-order.test.cjs
 ```
 
-## Design, acessibilidade e instituições
+O código de interface evita emojis e utiliza desenhos SVG e texto. O projeto inclui rótulos acessíveis em controles importantes, suporte a teclado e estilos responsivos; isso **não equivale a uma certificação de acessibilidade**. O comportamento deve continuar sendo avaliado em aparelhos reais.
 
-A identidade visual utiliza tons de verde, tipografia editorial, as cinco cores de separação dos resíduos e desenhos vetoriais locais. As famílias tipográficas usadas incluem **Barlow Condensed**, **IBM Plex Sans** e **IBM Plex Mono**. As folhas de estilo incluem `identity-v3.css`, `mobile-v5.css`, `landing-v6.css` e `landing-v7.css`.
+## Estado e limitações
 
-A interface conta com rótulos para leitores de tela em controles relevantes, indicação de seleção nas cartas, botões compatíveis com toque e teclado e estilos que consideram a preferência por movimento reduzido. O contraste e a disposição dos elementos devem continuar sendo avaliados em celulares reais.
+- O Salve o Mundo usa `sessionStorage` para tentar recuperar uma partida recarregada **na mesma aba**; isso não é uma conta nem uma sincronização entre dispositivos.
+- A Missão Coleta não mantém um histórico de desempenho entre partidas.
+- As metas das campanhas, o equilíbrio dos 50 coringas e a experiência em celulares precisam de testes contínuos com usuários.
+- A classificação ambiental dos objetos é uma **simplificação didática**, não uma garantia de aceitação em cooperativas ou serviços municipais.
+- O uso de marca institucional exibida no projeto deve ser validado com os responsáveis antes de aplicação em materiais oficiais.
 
-O projeto exibe a marca do **Instituto Federal do Maranhão (IFMA)** e apresenta ligação com a **EcoResiduários Academy**. Antes de uso institucional ou de impressão, recomenda-se confirmar a versão oficial das marcas com as respectivas equipes.
+## Identidade, referências e licença
 
-- Instagram da EcoResiduários Academy: https://www.instagram.com/ecoresiduariosacademy/
-- Referência da marca horizontal do IFMA: https://commons.wikimedia.org/wiki/File:Instituto_Federal_do_Maranhão_-_Marca_Horizontal_2015.svg
+O site utiliza a identificação **EcoResiduários Academy** e exibe uma marca do **Instituto Federal do Maranhão (IFMA)**. A presença dessas marcas na interface não comprova, por si só, vínculo institucional, endosso ou autorização de uso. Consulte os responsáveis pelo projeto antes de divulgar o jogo como iniciativa oficial.
 
-## Informação ambiental
+- [EcoResiduários Academy no Instagram](https://www.instagram.com/ecoresiduariosacademy/)
+- [Resolução CONAMA 275/2001 — padrão de cores](https://conama.mma.gov.br/images/conteudo/LivroConama.pdf)
+- [Fundamentação ambiental e fontes](docs/FUNDAMENTACAO.md)
 
-O jogo utiliza cinco das cores previstas pela **Resolução CONAMA 275/2001**. A norma contempla outras categorias além das cinco usadas nesta experiência. A separação e a possibilidade de reciclagem dependem do material, da contaminação, dos pontos de coleta e das regras municipais. Materiais orgânicos podem ser aproveitados em compostagem quando houver condições adequadas.
+**Licença do código:** [MIT](LICENSE), conforme o arquivo do repositório. Para imagens, marcas de terceiros e materiais institucionais, respeite os direitos e as regras dos respectivos titulares.
 
-- [CONAMA — publicações e normas](https://conama.mma.gov.br/images/conteudo/LivroConama.pdf)
-- [DNIT — normas e orientações de gestão de resíduos](https://www.gov.br/dnit/pt-br/central-de-conteudos/atos-normativos/tipo/portarias/portaria-3412-2023-setsust-publ.pdf)
-
-## Próximos passos
-
-1. Testar os dois jogos em celulares reais, especialmente a loja do Salve o Mundo e a quinta etapa da Missão Coleta.
-2. Avaliar a dificuldade das 28 crises e a variedade de estratégias com os 50 coringas.
-3. Revisar os textos ambientais e a identidade visual com a equipe do projeto e do IFMA.
-
-**Licença:** consulte o arquivo `LICENSE` do repositório.
+**Ajuda e sugestões:** abra uma [issue no GitHub](https://github.com/yusei21/ecocard/issues). Para contribuir com código ou documentação, consulte o [guia de contribuição](docs/CONTRIBUINDO.md).
