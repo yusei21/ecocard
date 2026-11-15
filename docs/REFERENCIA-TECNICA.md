@@ -62,6 +62,12 @@ A partir da segunda crise há sorteio de uma restrição de chefe. Entre as poss
 
 Uma mão inválida pode render zero pontos e ainda consumir uma jogada. A prévia sinaliza essa condição.
 
+### Estados visuais e ordenação
+
+O módulo `hand-order.js` oferece reorganização por arrasto, gestos de toque e modo alternativo de **duas seleções**. A movimentação altera a ordem visual da mão, não seus valores nem sua composição.
+
+O módulo `joker-feedback.js` utiliza os eventos já devolvidos por `evaluate()` para indicar quais coringas realmente pontuariam com a mão selecionada. As correspondências entre coringas e cartas são usadas apenas para realce visual. Durante `animateScore()`, coringas ativados e cartas associadas recebem animações e efeitos sonoros de acordo com a raridade. Não há cálculo de pontuação separado no módulo visual.
+
 ### Coringas
 
 **Coleção:** 50 coringas, divididos em 20 Comuns, 15 Raros, 10 Épicos e cinco Lendários.
