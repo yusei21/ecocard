@@ -222,7 +222,24 @@ for(const j of jokers){
 }
 assert(source.includes('rarity-card rarity-'),'store uses visible rarity cards');
 assert(source.includes('joker-rarity-'),'equipped joker retains rarity frame');
+const victorySource=fs.readFileSync('victory-share.js','utf8');
+const victorySandbox={window:{},console};
+vm.runInNewContext(victorySource,victorySandbox,{filename:'victory-share.js'});
+const victory=victorySandbox.window.EcoVictory;
+const victoryState={phase:'won',campaign:1,runScore:234567,played:19,wonStages:7};
+const shared=victory.text(victoryState);
+assert(shared.includes('MÉDIO'),'share shows completed difficulty');
+assert(shared.includes('234.567'),'share shows formatted points');
+assert(shared.includes('7 de 7'),'share shows campaign completion');
+assert(shared.includes('https://yusei21.github.io/ecocard/'),'share includes game URL');
+assert(victory.card(victoryState).includes('id="shareVictory"'),'victory contains share button');
+assert(victory.card(victoryState).includes('id="saveVictory"'),'victory contains PNG action');
+assert(victory.card(victoryState).includes('id="copyVictory"'),'victory contains copy action');
+assert(source.includes('window.EcoVictory.card(solo)'),'win screen renders victory certificate');
+assert(source.includes('window.EcoVictory?.attach(main,solo)'),'win screen connects share actions');
 const indexHtml=require('node:fs').readFileSync('index.html','utf8');
+assert(indexHtml.includes('victory-share.js?v='),'victory share feature must load');
+
 assert(indexHtml.includes('id="helpEcoCard"'),'Como jogar button must be visible');
 assert(indexHtml.includes('window.EcoCardSolo.showHandGuide()'),'solo route must launch guide explicitly');
 assert(/solo-v2\.js\?v=/.test(indexHtml),'script must have cache-busting version');
