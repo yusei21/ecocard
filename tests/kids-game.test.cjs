@@ -9,6 +9,22 @@ assert(kids,'children mode should expose a playable API');
 assert.equal(kids.CATEGORIES.length,5);
 assert.equal(kids.ITEMS.length,40);
 assert.equal(kids.LEVELS.length,5,'five progression levels');
+assert.equal(kids.isFinalLevel(19),false,'level four still shows material names');
+assert.equal(kids.isFinalLevel(20),true,'level five is color only');
+assert.equal(kids.isFinalLevel(24),true,'last object remains color only');
+const earlierBins=kids.binsHTML(19);
+const finalBins=kids.binsHTML(20);
+for(const c of kids.CATEGORIES){
+ assert(earlierBins.includes('<strong>'+c.name+'</strong>'),'earlier levels show '+c.name);
+ assert(!finalBins.includes('<strong>'+c.name+'</strong>'),'final level hides '+c.name);
+ assert(finalBins.includes('data-bin="'+c.id+'"'),'color-only option retains correct category');
+ assert(finalBins.includes('--bin:'+c.color),'color-only option retains '+c.id+' color');
+}
+assert(!finalBins.includes('Lixeira de '),'final level accessible names do not reveal materials');
+assert(finalBins.includes('aria-label="Lixeira azul"'));
+assert(finalBins.includes('aria-label="Lixeira vermelha"'));
+assert(finalBins.includes('aria-label="Lixeira marrom"'));
+
 assert.equal(kids.JOKES_CORRECT.length,5);
 assert.equal(kids.JOKES_RETRY.length,5);
 assert.equal(new Set(kids.ITEMS.map(x=>x.id)).size,40,'unique educational objects');
@@ -58,6 +74,7 @@ for(let n=0;n<25;n++){
   assert.equal(state.phase,'playing');
  }
 }
+assert.equal(kids.binsHTML(24).includes('<strong>PLÁSTICO</strong>'),false,'final puzzle has no text labels');
 assert.equal(state.phase,'complete','children can finish all levels');
 assert.equal(state.correct,25);
 assert.equal(state.levelsCompleted,5);
