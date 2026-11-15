@@ -148,6 +148,31 @@ assert.equal(difficultyRules(2,'normal',boss('double_hp')).goal,8000);
 assert.equal(difficultyRules(2).goal,4000);
 assert.equal(rollDifficultyModifier(0).id,'normal','first crisis has no random extra penalty');
 assert.equal(difficultyRules(0).discards,2);
+const {CAMPAIGNS,campaignRules,selectCampaign}=sandbox.window.EcoCardSolo;
+assert.equal(CAMPAIGNS.length,4,'four sequential difficulty campaigns');
+assert.equal(CAMPAIGNS.map(c=>c.name).join(','),'FÁCIL,MÉDIO,DIFÍCIL,EXTREMO');
+assert.equal(typeof selectCampaign,'function');
+for(let phase=0;phase<4;phase++){
+ const goals=stages.map((_,stage)=>campaignRules(phase,stage).goal);
+ assert(goals.every((value,i)=>i===0||value>goals[i-1]),'goals increase inside campaign '+phase);
+ assert(goals.length===7,'each campaign contains seven crises');
+}
+for(let stage=0;stage<7;stage++){
+ const goals=CAMPAIGNS.map((_,c)=>campaignRules(c,stage).goal);
+ assert(goals.every((value,i)=>i===0||value>goals[i-1]),'later campaigns harder at stage '+stage);
+}
+assert.equal(campaignRules(0,6).goal,54000,'easy has its own attainable seventh crisis');
+assert.equal(campaignRules(1,6).goal,97500,'medium has its own seventh crisis');
+assert.equal(campaignRules(2,6).goal,150000,'hard retains original seventh-crisis goal');
+assert.equal(campaignRules(3,6).goal,240000,'extreme final crisis is hardest');
+assert.equal(campaignRules(0,6,'normal',boss('double_hp')).goal,108000,'double-life boss applies after campaign scaling');
+assert.equal(campaignRules(0,0).hands,6);
+assert.equal(campaignRules(3,0).hands,4);
+assert.equal(campaignRules(0,0).discards,3);
+assert.equal(campaignRules(3,0).discards,1);
+assert(source.includes('unlockedCampaign=Math.max'),'victory unlocks next campaign');
+assert(source.includes('start(solo.campaign+1)'),'victory button starts next campaign');
+
 sandbox.solo={rerolls:0};
 assert.equal(rerollCost(),4);
 const climateCards=[make('azul',10),make('verde',11),make('amarelo',12)];
