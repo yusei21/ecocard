@@ -58,10 +58,11 @@ const shuffle=(array,rng=Math.random)=>{
  return out;
 };
 function createRound(rng=Math.random){
- // Three levels with five objects each, five categories represented per level.
+ // Three levels, each with one object from each category; no repeats.
+ const selections=CATEGORIES.map(category=>shuffle(ITEMS.filter(item=>item.category===category.id),rng).slice(0,3));
  const rounds=[];
  for(let level=0;level<3;level++){
-  const choices=CATEGORIES.flatMap(category=>shuffle(ITEMS.filter(item=>item.category===category.id),rng).slice(level,level+1));
+  const choices=selections.map(items=>items[level]);
   rounds.push(...shuffle(choices,rng));
  }
  return rounds;
