@@ -45,7 +45,67 @@ assert.equal(evaluate([make('azul',1),make('azul',2)],4,[],null,boss('only_three
 assert(evaluate([make('azul',1),make('azul',2),make('azul',3)],4,[],null,boss('only_three')).score>0);
 assert.equal(stages.length,7);
 assert.equal(new Set(jokers.map(j=>j.id)).size,jokers.length,'unique joker IDs');
+
+const expectedRarities={common:16,uncommon:12,epic:8,legend:4};
+assert.equal(jokers.length,40,'the game must contain exactly 40 jokers');
+assert.equal(new Set(jokers.map(j=>j.id)).size,40,'all 40 joker IDs must be unique');
+for(const [rarity,count] of Object.entries(expectedRarities)){
+ assert.equal(jokers.filter(j=>j.rarity===rarity).length,count,'correct '+rarity+' distribution');
+}
+assert.equal(jokers.filter(j=>j.id==='circular').length,1,'Aventura Circular remains unique');
+const {jokerWeight}=sandbox.window.EcoCardSolo;
+assert(jokerWeight(jokers.find(j=>j.id==='circular'))<
+ Math.min(...jokers.filter(j=>j.id!=='circular').map(jokerWeight)),
+ 'Aventura Circular is the rarest individual joker');
+const hands={
+ blue2:[make('azul',3),make('azul',4)],
+ green2:[make('verde',3),make('verde',4)],
+ yellow2:[make('amarelo',3),make('amarelo',4)],
+ red2:[make('vermelho',3),make('vermelho',4)],
+ brown2:[make('marrom',3),make('marrom',4)],
+ blue3:[make('azul',3),make('azul',4),make('azul',5)],
+ green3:[make('verde',3),make('verde',4),make('verde',5)],
+ brown3:[make('marrom',3),make('marrom',4),make('marrom',5)],
+ mixed3:[make('azul',3),make('verde',4),make('marrom',5)],
+ mixed4:[make('azul',3),make('verde',4),make('marrom',5),make('amarelo',6)],
+ pair:[make('azul',3),make('verde',3)],
+ triple:[make('azul',3),make('verde',3),make('marrom',3)],
+ single:[make('azul',3)],
+ high:[make('azul',11)],
+ flush:[make('azul',3),make('azul',4),make('azul',5),make('azul',7),make('azul',9)],
+ straightflush:[make('azul',3),make('azul',4),make('azul',5),make('azul',6),make('azul',7)]
+};
+const triggerCases={
+ papel_limpo:'blue2',vidro_retorno:'green2',metal_valor:'yellow2',
+ plastico_responsavel:'red2',horta_urbana:'brown2',separacao:'blue3',
+ diversidade:'mixed3',sequencia_curta:'mixed3',dupla_vida:'pair',
+ coleta_rapida:'single',reparo:'high',papel_reciclado:'blue2',
+ vidro_circular:'green2',metal_reuso:'yellow2',plastico_engenharia:'red2',
+ biofertilizante:'brown2',coleta_integrada:'mixed3',triagem_inteligente:'triple',
+ fluxo_devolucao:'mixed3',reuso_de_agua:'blue3',parque_solar:'yellow2',
+ economia_azul:'blue3',carbono_positivo:'brown3',cidade_circular:'mixed4',
+ laboratorio_verde:'green3',rede_regenerativa:'straightflush',
+ planeta_vivo:'mixed4',renascimento:'flush',pacto_global:'triple'
+};
+assert.equal(Object.keys(triggerCases).length,29,'every newly added joker has a tested effect');
+for(const [id,handName] of Object.entries(triggerCases)){
+ const joker=jokers.find(j=>j.id===id);
+ assert(joker,'joker exists: '+id);
+ const cards=hands[handName];
+ const baseline=evaluate(cards,0,[]);
+ const powered=evaluate(cards,0,[joker]);
+ assert(powered.score>baseline.score,id+' should improve a qualifying hand');
+ assert(powered.events.some(e=>e.label===joker.name),id+' should disclose its scoring effect');
+ const circular=evaluate(cards,0,[joker,jokers.find(j=>j.id==='circular')]);
+ assert.equal(circular.events.filter(e=>e.label===joker.name).length,2,
+  'Aventura Circular should activate '+id+' exactly twice');
+}
+const blockedRed=evaluate(hands.red2,1,[jokers.find(j=>j.id==='plastico_responsavel')],
+ null,boss('ban_vermelho'));
+assert.equal(blockedRed.score,0,'a negated category cannot trigger its joker');
+assert.equal(blockedRed.events.some(e=>e.label==='Plástico Responsável'),false);
 assert.equal(offers([]).length,3);
+
 let seed=1234567;
 const rng=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296};
 const counts={common:0,uncommon:0,epic:0,legend:0};
