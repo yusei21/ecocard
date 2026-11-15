@@ -430,3 +430,15 @@ footer a{color:#d9ecab;text-decoration:underline;text-underline-offset:3px}
 #solo .evolution-track{height:7px;border:1px solid #9cd89888;border-radius:4px;background:#0c2619;overflow:hidden}
 #solo .evolution-track span{display:block;height:100%;background:linear-gradient(90deg,#b9f180,#e4ffaf);transition:width .25s ease}
 #solo .arcade-shop .joker-evolution{margin:0 0 8px}
+
+/* Deck control is part of the shop, not just random joker rolls. */
+#solo .deck-focus-shop{margin:20px 0 24px;padding:18px;border:2px solid #8fb8a0;border-radius:7px;background:linear-gradient(145deg,#203e34,#1a2e2a)}
+#solo .deck-focus-shop h3{font:900 clamp(27px,4vw,40px)/1 'Barlow Condensed','Arial Narrow',sans-serif;margin:7px 0 10px;color:#e9ffc5}
+#solo .deck-focus-shop p{font:500 13px/1.5 'IBM Plex Sans',sans-serif;color:#e4f3df;margin:0 0 15px}
+#solo .deck-focus-stats{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px;margin:12px 0}
+#solo .deck-focus-stats span{display:flex;flex-direction:column;align-items:center;gap:2px;border:1px solid #7d9b85;background:#19342b;padding:8px 2px;font:700 10px 'IBM Plex Mono',monospace;color:#e0f1da}
+#solo .deck-focus-stats b{font:900 22px 'Barlow Condensed',sans-serif;color:#f2ffb9}
+#solo .deck-focus-actions{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}
+#solo .deck-focus-actions button{flex:1 1 125px;min-height:42px;white-space:normal;padding:8px;font:800 11px 'IBM Plex Mono',monospace}
+#solo .deck-focus-shop>small{display:block;font:700 10px/1.55 'IBM Plex Mono',monospace;color:#c4e4c7}
+@media(max-width:590px){#solo .deck-focus-shop{padding:12px}#solo .deck-focus-stats{grid-template-columns:repeat(3,minmax(0,1fr))}#solo .deck-focus-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}#solo .deck-focus-actions button{min-width:0}}
