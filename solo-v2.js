@@ -212,6 +212,7 @@ const HAND_GUIDE=[
  {name:'Ciclo Completo',cards:[['2','marrom'],['3','marrom'],['4','marrom'],['5','marrom'],['6','marrom']],text:'Cinco cartas da mesma categoria em sequência. Multiplicador ×6.'}
 ];
 function showHandGuide(){
+ window.EcoOrientation?.sync(false);
  clearSavedRun();clearQueue();solo=null;lastBurst=null;
  const main=document.querySelector('#soloMain'),side=document.querySelector('#soloSide');
  if(!main||!side)return;
@@ -427,6 +428,7 @@ function deckFocusHTML(state){
 
 function fill(n){if(!solo)return;for(let k=0;k<n;k++){if(!solo.deck.length)break;solo.hand.push(solo.deck.pop())}/* Keep manual ordering; new cards append at the end. */}
 function selectCampaign(){
+ window.EcoOrientation?.sync(false);
  clearQueue();solo=null;lastBurst=null;
  const main=document.querySelector('#soloMain'),side=document.querySelector('#soloSide');
  if(!main||!side)return;
