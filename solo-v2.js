@@ -551,7 +551,8 @@ function animateScore(result,onDone){
    });
    zone.classList.toggle('joker-score-event',!!activeJoker);
    zone.dataset.rarity=activeJoker?.rarity||'';
-   const bonusCards=activeJoker?new Set(window.EcoJokerFeedback?.relatedCards(solo.playedCards,activeJoker)||[]):null;
+   const contributing=solo.playedCards.filter(card=>card.suit!==result.blockedSuit);
+   const bonusCards=activeJoker?new Set(window.EcoJokerFeedback?.relatedCards(contributing,activeJoker)||[]):null;
    board.querySelectorAll('.played-cards .playing-card').forEach((card,j)=>{
     card.classList.toggle('joker-boost-card',!!bonusCards?.has(solo.playedCards[j]?.id));
    });
@@ -604,7 +605,8 @@ function render(){
  const scoring=solo.phase==='scoring';
  const preview=selected.length?evaluate(selected,solo.stage,solo.jokers,solo.modifier,solo.bossRule):null;
  const jokerStatuses=window.EcoJokerFeedback?.preview(solo.jokers,scoring?lastBurst:preview,scoring||selected.length>0)||[];
- const highlighted=(!scoring&&preview&&preview.score>0)?window.EcoJokerFeedback?.highlightedCardIds(selected,solo.jokers,jokerStatuses):null;
+ const eligibleSelected=preview?.blockedSuit?selected.filter(card=>card.suit!==preview.blockedSuit):selected;
+ const highlighted=(!scoring&&preview&&preview.score>0)?window.EcoJokerFeedback?.highlightedCardIds(eligibleSelected,solo.jokers,jokerStatuses):null;
  const progress=Math.min(100,Math.round(100*shownScore/goal));
  const headline=solo.phase==='won'?'JORNADA VENCIDA':solo.phase==='clear'?'CRISE SUPERADA':solo.phase==='lost'?'FIM DA JORNADA':'MISSÃO '+(solo.stage+1)+' DE '+stages.length;
  const blockedSuit=solo.bossRule?.kind==='block'?SUITS.find(item=>item.id===solo.bossRule.suit):null;
