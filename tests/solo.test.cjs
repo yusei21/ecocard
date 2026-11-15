@@ -3,7 +3,11 @@ const fs=require('node:fs');
 const vm=require('node:vm');
 const source=fs.readFileSync('solo-v2.js','utf8');
 const storage={getItem:()=>null,setItem:()=>{}};
-const sandbox={window:{},localStorage:storage,console,Math,setTimeout,document:{querySelector:()=>null},shuffle:a=>a,makeDeck:()=>[],solo:null,esc:s=>String(s),cardHTML:()=>'',startSolo:null,drawSolo:null,combo:null,scoreSolo:null,selectSolo:null,playSolo:null,targetSolo:null,makeOffers:null,buyJoker:null,nextSolo:null,renderSolo:null};
+const savedSession={};
+const sessionStorage={getItem:key=>savedSession[key]||null,setItem:(key,value)=>{savedSession[key]=value},removeItem:key=>{delete savedSession[key]}};
+const testSuits=['azul','vermelho','verde','amarelo','marrom'].map(id=>({id,label:id}));
+const testDeck=()=>testSuits.flatMap(s=>Array.from({length:13},(_,i)=>({id:s.id+'-'+(i+1)+'-1',suit:s.id,rank:i+1,name:s.id+' '+(i+1)})));
+const sandbox={window:{},localStorage:storage,sessionStorage,SUITS:testSuits,console,Math,setTimeout,document:{querySelector:()=>null},shuffle:a=>a,makeDeck:testDeck,solo:null,esc:s=>String(s),cardHTML:()=>'',startSolo:null,drawSolo:null,combo:null,scoreSolo:null,selectSolo:null,playSolo:null,targetSolo:null,makeOffers:null,buyJoker:null,nextSolo:null,renderSolo:null};
 vm.runInNewContext(source,sandbox,{filename:'solo-v2.js'});
 const {evaluate,combination,offers,stages,jokers}=sandbox.window.EcoCardSolo;
 const make=(suit,rank)=>({suit,rank,id:suit+'-'+rank});
@@ -270,6 +274,34 @@ for(const id of Object.keys(EVOLUTION_RULES)){
 }
 assert(source.includes("solo.campaign===CAMPAIGNS.length-1&&window.EcoVictory"),'certificate only on Extreme victory');
 assert(source.includes("solo.campaign===CAMPAIGNS.length-1)window.EcoVictory"),'share actions only on Extreme victory');
+// Shop deck specialization persists across stages and cannot remove the focused suit.
+const {emptyDeckPlan,focusDeck,tunedDeck,deckStatistics,deckFocusHTML,DECK_FOCUS_COST,restoreSession,saveSession}=sandbox.window.EcoCardSolo;
+assert.equal(DECK_FOCUS_COST,4);
+let plan=emptyDeckPlan();
+for(let i=0;i<5;i++){
+ const updated=focusDeck(plan,'azul',testDeck(),()=>0);
+ assert(updated,'shop adjustment '+i+' is available');
+ plan=updated;
+ assert.equal(plan.removed.length,(i+1)*3,'each refinement removes 3 off-category cards');
+ assert.equal(plan.extras.length,(i+1)*2,'each refinement adds 2 focused cards');
+ assert(plan.extras.every(c=>c.suit==='azul'),'focused cards match chosen category');
+ assert(plan.removed.every(id=>!id.startsWith('azul-')),'never remove chosen category');
+}
+assert.equal(focusDeck(plan,'azul',testDeck()),null,'deck upgrades are capped');
+assert.equal(focusDeck(emptyDeckPlan(),'invalid',testDeck()),null,'invalid categories rejected');
+const finalDeck=tunedDeck(plan,testDeck());
+assert.equal(finalDeck.length,60);
+assert.equal(new Set(finalDeck.map(c=>c.id)).size,60,'no duplicate card ids');
+assert.equal(deckStatistics(plan).bySuit.find(s=>s.id==='azul').count,23,'target category increases from 13 to 23');
+assert(deckFocusHTML({stage:0,coins:8,deckPlan:emptyDeckPlan()}).includes('data-focus="azul"'),'shop includes suit choice');
+assert.equal(deckFocusHTML({stage:6,coins:8,deckPlan:emptyDeckPlan()}),'','no pointless shop specialization after final stage');
+assert.equal(restoreSession(),false,'no saved run initially');
+savedSession['ecocard-session-v3']=JSON.stringify({version:3,unlockedCampaign:3,run:{stage:6,campaign:3,phase:'scoring',pendingPhase:'won',deckPlan:plan,score:333,coins:12,hand:[],deck:[],selected:[],jokers:[],modifier:{id:'normal',name:'Padrão',desc:'Sem efeito extra'},played:7,hands:0,discards:0}});
+assert.equal(restoreSession(),true,'mobile reload restores last campaign and stage');
+assert.equal(sandbox.solo.phase,'won','interrupted score animation resolves without replay');
+assert.equal(sandbox.solo.score,333,'restore does not duplicate score');
+saveSession();
+assert(JSON.parse(savedSession['ecocard-session-v3']).run.stage===6);
 const indexHtml=require('node:fs').readFileSync('index.html','utf8');
 assert(indexHtml.includes('victory-share.js?v='),'victory share feature must load');
 
