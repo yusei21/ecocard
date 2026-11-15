@@ -7,7 +7,7 @@ const savedSession={};
 const sessionStorage={getItem:key=>savedSession[key]||null,setItem:(key,value)=>{savedSession[key]=value},removeItem:key=>{delete savedSession[key]}};
 const testSuits=['azul','vermelho','verde','amarelo','marrom'].map(id=>({id,label:id}));
 const testDeck=()=>testSuits.flatMap(s=>Array.from({length:13},(_,i)=>({id:s.id+'-'+(i+1)+'-1',suit:s.id,rank:i+1,name:s.id+' '+(i+1)})));
-const sandbox={window:{},localStorage:storage,sessionStorage,SUITS:testSuits,console,Math,setTimeout,document:{querySelector:()=>null},shuffle:a=>a,makeDeck:testDeck,solo:null,esc:s=>String(s),cardHTML:()=>'',startSolo:null,drawSolo:null,combo:null,scoreSolo:null,selectSolo:null,playSolo:null,targetSolo:null,makeOffers:null,buyJoker:null,nextSolo:null,renderSolo:null};
+const sandbox={window:{},localStorage:storage,sessionStorage,SUITS:testSuits,console,Math,setTimeout,clearTimeout,document:{querySelector:()=>null},shuffle:a=>a,makeDeck:testDeck,solo:null,esc:s=>String(s),cardHTML:()=>'',startSolo:null,drawSolo:null,combo:null,scoreSolo:null,selectSolo:null,playSolo:null,targetSolo:null,makeOffers:null,buyJoker:null,nextSolo:null,renderSolo:null};
 vm.runInNewContext(source,sandbox,{filename:'solo-v2.js'});
 const {evaluate,combination,offers,stages,jokers}=sandbox.window.EcoCardSolo;
 const make=(suit,rank)=>({suit,rank,id:suit+'-'+rank});
