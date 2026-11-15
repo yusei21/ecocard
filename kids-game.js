@@ -35,7 +35,23 @@ const ITEMS=[
  {id:'casca_melancia',name:'Casca de melancia',category:'marrom',shape:'leaf',tip:'Restos vegetais podem ser aproveitados na compostagem.'},
  {id:'borra_cafe',name:'Borra de café',category:'marrom',shape:'leaf',tip:'Borra de café pode ser utilizada na compostagem.'},
  {id:'folhas',name:'Folhas secas',category:'marrom',shape:'leaf',tip:'Folhas secas são materiais orgânicos para compostagem.'},
- {id:'casca_laranja',name:'Casca de laranja',category:'marrom',shape:'leaf',tip:'Cascas de frutas são resíduos orgânicos.'}
+ {id:'casca_laranja',name:'Casca de laranja',category:'marrom',shape:'leaf',tip:'Cascas de frutas são resíduos orgânicos.'},
+
+ {id:'mapa_papel',name:'Mapa de papel',category:'azul',shape:'map',tip:'Mapas feitos de papel limpo podem ser separados para reciclagem.'},
+ {id:'tubo_papelao',name:'Tubo de papelão',category:'azul',shape:'tube',tip:'O rolinho de papelão pode ir para a coleta de papel quando está limpo.'},
+ {id:'cartaz_papel',name:'Cartaz de papel',category:'azul',shape:'poster',tip:'Um cartaz de papel sem plastificação pode ir para a reciclagem de papel.'},
+ {id:'frasco_shampoo',name:'Frasco de xampu vazio',category:'vermelho',shape:'shampoo',tip:'Se o frasco é plástico e está vazio, separe-o com o plástico.'},
+ {id:'balde_plastico',name:'Balde plástico quebrado',category:'vermelho',shape:'bucket',tip:'Objetos plásticos rígidos podem ser recebidos em ecopontos específicos.'},
+ {id:'copo_plastico',name:'Copo plástico limpo',category:'vermelho',shape:'cup',tip:'Copos plásticos limpos podem ser aceitos na coleta de plástico local.'},
+ {id:'pote_geleia',name:'Pote de geleia de vidro',category:'verde',shape:'jar',tip:'O pote vazio é de vidro e pode ser reciclado.'},
+ {id:'garrafa_suco',name:'Garrafa de suco de vidro',category:'verde',shape:'glass',tip:'Olhe o material: essa garrafa é de vidro, não de plástico.'},
+ {id:'frasco_molho',name:'Frasco de molho de vidro',category:'verde',shape:'flask',tip:'Frascos de vidro vazios podem ser separados para a reciclagem.'},
+ {id:'colher_metal',name:'Colher de metal velha',category:'amarelo',shape:'spoon',tip:'Uma colher feita de metal pode ser destinada a pontos de coleta de metais.'},
+ {id:'pote_biscoito',name:'Lata de biscoitos',category:'amarelo',shape:'tin',tip:'Mesmo sendo uma embalagem de biscoitos, o material é metal.'},
+ {id:'forma_aluminio',name:'Forma de alumínio limpa',category:'amarelo',shape:'tray',tip:'O alumínio da forma é metal e pode ser reciclado quando está limpo.'},
+ {id:'casca_batata',name:'Casca de batata',category:'marrom',shape:'potato',tip:'Cascas de batata são resíduos vegetais que podem ir para a compostagem.'},
+ {id:'resto_alface',name:'Folha de alface murcha',category:'marrom',shape:'lettuce',tip:'Folhas de verduras podem ser aproveitadas como material orgânico.'},
+ {id:'talo_couve',name:'Talo de couve',category:'marrom',shape:'stem',tip:'Talos de verduras também podem ser usados na compostagem.'}
 ];
 const SHAPES={
  paper:'<path d="M20 8h38l12 13v60H20zM58 8v14h12M29 36h32M29 46h32M29 56h23"/>',
@@ -49,6 +65,19 @@ const SHAPES={
  can:'<ellipse cx="45" cy="20" rx="26" ry="10"/><path d="M19 20v50q0 11 26 11t26-11V20M19 70q26 20 52 0M31 40h28M31 50h28"/>',
  pan:'<path d="M20 44h50v16q0 16-25 16T20 60zM13 44h66M70 48h16M31 37h28"/>',
  leaf:'<path d="M20 69q-8-45 52-56 10 56-35 64-11 0-17-8zM22 72q22-31 49-47M32 53l-14-13M47 39l-2-16M48 48l22 5"/>'
+,
+ map:'<path d="M8 23l26-10 23 10 25-10v58L57 81 34 71 8 81zM34 13v58M57 23v58M15 37h12M62 42h13"/>',
+ tube:'<ellipse cx="45" cy="19" rx="22" ry="11"/><path d="M23 19v58q0 11 22 11t22-11V19M23 77q22 20 44 0M35 19q10 5 20 0"/>',
+ poster:'<path d="M17 11h56v73H17zM25 20h40v31H25zM25 61h40M25 70h30M34 43l10-14 12 14"/>',
+ shampoo:'<path d="M30 23h32v9l6 10v33q0 10-10 10H30q-10 0-10-10V42l10-10zM36 14h20v9H36zM30 49h28M34 60h20"/>',
+ bucket:'<path d="M18 31h54L64 83H26zM25 30q0-23 20-23t20 23M27 49h36M30 66h30"/>',
+ flask:'<path d="M33 10h25v17q0 8 7 16v33q0 9-9 9H34q-9 0-9-9V43q8-8 8-16zM33 27h25M25 50h40M36 63h18"/>',
+ spoon:'<ellipse cx="45" cy="23" rx="15" ry="18"/><path d="M45 41v43M35 84h20"/>',
+ tin:'<ellipse cx="45" cy="20" rx="29" ry="10"/><path d="M16 20v55q0 10 29 10t29-10V20M16 75q29 17 58 0M26 43h38M26 58h38"/>',
+ tray:'<path d="M12 39h66l-9 37H21zM8 35h74M22 48h45M27 59h35"/>',
+ potato:'<path d="M25 21q-20 10-14 38t33 23q30 4 35-22 4-18-13-26-11-26-41-13zM28 47h2M56 56h2M41 30h2"/>',
+ lettuce:'<path d="M43 77q-24-12-29-32 4-12 18-14 1-20 19-23 13 6 14 24 17 4 15 20-13 26-37 25zM43 76V25M43 53L29 42M43 42l13-13"/>',
+ stem:'<path d="M44 83V20M44 49Q23 49 18 23q20-1 26 26M44 64Q66 59 73 32q-23-1-29 32M35 82h18"/>'
 };
 function illustration(shape){
  return '<svg viewBox="0 0 90 96" width="96" height="105" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+(SHAPES[shape]||SHAPES.box)+'</svg>';
@@ -57,13 +86,36 @@ const shuffle=(array,rng=Math.random)=>{
  const out=[...array];for(let i=out.length-1;i>0;i--){const j=Math.floor(rng()*(i+1));[out[i],out[j]]=[out[j],out[i]]}
  return out;
 };
+const LEVELS=[
+ {name:'Primeiros Passos',description:'Comece pelos materiais mais conhecidos.',hint:true},
+ {name:'Olho de Águia',description:'Agora olhe com atenção para cada objeto.',hint:true},
+ {name:'Detetive da Coleta',description:'Mais materiais, menos pistas.',hint:false},
+ {name:'Desafio dos Materiais',description:'Objetos que parecem de uma categoria, mas são de outra.',hint:false},
+ {name:'Mestre da Separação',description:'A etapa final reúne materiais que exigem atenção.',hint:false}
+];
+const JOKES_CORRECT=[
+ 'Missão cumprida! Até a lixeira ficou orgulhosa.',
+ 'Boa! O planeta acaba de ganhar mais um especialista.',
+ 'Acertou! Essa investigação foi digna de um detetive.',
+ 'Muito bem! A lixeira certa agradece a visita.',
+ 'Mandou bem! Separar resíduos é uma super-habilidade.'
+];
+const JOKES_RETRY=[
+ 'Quase! A lixeira não vai fugir, tente outra.',
+ 'Ops! O objeto entrou na fila errada. Vamos descobrir a certa?',
+ 'Ainda não! Olhe o material, não só o formato.',
+ 'A lixeira ficou confusa. Que tal tentar mais uma vez?',
+ 'Opa! Nem toda garrafa é de plástico. Observe bem.'
+];
 function createRound(rng=Math.random){
- // Three levels, each with one object from each category; no repeats.
- const selections=CATEGORIES.map(category=>shuffle(ITEMS.filter(item=>item.category===category.id),rng).slice(0,3));
+ // 25 different items: three introductory and two advanced objects per category.
+ const byCategory=CATEGORIES.map(cat=>{
+  const items=ITEMS.filter(item=>item.category===cat.id);
+  return [...shuffle(items.slice(0,5),rng).slice(0,3),...shuffle(items.slice(5),rng).slice(0,2)];
+ });
  const rounds=[];
- for(let level=0;level<3;level++){
-  const choices=selections.map(items=>items[level]);
-  rounds.push(...shuffle(choices,rng));
+ for(let level=0;level<LEVELS.length;level++){
+  rounds.push(...shuffle(byCategory.map(items=>items[level]),rng));
  }
  return rounds;
 }
