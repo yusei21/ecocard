@@ -82,3 +82,15 @@
  #kids .kids-answer p{font-size:14px}
  #kids .kids-item h2{font-size:clamp(30px,8vw,44px)}
 }
+
+/* Final childhood stage: no material names, only familiar bin colors. */
+#kids .kids-bin-color-only .kids-bin-body{
+ min-height:145px;justify-content:center;
+ background:var(--bin);border-width:3px;
+}
+#kids .kids-bin-color-only .kids-bin-lid{height:16px}
+#kids .kids-bin-color-only:focus-visible{outline:4px solid #f2ffd4;outline-offset:5px}
+#kids .kids-final-guide{border-left:4px solid #def6a2;padding-left:13px}
+@media(max-width:570px){
+ #kids .kids-bin-color-only .kids-bin-body{min-height:119px}
+}
