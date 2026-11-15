@@ -89,3 +89,22 @@
  #solo .table-joker-slot.joker-triggering{transform:none}
  #solo .balatro-table .arcade-hand .playing-card.reorder-source{transform:none!important}
 }
+
+/* A specific played card brightens when its matching joker applies a bonus. */
+#solo .balatro-table .played-cards .playing-card.joker-boost-card{
+ z-index:3;position:relative;
+ outline:3px solid #f1ffad!important;outline-offset:2px;
+ box-shadow:0 0 20px 4px #d5f7a788,4px 7px 0 #07120e!important;
+ filter:brightness(1.24);
+ animation:joker-card-link .33s ease-out both;
+}
+@keyframes joker-card-link{
+ 0%{transform:translateY(0) scale(1)}
+ 45%{transform:translateY(-10px) scale(1.12)}
+ 100%{transform:translateY(-4px) scale(1.05)}
+}
+@media(prefers-reduced-motion:reduce){
+ #solo .balatro-table .played-cards .playing-card.joker-boost-card{
+  animation:none!important;transform:none!important;
+ }
+}
