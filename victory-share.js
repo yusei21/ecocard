@@ -19,7 +19,7 @@ function card(state){
  '<svg class="victory-globe" viewBox="0 0 120 120" fill="none" aria-hidden="true"><circle cx="60" cy="60" r="48" stroke="currentColor" stroke-width="3"/><ellipse cx="60" cy="60" rx="25" ry="46" stroke="currentColor" stroke-width="2"/><path d="M13 60h94M60 13v94M25 39h70M25 81h70" stroke="currentColor" stroke-width="2"/><path d="m40 60 14 14 29-29" stroke="currentColor" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/></svg>'+
  '<span class="victory-certificate-label">CONQUISTA DESBLOQUEADA</span>'+
  '<h3>JOGO ZERADO</h3><p>CAMPANHA '+tier+' CONCLUÍDA</p>'+
- '<div class="victory-certificate-stats"><div><strong>28 / 28</strong><small>CRISES DA JORNADA</small></div><div><strong>'+fmt(state.runScore)+'</strong><small>PONTOS TOTAIS</small></div></div>'+
+ '<div class="victory-certificate-stats"><div><strong>28 / 28</strong><small>CRISES DA JORNADA</small></div><div><strong>'+fmt(state.runScore)+'</strong><small>PONTOS NO EXTREMO</small></div></div>'+
  '<span class="victory-certificate-url">yusei21.github.io/ecocard</span></section>'+
  '<div class="victory-share-actions"><button type="button" class="btn arcade-play" id="shareVictory">COMPARTILHAR VITÓRIA</button><button type="button" class="btn secondary" id="saveVictory">SALVAR IMAGEM</button><button type="button" class="btn secondary" id="copyVictory">COPIAR RESULTADO</button></div>'+
  '<p id="victoryShareStatus" role="status" aria-live="polite" class="victory-share-status"></p>'+
@@ -42,8 +42,8 @@ function canvas(state){
  ctx.fillStyle='#ffffff';ctx.font='bold 84px Arial';ctx.fillText('JOGO ZERADO',540,790);
  ctx.font='bold 48px Arial';ctx.fillText('CAMPANHA '+campaigns[state.campaign||0],540,870);
  ctx.fillStyle=accent;ctx.font='bold 116px Arial';ctx.fillText('28 / 28',540,1020);
- ctx.fillStyle='#ffffff';ctx.font='bold 29px Arial';ctx.fillText('CRISES SUPERADAS',540,1068);
- ctx.font='bold 53px Arial';ctx.fillText(fmt(state.runScore)+' PONTOS',540,1160);
+ ctx.fillStyle='#ffffff';ctx.font='bold 29px Arial';ctx.fillText('CRISES DA JORNADA',540,1068);
+ ctx.font='bold 53px Arial';ctx.fillText(fmt(state.runScore)+' PONTOS NO EXTREMO',540,1160);
  ctx.fillStyle=accent;ctx.font='28px Arial';ctx.fillText('yusei21.github.io/ecocard',540,1240);
  return cv;
 }
