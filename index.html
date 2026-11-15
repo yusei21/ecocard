@@ -30,6 +30,7 @@ footer{border-top:1px solid var(--edge);display:flex;align-items:center;justify-
 <link rel="stylesheet" href="./landing-v7.css">
 <link rel="stylesheet" href="./kids-game.css?v=kids-colors-final-v3">
 <link rel="stylesheet" href="./tabletop-v1.css?v=table-landscape-1">
+<link rel="stylesheet" href="./joker-interaction-v1.css?v=interaction-v1">
 </head>
 <body>
 <div class="shell">
@@ -114,9 +115,10 @@ document.querySelector('#helpEcoCard')?.addEventListener('click',()=>{if(solo&&!
 document.querySelector('#kidsReset')?.addEventListener('click',()=>{if(window.confirm('Começar uma nova Missão Coleta?'))window.EcoKids?.newGame();});
 document.querySelector('#resetEcoCard')?.addEventListener('click',()=>{if(window.confirm('Reiniciar Salve o Mundo? Todos os pontos, coringas e fichas desta jornada serão perdidos.')){solo=null;startSolo();}});$('#homeBrand').addEventListener('click',e=>{e.preventDefault();view('home')});
 </script>
-<script src="./hand-order.js"></script>
+<script src="./hand-order.js?v=touch-reorder-v2"></script>
 <script src="./victory-share.js?v=final-only"></script>
 <script src="./orientation-hint.js?v=rotate-v1"></script>
-<script src="./solo-v2.js?v=table-landscape-1"></script>
+<script src="./joker-feedback.js?v=interaction-v1"></script>
+<script src="./solo-v2.js?v=interaction-v1"></script>
 <script src="./kids-game.js?v=kids-colors-final-v3"></script>
 </body></html>
