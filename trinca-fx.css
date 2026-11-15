@@ -33,3 +33,26 @@
 @keyframes trinca-confetti-fall{from{opacity:1;transform:translate(0,0) rotate(0)}to{opacity:0;transform:translate(var(--x),calc(var(--y) + 155px)) rotate(700deg)}}
 @media(max-width:480px){#multi .trinca-slots{gap:5px}#multi .trinca-slot{min-height:79px;padding:7px}#multi .trinca-slot b{font-size:13px}#multi .trinca-tracker-header strong{font-size:29px}#multi .trinca-victory{min-height:310px}}
 @media(prefers-reduced-motion:reduce){#multi .trinca-victory *,#multi .trinca-slot.filled,#multi .trinca-ready{animation:none!important;transition:none!important}}
+
+/* Trinca Circular — two-to-four player screen */
+#multi .game-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(245px,300px);gap:18px;align-items:start}
+#multi .surface,#multi .sidepanel{border:1px solid #547b69;border-radius:9px;background:#162d27;padding:clamp(12px,2vw,24px)}
+#multi .sidepanel{display:flex;flex-direction:column;gap:14px}
+#multi .surface{min-height:365px}
+#multi .surface h2{font:900 clamp(29px,4vw,51px)/1 'Barlow Condensed',sans-serif}
+#multi .room-code{font:900 clamp(38px,7vw,70px)/1 'Barlow Condensed',sans-serif;letter-spacing:.15em;color:#d9f68e;overflow-wrap:anywhere;margin:10px 0 16px}
+#multi .room-form input{max-width:280px;text-transform:none;background:#0d211a;border:2px solid #799b85;border-radius:5px;color:#fff;padding:13px}
+#multi #roomInput{text-transform:uppercase;letter-spacing:.12em}
+#multi .players{margin:14px 0}
+#multi .player-chip{border:1px solid #739481;background:#263b31;color:#e8f4e5}
+#multi .player-chip.active{background:#d9f68e;color:#132517;border-color:#d9f68e}
+#multi .multi-hand{display:flex;flex-wrap:wrap;gap:9px;align-items:flex-start;justify-content:flex-start;margin:16px 0}
+#multi .multi-hand .playing-card{width:clamp(71px,10vw,110px);min-width:71px;min-height:155px}
+#multi .multi-hand .playing-card:not(:disabled){cursor:pointer}
+#multi .cards .playing-card{max-width:118px}
+#multi .trinca-victory{margin-top:0;margin-bottom:22px}
+#multi .actions{display:flex;gap:10px;flex-wrap:wrap}
+#multi .notice{overflow-wrap:anywhere}
+#multi button:focus-visible{outline:3px solid #d9f68e;outline-offset:3px}
+@media(max-width:850px){#multi .game-layout{grid-template-columns:1fr}#multi .sidepanel{grid-row:2}#multi .multi-hand{justify-content:center}}
+@media(max-width:470px){#multi .multi-hand{gap:5px}#multi .multi-hand .playing-card{min-width:66px;width:calc((100% - 15px)/4);max-width:99px}#multi .room-form input{max-width:none}}
