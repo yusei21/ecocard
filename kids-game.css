@@ -1,0 +1,50 @@
+/* EcoCard — Missão Coleta: tactile visual learning mode for children. */
+#kids .game-layout{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:20px;align-items:start}
+#kids .surface,#kids .sidepanel{border:1px solid #527a64;border-radius:10px;background:#173128;padding:clamp(15px,2.5vw,28px)}
+#kids .surface{min-height:570px}
+#kids .sidepanel{display:block}
+#kids .kids-kicker,#kids .kids-label{font:900 11px/1.3 'IBM Plex Mono',monospace;color:#d5f792;letter-spacing:.09em}
+#kids .kids-intro,#kids .kids-finish{display:flex;flex-direction:column;align-items:center;text-align:center;gap:18px;padding:clamp(20px,4vw,58px) 8px}
+#kids .kids-intro h2,#kids .kids-finish h2{font:900 clamp(57px,9vw,110px)/.88 'Barlow Condensed',Impact,sans-serif;max-width:650px;color:#f9f7df;margin:3px auto}
+#kids .kids-intro p,#kids .kids-finish p{font:500 clamp(15px,2vw,19px)/1.5 'IBM Plex Sans',sans-serif;color:#e0e9d7;max-width:565px;margin:0}
+#kids .kids-intro-art{display:flex;align-items:end;justify-content:center;gap:9px;padding:20px 0}
+#kids .kids-intro-art span{width:46px;height:69px;background:var(--bin);border-radius:6px 6px 8px 8px;border-top:10px solid #0f291f;box-shadow:3px 6px 0 #0005}
+#kids .kids-primary{background:#ddf58a;color:#18241c;border:2px solid #f3ffd1;min-height:53px;border-radius:5px;box-shadow:3px 5px 0 #081c14;font:900 16px 'Barlow Condensed',sans-serif;letter-spacing:.03em}
+#kids .kids-primary:hover{filter:brightness(1.08)}
+#kids .kids-arena{display:flex;flex-direction:column;align-items:stretch;gap:15px}
+#kids .kids-topline{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:9px;font:900 11px 'IBM Plex Mono',monospace;color:#daf0a4}
+#kids .kids-progress{height:11px;border-radius:8px;overflow:hidden;background:#10261c;border:1px solid #698772}
+#kids .kids-progress span{height:100%;display:block;background:#d9f68a;transition:width .2s}
+#kids .kids-item{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:290px;gap:12px;border:2px solid #a7cdb0;border-radius:10px;background:radial-gradient(circle at 50% 24%,#3d6450,#234233 78%);padding:20px 12px}
+#kids .kids-illustration{width:148px;height:147px;display:grid;place-items:center;background:#fff7e6;border:3px solid #152b24;border-radius:12px;color:#1c4b38;box-shadow:5px 7px 0 #0e231b}
+#kids .kids-illustration svg{width:110px;height:115px}
+#kids .kids-item h2{font:900 clamp(31px,5vw,53px)/1 'Barlow Condensed',sans-serif;text-align:center;color:#fffdf0;margin:0;max-width:100%}
+#kids .kids-question{font:900 clamp(22px,3vw,32px) 'Barlow Condensed',sans-serif;color:#ecf7d5;text-align:center;margin:0}
+#kids .kids-bins{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:9px;align-items:end;margin:0 0 8px}
+#kids .kids-bin{background:transparent;border:0;color:#15291e;cursor:pointer;padding:0;display:flex;flex-direction:column;align-items:stretch;gap:0;min-width:0;transition:transform .15s}
+#kids .kids-bin:hover,#kids .kids-bin:focus-visible{transform:translateY(-5px)}
+#kids .kids-bin-lid{display:block;position:relative;height:13px;background:var(--bin);border:2px solid #152f26;border-radius:4px;margin:0 -2px;z-index:1;box-shadow:2px 2px 0 #0006}
+#kids .kids-bin-lid:before{content:'';position:absolute;top:-8px;left:31%;width:38%;height:7px;border-radius:5px 5px 0 0;background:var(--bin);border:2px solid #152f26;border-bottom:0}
+#kids .kids-bin-body{background:var(--bin);border:2px solid #193226;border-radius:3px 3px 8px 8px;min-height:127px;padding:12px 3px;display:flex;flex-direction:column;align-items:center;justify-content:space-evenly;gap:10px;box-shadow:3px 5px 0 #081c14}
+#kids .kids-bin-mark{font:900 32px/1 'Barlow Condensed',sans-serif}
+#kids .kids-bin strong{font:900 clamp(11px,1.4vw,16px)/1.1 'Barlow Condensed',sans-serif;letter-spacing:.01em;overflow-wrap:anywhere}
+#kids .kids-hint{text-align:center;font:500 12px 'IBM Plex Sans',sans-serif;color:#d9e8cd}
+#kids .kids-answer{border:2px solid #aedb91;border-radius:10px;background:#264836;color:#efffdc;padding:23px;display:flex;flex-direction:column;align-items:center;gap:13px;text-align:center}
+#kids .kids-answer.retry{border-color:#f3c689;background:#443a2a;color:#fff4e5}
+#kids .kids-answer h3{font:900 37px 'Barlow Condensed',sans-serif;margin:0}
+#kids .kids-answer p{font:600 15px/1.5 'IBM Plex Sans',sans-serif;margin:0;max-width:500px}
+#kids .kids-finish-symbol{display:grid;place-items:center;border:4px solid #dbf6a1;color:#dbf6a1;font:900 90px 'Barlow Condensed',sans-serif;border-radius:100%;width:145px;height:145px}
+#kids .kids-final-score{display:grid;grid-template-columns:repeat(2,1fr);gap:4px 40px;align-items:center;border:1px solid #b5cf8d;padding:22px;border-radius:8px}
+#kids .kids-final-score strong{font:900 46px 'Barlow Condensed',sans-serif;color:#d8f493}
+#kids .kids-final-score span{font:800 11px 'IBM Plex Mono',monospace;color:#d9e8c4}
+#kids .kids-help h3{font:900 29px 'Barlow Condensed',sans-serif;color:#e5f5c7;margin:0 0 12px}
+#kids .kids-help p{font:500 13px/1.5 'IBM Plex Sans',sans-serif;color:#cfdfd1;margin:10px 0}
+#kids .kids-legend{display:grid;gap:9px}
+#kids .kids-legend>div{display:grid;grid-template-columns:13px minmax(0,1fr);column-gap:8px;align-items:start}
+#kids .kids-legend>div span{display:block;background:var(--bin);height:32px;border-radius:3px;grid-row:span 2}
+#kids .kids-legend strong{font:900 13px 'Barlow Condensed',sans-serif}
+#kids .kids-legend small{font:500 11px 'IBM Plex Sans',sans-serif;color:#c9d8ce}
+@media(max-width:970px){#kids .game-layout{grid-template-columns:1fr}#kids .sidepanel{grid-row:2}#kids .kids-legend{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:570px){#kids .kids-bins{grid-template-columns:repeat(3,minmax(0,1fr));justify-content:center;gap:11px}#kids .kids-bin-body{min-height:105px}#kids .kids-bin{min-width:0}#kids .kids-item{min-height:240px}#kids .kids-intro-art span{width:38px;height:59px}#kids .kids-intro h2{font-size:70px}}
+@media(max-width:360px){#kids .kids-bins{gap:7px}#kids .kids-bin strong{font-size:12px}#kids .kids-legend{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){#kids .kids-bin,#kids .kids-progress span{transition:none!important}}
