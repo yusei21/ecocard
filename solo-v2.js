@@ -192,13 +192,53 @@ const HAND_GUIDE=[
  {name:'Ciclo Completo',cards:[['2','marrom'],['3','marrom'],['4','marrom'],['5','marrom'],['6','marrom']],text:'Cinco cartas da mesma categoria em sequência. Multiplicador ×6.'}
 ];
 function showHandGuide(){
- clearQueue();solo=null;lastBurst=null;
+ clearSavedRun();clearQueue();solo=null;lastBurst=null;
  const main=document.querySelector('#soloMain'),side=document.querySelector('#soloSide');
  if(!main||!side)return;
  side.style.display='none';main.classList.add('arcade-solo');
  const card=([rank,suit])=>'<span class="guide-mini-card guide-'+suit+'"><b>'+rank+'</b><i>'+({'azul':'▤','vermelho':'⬡','verde':'◇','amarelo':'✦','marrom':'✿'}[suit])+'</i></span>';
  main.innerHTML='<section class="hand-guide"><div class="guide-kicker">GUIA RÁPIDO / ANTES DE JOGAR</div><h2>COMO FORMAR AS MÃOS?</h2><p>Não precisa saber pôquer. Selecione de 1 a 5 cartas e veja a prévia de pontos antes de jogar. Cada carta tem um <b>valor</b> e uma <b>categoria de resíduo</b> (cor).</p><div class="guide-formula"><span>PONTOS DAS CARTAS</span><strong>×</strong><span>MULTIPLICADOR DA COMBINAÇÃO</span><strong>=</strong><span>PONTUAÇÃO</span></div><div class="guide-collection">'+HAND_GUIDE.map(h=>'<article class="guide-combo"><h3>'+h.name+'</h3><div class="guide-cards">'+h.cards.map(card).join('')+'</div><p>'+h.text+'</p></article>').join('')+'</div><div class="guide-note"><b>ATENÇÃO AOS CHEFES</b><p>Algumas crises anulam cores, exigem um tipo de combinação ou rejeitam mãos de cinco cartas. Se a prévia mostrar <strong>0 pontos</strong>, essa mão não será válida para o chefe. Coringas podem aumentar os pontos e multiplicadores.</p></div><button type="button" class="btn arcade-play guide-next" id="guideContinue">ENTENDI · ESCOLHER CAMPANHA →</button></section>';
  main.querySelector('#guideContinue')?.addEventListener('click',selectCampaign);
+}
+
+
+const SESSION_KEY='ecocard-session-v3';
+function saveSession(){
+ try{
+  if(typeof sessionStorage==='undefined')return;
+  sessionStorage.setItem(SESSION_KEY,JSON.stringify({version:3,unlockedCampaign,run:solo}));
+ }catch{}
+}
+function clearSavedRun(){
+ try{
+  if(typeof sessionStorage==='undefined')return;
+  sessionStorage.removeItem(SESSION_KEY);
+ }catch{}
+}
+function restoreSession(){
+ try{
+  if(typeof sessionStorage==='undefined')return false;
+  const raw=sessionStorage.getItem(SESSION_KEY);
+  if(!raw)return false;
+  const state=JSON.parse(raw);
+  if(state.version!==3||!state.run)return false;
+  if(!Number.isInteger(state.run.stage)||state.run.stage<0||state.run.stage>=stages.length)return false;
+  if(!Number.isInteger(state.run.campaign)||state.run.campaign<0||state.run.campaign>=CAMPAIGNS.length)return false;
+  if(!['play','scoring','clear','shop','lost','won'].includes(state.run.phase))return false;
+  solo=state.run;solo.deckPlan ||=emptyDeckPlan();
+  unlockedCampaign=Math.max(solo.campaign,Math.min(CAMPAIGNS.length-1,state.unlockedCampaign||0));
+  if(solo.phase==='scoring'){
+   // A phone may reload during the point-counting animation. Recover the
+   // already recorded result rather than awarding the same hand twice.
+   solo.phase=solo.pendingPhase||'play';
+   solo.pendingPhase=null;
+  }
+  const page=document.querySelector('#solo');
+  const home=document.querySelector('#home');
+  if(page)page.classList.remove('hidden');
+  if(home)home.classList.add('hidden');
+  lastBurst=null;clearQueue();render();return true;
+ }catch{return false}
 }
 
 let busy=false,queue=[];function clearQueue(){queue.forEach(clearTimeout);queue=[];busy=false}
@@ -546,11 +586,13 @@ function render(){
  main.querySelectorAll('[data-buy]').forEach(el=>el.addEventListener('click',()=>buy(el.dataset.buy)));
  side.querySelectorAll('[data-sell]').forEach(el=>el.addEventListener('click',()=>sellJoker(el.dataset.sell)));
  side.querySelector('#muteAudio')?.addEventListener('change',e=>{muted=!e.target.checked;localStorage.setItem('ecocard-muted',muted?'1':'0')});
+ saveSession();
 }
 
 // Override prototype functions used by the existing page's view routing.
 startSolo=showHandGuide;drawSolo=fill;combo=combination;scoreSolo=cards=>evaluate(cards,solo.stage,solo.jokers,solo.modifier,solo.bossRule);
 selectSolo=choose;playSolo=play;targetSolo=target;makeOffers=()=>offers(solo.jokers);
 buyJoker=buy;nextSolo=next;renderSolo=render;
-window.EcoCardSolo={emptyDeckPlan,focusDeck,tunedDeck,deckStatistics,deckFocusHTML,buyDeckFocus,DECK_FOCUS_COST,combination,evaluate,offers,stages,jokers:upgradedJokers,MODIFIERS,rollModifier,payoutFor,rerollCost,difficultyRules,rollDifficultyModifier,BOSS_RULES,drawBossRule,bossInvalidReason,HAND_GUIDE,showHandGuide,selectCampaign,campaignRules,CAMPAIGNS,EVOLUTION_RULES,advanceEvolutions,evolutionCount,growthSummary,scoringFrames,RARITY_INFO,jokerArt,jokerWeight};
+window.EcoCardSolo={emptyDeckPlan,focusDeck,tunedDeck,deckStatistics,deckFocusHTML,buyDeckFocus,DECK_FOCUS_COST,restoreSession,saveSession,combination,evaluate,offers,stages,jokers:upgradedJokers,MODIFIERS,rollModifier,payoutFor,rerollCost,difficultyRules,rollDifficultyModifier,BOSS_RULES,drawBossRule,bossInvalidReason,HAND_GUIDE,showHandGuide,selectCampaign,campaignRules,CAMPAIGNS,EVOLUTION_RULES,advanceEvolutions,evolutionCount,growthSummary,scoringFrames,RARITY_INFO,jokerArt,jokerWeight};
+restoreSession();
 })();
