@@ -27,6 +27,14 @@ Os lendários são: **Aventura Circular, Planeta Vivo, Renascimento Verde e Pact
 
 A distribuição de sorteio é ponderada, não uniforme. A raridade não garante automaticamente um resultado melhor em qualquer situação: cartas mais raras exigem condições específicas de combinação.
 
+### Campanhas de dificuldade (7 crises por nível)
+
+O jogo começa no **Fácil** e mostra um seletor com as campanhas **Fácil → Médio → Difícil → Extremo**. Cada campanha contém **as mesmas sete crises**, mantendo a progressão de metas dentro do nível escolhido. Ao concluir a sétima crise, o jogo desbloqueia a campanha seguinte e oferece um botão para avançar. Cada nova campanha começa com cartas, coringas e ecofichas novos, para evitar que a dificuldade seja trivializada por uma coleção pronta.
+
+As metas de resistência do chefe da sétima crise são: Fácil **54.000**, Médio **97.500**, Difícil **150.000**, Extremo **240.000**. O chefe aleatório **Crise agravada** pode dobrar essas metas. Fácil tem uma jogada e um descarte extra por crise; Extremo reduz um de cada. Nenhuma campanha é desbloqueada automaticamente sem vencer as sete fases da anterior.
+
+O desbloqueio é **temporário para a visita atual**, sem persistência no navegador, em conformidade com a regra de reiniciar o site ao atualizar ou fechá-lo. Ainda falta validar a curva completa com partidas reais.
+
 ### Escalada e regras rotativas (7 crises)
 
 Agora a jornada contém **7 crises**: (1) Contaminação Cruzada — Fácil, 850 pontos, 5 mãos; (2) Descarte Irregular — Médio, 2.200 pontos, 4 mãos; (3) Desperdício de Recursos — Médio, 4.000 pontos, 4 mãos; (4) Crise dos Aterros — Difícil, 7.600 pontos, 4 mãos; (5) Poluição dos Oceanos — Difícil, 12.000 pontos, 4 mãos; (6) Consumo Desenfreado — Extremo, 18.500 pontos, 3 mãos; (7) Mudanças Climáticas — Final, 150.000 pontos, 3 mãos. A dificuldade é definida por fase, sem um multiplicador global escolhido pelo jogador.
