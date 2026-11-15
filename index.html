@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#101c18"><meta name="description" content="EcoCard: Salve o Mundo, um jogo de cartas e educação ambiental da EcoResiduários Academy.">
+<meta name="theme-color" content="#101c18"><meta name="description" content="EcoCard: dois jogos de educação ambiental — Salve o Mundo e Missão Coleta para crianças.">
 <title>EcoCard — Um universo de escolhas</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -28,6 +28,7 @@ footer{border-top:1px solid var(--edge);display:flex;align-items:center;justify-
 
 <link rel="stylesheet" href="./landing-v6.css">
 <link rel="stylesheet" href="./landing-v7.css">
+<link rel="stylesheet" href="./kids-game.css?v=kids-v1">
 </head>
 <body>
 <div class="shell">
@@ -43,14 +44,14 @@ footer{border-top:1px solid var(--edge);display:flex;align-items:center;justify-
 <div class="scene-top"><span><i class="scene-live"></i> ECOCARD / EDIÇÃO AMBIENTAL</span><span class="scene-edition">IFMA · UNIVERSO IFMA</span></div>
 <div class="scene-layout">
 <div class="scene-text">
-<div class="scene-kicker"><span class="scene-kicker-line"></span> UM JOGO. CINCO CRISES AMBIENTAIS.</div>
+<div class="scene-kicker"><span class="scene-kicker-line"></span> DOIS JOGOS. UMA MISSÃO AMBIENTAL.</div>
 <h1>ECO<span>CARD</span><b class="scene-stop">.</b></h1>
-<p>Um baralho ambiental. Cinco crises. Coringas para salvar o planeta.</p>
+<p>Duas formas de aprender: enfrente as sete crises no Salve o Mundo ou ajude a separar resíduos na Missão Coleta.</p>
 <div class="scene-nav" aria-label="Selecionar jogo">
-<button type="button" class="scene-button scene-primary" data-view="solo"><span class="scene-button-index">▶</span><span class="scene-button-content"><strong>SALVE O MUNDO</strong><small>Jogo solo · 65 cartas · chefes que anulam cores</small></span><span class="scene-button-arrow" aria-hidden="true">↗</span></button>
-
+<button type="button" class="scene-button scene-primary" data-view="solo"><span class="scene-button-index">▶</span><span class="scene-button-content"><strong>SALVE O MUNDO</strong><small>Estratégia · 40 coringas · 7 crises por campanha</small></span><span class="scene-button-arrow" aria-hidden="true">↗</span></button>
+<button type="button" class="scene-button scene-kids" data-view="kids"><span class="scene-button-index">02</span><span class="scene-button-content"><strong>MISSÃO COLETA</strong><small>Jogo infantil · 15 objetos · 5 lixeiras coloridas</small></span><span class="scene-button-arrow" aria-hidden="true">↗</span></button>
 </div>
-<div class="scene-footnote"><span class="scene-foot-dot" aria-hidden="true"></span> ENTRE NO JOGO E ENFRENTE AS CINCO CRISES</div>
+<div class="scene-footnote"><span class="scene-foot-dot" aria-hidden="true"></span> ESCOLHA UM MODO E CUIDE DO PLANETA</div>
 </div>
 <div class="scene-table" aria-hidden="true">
 <div class="table-ring table-ring-outer"></div><div class="table-ring table-ring-inner"></div>
@@ -66,6 +67,7 @@ footer{border-top:1px solid var(--edge);display:flex;align-items:center;justify-
 <div class="scene-bottom"><span>UMA EXPERIÊNCIA DE EDUCAÇÃO AMBIENTAL</span><a href="https://www.instagram.com/ecoresiduariosacademy/" target="_blank" rel="noopener noreferrer">ECORESIDUÁRIOS ACADEMY ↗</a></div>
 </div>
 </section>
+<section id="kids" class="hidden"><div class="game-top"><div><span class="eyebrow">Modo 02 · Aprender brincando</span><h1>Missão Coleta</h1></div><div class="game-top-actions"><button class="btn secondary" data-view="home">← Voltar</button><button class="btn secondary" id="kidsReset" type="button">↻ Novo jogo</button></div></div><div class="game-layout"><div class="surface" id="kidsMain"></div><aside class="sidepanel" id="kidsSide"></aside></div></section>
 <section id="solo" class="hidden"><div class="game-top"><div><span class="eyebrow">Modo 01 · Estratégia solo</span><h1>Salve o Mundo</h1></div><div class="game-top-actions"><button class="btn secondary" data-view="home">← Voltar</button><button class="btn secondary" id="helpEcoCard" type="button">? Como jogar</button><button class="btn secondary" id="resetEcoCard" type="button" aria-label="Recomeçar Salve o Mundo do zero">↻ Reiniciar</button></div></div><div class="game-layout"><div class="surface" id="soloMain"></div><aside class="sidepanel" id="soloSide"></aside></div></section>
 
 </main>
@@ -104,12 +106,14 @@ solo.phase==='shop'?'<h2>Mercado de soluções</h2><p class="hint">Você pode co
 main.querySelectorAll('[data-card]').forEach(el=>el.addEventListener('click',()=>selectSolo(el.dataset.card)));main.querySelector('#playCards')?.addEventListener('click',()=>playSolo(false));main.querySelector('#discardCards')?.addEventListener('click',()=>playSolo(true));main.querySelector('#nextStage')?.addEventListener('click',nextSolo);main.querySelector('#restartSolo')?.addEventListener('click',startSolo);main.querySelectorAll('[data-buy]').forEach(el=>el.addEventListener('click',()=>buyJoker(el.dataset.buy)))}
 </script>
 <script>
-function view(id){for(const s of ['home','solo'])$('#'+s).classList.toggle('hidden',s!==id);if(id==='solo'&&!solo){if(window.EcoCardSolo?.showHandGuide)window.EcoCardSolo.showHandGuide();else startSolo();}window.scrollTo({top:0,behavior:'smooth'})}
+function view(id){for(const s of ['home','solo','kids'])$('#'+s).classList.toggle('hidden',s!==id);if(id==='solo'&&!solo){if(window.EcoCardSolo?.showHandGuide)window.EcoCardSolo.showHandGuide();else startSolo();}if(id==='kids')window.EcoKids?.show();window.scrollTo({top:0,behavior:'smooth'})}
 document.querySelectorAll('[data-view]').forEach(el=>el.addEventListener('click',()=>view(el.dataset.view)));
 document.querySelector('#helpEcoCard')?.addEventListener('click',()=>{if(solo&&!window.confirm('Abrir o guia e sair da partida atual? O progresso desta jornada será perdido.'))return;if(window.EcoCardSolo?.showHandGuide)window.EcoCardSolo.showHandGuide();else startSolo();});
+document.querySelector('#kidsReset')?.addEventListener('click',()=>{if(window.confirm('Começar uma nova Missão Coleta?'))window.EcoKids?.newGame();});
 document.querySelector('#resetEcoCard')?.addEventListener('click',()=>{if(window.confirm('Reiniciar Salve o Mundo? Todos os pontos, coringas e fichas desta jornada serão perdidos.')){solo=null;startSolo();}});$('#homeBrand').addEventListener('click',e=>{e.preventDefault();view('home')});
 </script>
 <script src="./hand-order.js"></script>
 <script src="./victory-share.js?v=final-only"></script>
 <script src="./solo-v2.js?v=deck-focus-session3"></script>
+<script src="./kids-game.js?v=kids-v1"></script>
 </body></html>
