@@ -397,3 +397,28 @@ footer a{color:#d9ecab;text-decoration:underline;text-underline-offset:3px}
 #solo .campaign-note{font-size:12px!important;color:#c0d4b5!important}
 @media(max-width:640px){#solo .campaign-choices{grid-template-columns:1fr}#solo .campaign-choice{min-height:152px;padding:14px}#solo .campaign-choice b{font-size:38px}}
 @media(prefers-reduced-motion:reduce){#solo .campaign-choice{transition:none;transform:none!important}}
+
+/* Shareable victory certificate, distinct from the buttons below. */
+#solo .victory-certificate{
+ --v-accent:#cdec91;--v-base:#204332;
+ display:flex;flex-direction:column;align-items:center;text-align:center;
+ margin:24px auto 18px;padding:22px 16px 19px;width:100%;max-width:580px;
+ background:radial-gradient(circle at 50% 20%,var(--v-base),#142822 85%);
+ border:3px solid var(--v-accent);box-shadow:5px 7px 0 #081410,inset 0 0 0 7px #ffffff0b;color:#ffffff;
+}
+#solo .victory-tier-1{--v-accent:#9cdeec;--v-base:#24475a}
+#solo .victory-tier-2{--v-accent:#ffd1ad;--v-base:#4b332b}
+#solo .victory-tier-3{--v-accent:#dab4ff;--v-base:#3f2a52}
+#solo .victory-brand,#solo .victory-certificate-label,#solo .victory-certificate-url{font:800 11px/1.4 'IBM Plex Mono',monospace;letter-spacing:.1em;color:var(--v-accent)}
+#solo .victory-globe{width:116px;height:116px;color:var(--v-accent);margin:15px 0}
+#solo .victory-certificate h3{font:900 clamp(37px,6vw,65px)/.92 'Barlow Condensed',sans-serif;margin:13px 0 8px;color:#fffce9}
+#solo .victory-certificate p{font:800 14px 'IBM Plex Mono',monospace;margin:0;color:var(--v-accent)}
+#solo .victory-certificate-stats{display:grid;grid-template-columns:1fr 1fr;gap:15px;width:100%;margin:22px 0;padding:16px;border-top:1px solid #ffffff55;border-bottom:1px solid #ffffff55}
+#solo .victory-certificate-stats div{display:flex;flex-direction:column;gap:8px;min-width:0}
+#solo .victory-certificate-stats strong{font:900 clamp(25px,5vw,42px)/1 'Barlow Condensed',sans-serif;color:#fff6d9;overflow-wrap:anywhere}
+#solo .victory-certificate-stats small{font:700 10px 'IBM Plex Mono',monospace;color:var(--v-accent)}
+#solo .victory-share-actions{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin:10px 0 16px}
+#solo .victory-share-actions button{flex:1 1 190px;min-height:49px}
+#solo .victory-share-status{font:600 13px 'IBM Plex Sans',sans-serif;color:#e8f4d2;text-align:center}
+#solo .victory-share-fallback{width:100%;min-height:130px;padding:10px;background:#182b23;color:#f7ffea;border:1px solid #cdec91;font:13px/1.5 monospace}
+@media(max-width:480px){#solo .victory-certificate{padding:15px 11px}#solo .victory-certificate-stats{gap:8px}#solo .victory-share-actions{flex-direction:column}#solo .victory-share-actions button{width:100%}}
