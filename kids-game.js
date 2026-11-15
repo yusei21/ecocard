@@ -131,7 +131,7 @@ function render(){
   main.querySelector('#kidsBegin')?.addEventListener('click',begin);return;
  }
  if(data.phase==='complete'){
-  main.innerHTML='<section class="kids-finish"><span class="kids-kicker">MISSÃO CONCLUÍDA</span><div class="kids-finish-symbol" aria-hidden="true">✓</div><h2>PARABÉNS, GUARDIÃO!</h2><p>Você separou os 15 objetos e ajudou a cuidar do planeta.</p><div class="kids-final-score"><strong>'+data.points.toLocaleString('pt-BR')+'</strong><span>PONTOS</span><strong>'+data.correct+'/15</strong><span>ACERTOS</span></div><p>O próximo passo é aprender onde os resíduos são coletados na sua cidade.</p><button class="btn kids-primary" id="kidsAgain">JOGAR OUTRA VEZ</button></section>';
+  main.innerHTML='<section class="kids-finish"><span class="kids-kicker">MISSÃO CONCLUÍDA</span><div class="kids-finish-symbol" aria-hidden="true">15/15</div><h2>PARABÉNS, GUARDIÃO!</h2><p>Você separou os 15 objetos e ajudou a cuidar do planeta.</p><div class="kids-final-score"><strong>'+data.points.toLocaleString('pt-BR')+'</strong><span>PONTOS</span><strong>'+data.correct+'/15</strong><span>ACERTOS</span></div><p>O próximo passo é aprender onde os resíduos são coletados na sua cidade.</p><button class="btn kids-primary" id="kidsAgain">JOGAR OUTRA VEZ</button></section>';
   main.querySelector('#kidsAgain')?.addEventListener('click',newGame);return;
  }
  const item=data.rounds[data.index],cat=category(item.category),at=data.index+1,level=Math.ceil(at/5);
@@ -139,7 +139,7 @@ function render(){
  '<div class="kids-progress"><span style="width:'+((data.index+1)/15*100)+'%"></span></div>'+
  '<div class="kids-item" role="group" aria-label="Objeto para separar"><span class="kids-label">ONDE DEVO COLOCAR?</span><div class="kids-illustration">'+illustration(item.shape)+'</div><h2>'+item.name+'</h2></div>'+
  (data.phase==='feedback'?'<section class="kids-answer '+(data.feedback.correct?'correct':'retry')+'" role="status"><h3>'+(data.feedback.correct?'ACERTOU!':'TENTE MAIS UMA VEZ')+'</h3><p>'+data.feedback.message+'</p><button class="btn kids-primary" id="kidsNext">'+(data.retry?'ESCOLHER OUTRA LIXEIRA':'PRÓXIMO OBJETO')+'</button></section>':
- '<h3 class="kids-question">ESCOLHA UMA LIXEIRA</h3><div class="kids-bins">'+CATEGORIES.map(c=>'<button type="button" class="kids-bin" style="--bin:'+c.color+'" data-bin="'+c.id+'" aria-label="Lixeira de '+c.name+'"><span class="kids-bin-lid"></span><span class="kids-bin-body"><span class="kids-bin-mark" aria-hidden="true">↻</span><strong>'+c.name+'</strong></span></button>').join('')+'</div><p class="kids-hint">Toque na lixeira correta. Não existe limite de tempo.</p>')+
+ '<h3 class="kids-question">ESCOLHA UMA LIXEIRA</h3><div class="kids-bins">'+CATEGORIES.map(c=>'<button type="button" class="kids-bin" style="--bin:'+c.color+'" data-bin="'+c.id+'" aria-label="Lixeira de '+c.name+'"><span class="kids-bin-lid"></span><span class="kids-bin-body"><span class="kids-bin-mark" aria-hidden="true">ECO</span><strong>'+c.name+'</strong></span></button>').join('')+'</div><p class="kids-hint">Toque na lixeira correta. Não existe limite de tempo.</p>')+
  '</div>';
  main.querySelector('#kidsNext')?.addEventListener('click',continueGame);
  main.querySelectorAll('[data-bin]').forEach(el=>el.addEventListener('click',()=>chooseBin(el.dataset.bin)));
