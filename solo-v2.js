@@ -309,6 +309,52 @@ function offers(exclude,rng=Math.random){
  }
  return chosen;
 }
+
+const DECK_FOCUS_COST=4,DECK_FOCUS_LIMIT=5;
+function emptyDeckPlan(){return {extras:[],removed:[],upgrades:0,focus:null}}
+function tunedDeck(plan,base=makeDeck()){
+ if(!plan)return base;
+ const removed=new Set(plan.removed||[]);
+ return shuffle([...base.filter(c=>!removed.has(c.id)),...(plan.extras||[])]);
+}
+function deckStatistics(plan){
+ const deck=tunedDeck(plan,makeDeck());
+ return {total:deck.length,bySuit:SUITS.map(s=>({id:s.id,label:s.label,count:deck.filter(c=>c.suit===s.id).length}))};
+}
+function focusDeck(plan,suit,base,rng=Math.random){
+ if(!SUITS.some(s=>s.id===suit)||plan.upgrades>=DECK_FOCUS_LIMIT)return null;
+ const removed=new Set(plan.removed);
+ const remaining=base.filter(c=>c.suit!==suit&&!removed.has(c.id));
+ const picked=[];
+ while(picked.length<3&&remaining.length){
+  const ix=Math.floor(Math.max(0,Math.min(.999999,rng()))*remaining.length);
+  picked.push(remaining.splice(ix,1)[0].id);
+ }
+ if(picked.length!==3)return null;
+ const source=base.filter(c=>c.suit===suit).sort((a,b)=>a.rank-b.rank);
+ const rankA=(plan.upgrades*3+6)%13,rankB=(plan.upgrades*3+9)%13;
+ const extras=[source[rankA],source[rankB]].map((card,i)=>({...card,id:card.id+'-focus-'+plan.upgrades+'-'+i}));
+ return {upgrades:plan.upgrades+1,focus:suit,removed:[...plan.removed,...picked],extras:[...plan.extras,...extras]};
+}
+function buyDeckFocus(suit){
+ if(!solo||solo.phase!=='shop'||solo.stage===stages.length-1)return;
+ if(solo.coins<DECK_FOCUS_COST||solo.deckPlan.upgrades>=DECK_FOCUS_LIMIT)return;
+ const plan=focusDeck(solo.deckPlan,suit,makeDeck());
+ if(!plan)return;
+ solo.coins-=DECK_FOCUS_COST;solo.deckPlan=plan;
+ solo.message='BARALHO AJUSTADO: +2 cartas de '+SUITS.find(s=>s.id===suit).label+', -3 de outras categorias. Vale na próxima crise.';
+ beep(640,.14,'triangle');render();
+}
+function deckFocusHTML(state){
+ if(state.stage===stages.length-1)return '';
+ const plan=state.deckPlan||emptyDeckPlan(),stats=deckStatistics(plan);
+ return '<section class="deck-focus-shop"><div class="eyebrow">PERSONALIZE SEU BARALHO</div><h3>ESCOLHA UMA ESTRATÉGIA</h3>'+
+ '<p>Adicione 2 cartas de uma categoria e retire 3 de outras. Vale a partir da próxima crise, inclusive nas seguintes desta campanha.</p>'+
+ '<div class="deck-focus-stats">'+stats.bySuit.map(x=>'<span>'+x.label+' <b>'+x.count+'</b></span>').join('')+'</div>'+
+ '<div class="deck-focus-actions">'+SUITS.map(x=>'<button type="button" class="btn secondary" data-focus="'+x.id+'" '+(state.coins<DECK_FOCUS_COST||plan.upgrades>=DECK_FOCUS_LIMIT?'disabled':'')+'>'+x.label+' · '+DECK_FOCUS_COST+' ✦</button>').join('')+'</div>'+
+ '<small>AJUSTES '+plan.upgrades+'/'+DECK_FOCUS_LIMIT+' · '+stats.total+' CARTAS NO BARALHO · As alterações não afetam a crise atual.</small></section>';
+}
+
 function fill(n){if(!solo)return;for(let k=0;k<n;k++){if(!solo.deck.length)break;solo.hand.push(solo.deck.pop())}/* Keep manual ordering; new cards append at the end. */}
 function selectCampaign(){
  clearQueue();solo=null;lastBurst=null;
@@ -318,7 +364,7 @@ function selectCampaign(){
  main.innerHTML='<section class="campaign-select"><span class="eyebrow">SALVE O MUNDO / PROGRESSÃO</span><h2>QUATRO CAMPANHAS. SETE CRISES CADA.</h2><p>Vença as sete crises de cada dificuldade para desbloquear a próxima. Cada campanha começa com um baralho e ecofichas novos.</p><div class="campaign-choices">'+CAMPAIGNS.map((c,i)=>'<button type="button" class="campaign-choice campaign-'+c.id+'" data-campaign="'+i+'" '+(i>unlockedCampaign?'disabled':'')+'><span class="campaign-status">'+(i>unlockedCampaign?'BLOQUEADA':'DISPONÍVEL')+'</span><b>'+c.name+'</b><small>'+c.description+'</small><span>7 CRISES · META FINAL '+(Math.ceil(stages[6].goal*c.scale/50)*50).toLocaleString('pt-BR')+' PTS</span></button>').join('')+'</div><p class="campaign-note">Recarregar a página reinicia o progresso no Fácil.</p></section>';
  main.querySelectorAll('[data-campaign]').forEach(btn=>btn.addEventListener('click',()=>start(Number(btn.dataset.campaign))));
 }
-function start(campaign=0){if(campaign>unlockedCampaign)return;clearQueue();const modifier=rollDifficultyModifier(0),rules=campaignRules(campaign,0,modifier.id);solo={stage:0,campaign,score:0,coins:rules.coins,hand:[],deck:makeDeck(),selected:[],jokers:[],hands:rules.hands,discards:rules.discards,phase:'play',message:'Escolha de 1 a 5 cartas. Descubra combinações, supere crises e evolua sua estratégia.',runScore:0,comboChain:0,played:0,modifier,rerolls:0,wonStages:0,payout:null,playedCards:[],pendingPhase:null,bossRule:drawBossRule(0)};lastBurst=null;fill(8);render();beep(420,.09)}
+function start(campaign=0){if(campaign>unlockedCampaign)return;clearQueue();const modifier=rollDifficultyModifier(0),rules=campaignRules(campaign,0,modifier.id);solo={stage:0,campaign,score:0,coins:rules.coins,hand:[],deck:makeDeck(),deckPlan:emptyDeckPlan(),selected:[],jokers:[],hands:rules.hands,discards:rules.discards,phase:'play',message:'Escolha de 1 a 5 cartas. Descubra combinações, supere crises e evolua sua estratégia.',runScore:0,comboChain:0,played:0,modifier,rerolls:0,wonStages:0,payout:null,playedCards:[],pendingPhase:null,bossRule:drawBossRule(0)};lastBurst=null;fill(8);render();beep(420,.09)}
 function target(){return campaignRules(solo.campaign||0,solo.stage,solo.modifier.id,solo.bossRule).goal}
 function moveSolo(from,to){
  if(!solo||solo.phase!=='play'||busy)return;
@@ -442,7 +488,7 @@ function animateScore(result,onDone){
 
 function buy(id){if(solo.phase!=='shop')return;const j=solo.offer.find(x=>x.id===id);if(!j||solo.jokers.length>=5||solo.coins<j.price)return;solo.coins-=j.price;solo.jokers.push({...j,growth:0});solo.offer=solo.offer.filter(x=>x.id!==id);solo.message=(j.rarity==='legend'?'LENDÁRIO ADQUIRIDO: ':'CORINGA ADQUIRIDO: ')+j.name+'!';beep(j.rarity==='legend'?1047:730,.27,'triangle');render()}
 function reroll(){const cost=rerollCost();if(!solo||solo.phase!=='shop'||solo.coins<cost)return;solo.coins-=cost;solo.rerolls++;solo.offer=offers(solo.jokers);solo.message='Ofertas renovadas por '+cost+' ecofichas. Próxima troca: '+rerollCost()+'.';render()}
-function next(){if(solo.phase!=='shop')return;if(solo.stage===stages.length-1){solo.phase='won';unlockedCampaign=Math.max(unlockedCampaign,Math.min(CAMPAIGNS.length-1,(solo.campaign||0)+1));solo.message='CAMPANHA '+CAMPAIGNS[solo.campaign||0].name+' CONCLUÍDA! Sete crises superadas.'}else{solo.stage++;solo.score=0;solo.modifier=rollDifficultyModifier(solo.stage);solo.bossRule=drawBossRule(solo.stage,solo.bossRule);const rules=campaignRules(solo.campaign||0,solo.stage,solo.modifier.id,solo.bossRule);solo.hands=rules.hands;solo.discards=rules.discards;solo.hand=[];solo.deck=makeDeck();solo.selected=[];solo.phase='play';solo.comboChain=0;solo.payout=null;solo.playedCards=[];lastBurst=null;fill(8);solo.message='NOVO DESAFIO: '+stages[solo.stage].title+'!'}beep(570,.18);render()}
+function next(){if(solo.phase!=='shop')return;if(solo.stage===stages.length-1){solo.phase='won';unlockedCampaign=Math.max(unlockedCampaign,Math.min(CAMPAIGNS.length-1,(solo.campaign||0)+1));solo.message='CAMPANHA '+CAMPAIGNS[solo.campaign||0].name+' CONCLUÍDA! Sete crises superadas.'}else{solo.stage++;solo.score=0;solo.modifier=rollDifficultyModifier(solo.stage);solo.bossRule=drawBossRule(solo.stage,solo.bossRule);const rules=campaignRules(solo.campaign||0,solo.stage,solo.modifier.id,solo.bossRule);solo.hands=rules.hands;solo.discards=rules.discards;solo.hand=[];solo.deck=tunedDeck(solo.deckPlan);solo.selected=[];solo.phase='play';solo.comboChain=0;solo.payout=null;solo.playedCards=[];lastBurst=null;fill(8);solo.message='NOVO DESAFIO: '+stages[solo.stage].title+'!'}beep(570,.18);render()}
 function fmt(v){return Math.floor(v).toLocaleString('pt-BR')}
 function render(){
  if(!solo)return;
@@ -482,7 +528,7 @@ function render(){
   const p=solo.payout;
   area=ruleBrief+'<div class="run-result won-result"><div class="result-kicker">DESAFIO '+(solo.stage+1)+' / '+stages.length+' CONCLUÍDO</div><div class="result-symbol" aria-hidden="true">✓</div><h2>CRISE SUPERADA!</h2><p>Você ultrapassou a meta de <b>'+fmt(goal)+'</b> pontos.</p><div class="result-score"><small>PONTUAÇÃO DA RODADA</small><strong>'+fmt(solo.score)+'</strong></div><div class="payout-ledger"><div><span>Recompensa da crise</span><b>+'+p.base+' ✦</b></div><div><span>Jogadas não utilizadas</span><b>+'+p.saved+' ✦</b></div><div><span>Juros (1 para cada 5 fichas, máximo 5)</span><b>+'+p.interest+' ✦</b></div><div class="total"><span>RECEBER AGORA</span><b>+'+p.total+' ✦</b></div></div><button class="btn arcade-play" id="collectPayout">RESGATAR '+p.total+' FICHAS →</button></div>';
  } else if(solo.phase==='shop'){
-  area=ruleBrief+'<div class="arcade-shop"><span class="eyebrow">ENTRE CRISES / MERCADO CIRCULAR</span><h2>MONTE SUA ESTRATÉGIA.</h2><div class="shop-wallet"><strong>'+fmt(solo.coins)+' ✦</strong><span>EM CAIXA</span><span>Juros futuros: +'+Math.min(5,Math.floor(solo.coins/5))+' por crise<br>Guardar ou gastar? Você decide.</span></div><p class="hint">Até 5 coringas em jogo. Você pode vender um coringa por metade do preço.</p><div class="market">'+solo.offer.map(j=>'<div class="market-item rarity-card rarity-'+j.rarity+'"><div class="rarity-card-top"><span class="rarity-ribbon">'+rarityLabel(j)+'</span></div>'+jokerArt(j)+'<b>'+esc(j.name)+'</b><p>'+esc(j.desc)+'</p>'+growthSummary(j)+'<button class="btn" data-buy="'+j.id+'" '+(solo.coins<j.price||solo.jokers.length>=5?'disabled':'')+'>COMPRAR · '+j.price+' ✦</button></div>').join('')+'</div><div class="actions shop-actions"><button class="btn secondary" id="rerollShop" '+(solo.coins<rerollCost()?'disabled':'')+'>NOVAS OFERTAS · '+rerollCost()+' ✦</button><button class="btn arcade-play" id="nextStage">'+(solo.stage===stages.length-1?'CONCLUIR JORNADA →':'PRÓXIMA CRISE →')+'</button></div></div>';
+  area=ruleBrief+'<div class="arcade-shop"><span class="eyebrow">ENTRE CRISES / MERCADO CIRCULAR</span><h2>MONTE SUA ESTRATÉGIA.</h2><div class="shop-wallet"><strong>'+fmt(solo.coins)+' ✦</strong><span>EM CAIXA</span><span>Juros futuros: +'+Math.min(5,Math.floor(solo.coins/5))+' por crise<br>Guardar ou gastar? Você decide.</span></div><p class="hint">Até 5 coringas em jogo. Você pode vender um coringa por metade do preço.</p>'+deckFocusHTML(solo)+'<div class="market">'+solo.offer.map(j=>'<div class="market-item rarity-card rarity-'+j.rarity+'"><div class="rarity-card-top"><span class="rarity-ribbon">'+rarityLabel(j)+'</span></div>'+jokerArt(j)+'<b>'+esc(j.name)+'</b><p>'+esc(j.desc)+'</p>'+growthSummary(j)+'<button class="btn" data-buy="'+j.id+'" '+(solo.coins<j.price||solo.jokers.length>=5?'disabled':'')+'>COMPRAR · '+j.price+' ✦</button></div>').join('')+'</div><div class="actions shop-actions"><button class="btn secondary" id="rerollShop" '+(solo.coins<rerollCost()?'disabled':'')+'>NOVAS OFERTAS · '+rerollCost()+' ✦</button><button class="btn arcade-play" id="nextStage">'+(solo.stage===stages.length-1?'CONCLUIR JORNADA →':'PRÓXIMA CRISE →')+'</button></div></div>';
  } else {
   area=ruleBrief+'<div class="run-result '+(solo.phase==='won'?'won-result':'lost-result')+'"><div class="result-kicker">'+(solo.phase==='won'?'7 DE 7 CRISES · '+campaign.name+'':'TENTATIVA ENCERRADA')+'</div><div class="result-symbol">'+(solo.phase==='won'?'✓':'×')+'</div><h2>'+(solo.phase==='won'?'CAMPANHA CONCLUÍDA!':'FIM DE JOGO')+'</h2><p>'+(solo.phase==='won'?'A jornada foi concluída. Agora leve essas decisões para o mundo real.':'A meta não foi alcançada. Experimente construir combinações mais fortes e reservar fichas para os juros.')+'</p><div class="result-score"><small>PONTUAÇÃO TOTAL DA JORNADA</small><strong>'+fmt(solo.runScore)+'</strong></div><div class="result-stats"><span>Crises superadas <b>'+solo.wonStages+'/'+stages.length+'</b></span><span>Jogadas realizadas <b>'+solo.played+'</b></span><span>Fichas finais <b>'+solo.coins+'</b></span></div>'+(solo.phase==='won'&&solo.campaign===CAMPAIGNS.length-1&&window.EcoVictory?window.EcoVictory.card(solo):'')+'<button class="btn arcade-play" id="restartSolo">'+(solo.phase==='won'&&solo.campaign<CAMPAIGNS.length-1?'AVANÇAR PARA '+CAMPAIGNS[solo.campaign+1].name+' →':solo.phase==='won'?'TODAS AS CAMPANHAS CONCLUÍDAS · REINICIAR':'TENTAR NOVAMENTE')+'</button></div>';
  }
@@ -494,6 +540,7 @@ function render(){
  main.querySelector('#collectPayout')?.addEventListener('click',collectPayout);
  main.querySelector('#nextStage')?.addEventListener('click',next);
  main.querySelector('#rerollShop')?.addEventListener('click',reroll);
+ main.querySelectorAll('[data-focus]').forEach(el=>el.addEventListener('click',()=>buyDeckFocus(el.dataset.focus)));
  if(solo.phase==='won'&&solo.campaign===CAMPAIGNS.length-1)window.EcoVictory?.attach(main,solo);
  main.querySelector('#restartSolo')?.addEventListener('click',()=>{if(solo.phase==='won'&&solo.campaign<CAMPAIGNS.length-1)start(solo.campaign+1);else selectCampaign();});
  main.querySelectorAll('[data-buy]').forEach(el=>el.addEventListener('click',()=>buy(el.dataset.buy)));
@@ -505,5 +552,5 @@ function render(){
 startSolo=showHandGuide;drawSolo=fill;combo=combination;scoreSolo=cards=>evaluate(cards,solo.stage,solo.jokers,solo.modifier,solo.bossRule);
 selectSolo=choose;playSolo=play;targetSolo=target;makeOffers=()=>offers(solo.jokers);
 buyJoker=buy;nextSolo=next;renderSolo=render;
-window.EcoCardSolo={combination,evaluate,offers,stages,jokers:upgradedJokers,MODIFIERS,rollModifier,payoutFor,rerollCost,difficultyRules,rollDifficultyModifier,BOSS_RULES,drawBossRule,bossInvalidReason,HAND_GUIDE,showHandGuide,selectCampaign,campaignRules,CAMPAIGNS,EVOLUTION_RULES,advanceEvolutions,evolutionCount,growthSummary,scoringFrames,RARITY_INFO,jokerArt,jokerWeight};
+window.EcoCardSolo={emptyDeckPlan,focusDeck,tunedDeck,deckStatistics,deckFocusHTML,buyDeckFocus,DECK_FOCUS_COST,combination,evaluate,offers,stages,jokers:upgradedJokers,MODIFIERS,rollModifier,payoutFor,rerollCost,difficultyRules,rollDifficultyModifier,BOSS_RULES,drawBossRule,bossInvalidReason,HAND_GUIDE,showHandGuide,selectCampaign,campaignRules,CAMPAIGNS,EVOLUTION_RULES,advanceEvolutions,evolutionCount,growthSummary,scoringFrames,RARITY_INFO,jokerArt,jokerWeight};
 })();
