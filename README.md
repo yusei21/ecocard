@@ -31,17 +31,19 @@ Roguelike de pontuação com cartas de cinco categorias de resíduos: **azul/pap
 As regras de pontuação são originais para este projeto. O jogo usa o conceito geral de construção de combinações e progressão roguelike, sem reutilizar assets de Balatro.
 
 
-### Coleção de 40 coringas
+### Coleção de 50 coringas
 
-O Salve o Mundo possui **40 coringas únicos**: **16 Comuns (verde), 12 Raros (azul), 8 Épicos (roxo) e 4 Lendários (dourado)**. A coleção mantém os 3 Rs e adiciona novas estratégias para cada categoria de resíduo, combinações de valores, sequências e bônus por diversidade de cores. Todos os novos coringas possuem um efeito funcional de pontuação, arte vetorial exclusiva e custo em ecofichas. A loja exibe três opções por visita, respeitando o limite de cinco coringas equipados.
+O Salve o Mundo possui **50 coringas únicos**: **20 Comuns (verde), 15 Raros (azul), 10 Épicos (roxo) e 5 Lendários (dourado)**. A coleção mantém os 3 Rs e adiciona novas estratégias para cada categoria de resíduo, combinações de valores, sequências e bônus por diversidade de cores. Todos os novos coringas possuem um efeito funcional de pontuação, arte vetorial exclusiva e custo em ecofichas. A loja exibe três opções por visita, respeitando o limite de cinco coringas equipados.
 
-Os lendários são: **Aventura Circular, Planeta Vivo, Renascimento Verde e Pacto Global**. Aventura Circular continua sendo o item de menor peso individual na loja. Os efeitos de pontuação são calculados apenas sobre cartas válidas após as restrições do chefe. Aventura Circular repete duas vezes cada outro coringa, incluindo épicos e lendários, sem ativar a si mesma.
+Os lendários são: **Aventura Circular, Planeta Vivo, Renascimento Verde, Pacto Global e Guardiões da Terra**. Aventura Circular continua sendo o item de menor peso individual na loja. Os efeitos de pontuação são calculados apenas sobre cartas válidas após as restrições do chefe. Aventura Circular repete duas vezes cada outro coringa, incluindo épicos e lendários, sem ativar a si mesma.
+
+A expansão adiciona dez coringas com arte e efeitos individuais: **Mutirão do Bairro**, **Retorno das Embalagens**, **Uso Consciente** e **Pequenos Reparos** (comuns); **Rota Limpa**, **Materiais em Parceria** e **Compostagem Coletiva** (raros); **Circuito de Valores** e **Ponte de Materiais** (épicos); e **Guardiões da Terra** (lendário, ×3,5 ao combinar as cinco categorias). Todos respondem às restrições dos chefes e são repetidos pela Aventura Circular quando ativados. A distribuição de pesos de raridade e o limite de cinco coringas equipados permanecem inalterados.
 
 A distribuição de sorteio é ponderada, não uniforme. A raridade não garante automaticamente um resultado melhor em qualquer situação: cartas mais raras exigem condições específicas de combinação.
 
 ### Coringas evolutivos e certificado final
 
-Sete dos 40 coringas agora são **evolutivos**: Papel Recuperado, Retorno do Vidro, Valor do Metal, Coleta Integrada, Biofertilizante, Aliança dos Biomas e Usina Circular. Eles começam com os bônus de origem e aumentam o efeito em cada jogada válida na qual a habilidade é ativada, até **8 evoluções**. O progresso aparece diretamente no coringa equipado, com contador e barra. Pré-visualizar cartas ou jogar uma mão anulada não aumenta o nível; a Aventura Circular continua repetindo o bônus, mas não duplica o avanço de nível. As evoluções pertencem ao coringa comprado e reiniciam numa nova campanha.
+Sete dos 50 coringas agora são **evolutivos**: Papel Recuperado, Retorno do Vidro, Valor do Metal, Coleta Integrada, Biofertilizante, Aliança dos Biomas e Usina Circular. Eles começam com os bônus de origem e aumentam o efeito em cada jogada válida na qual a habilidade é ativada, até **8 evoluções**. O progresso aparece diretamente no coringa equipado, com contador e barra. Pré-visualizar cartas ou jogar uma mão anulada não aumenta o nível; a Aventura Circular continua repetindo o bônus, mas não duplica o avanço de nível. As evoluções pertencem ao coringa comprado e reiniciam numa nova campanha.
 
 O **certificado de conclusão**, a imagem compartilhável e os botões para compartilhar ou copiar a vitória aparecem **somente depois da sétima crise da campanha Extremo**, isto é, depois das quatro campanhas (28 crises). Vencer Fácil, Médio ou Difícil apenas desbloqueia a próxima campanha. O certificado final mostra o feito de 28 crises vencidas e os pontos obtidos durante a campanha Extremo.
 
