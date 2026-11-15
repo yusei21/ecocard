@@ -586,13 +586,14 @@ function render(){
   const total=scoring?lastBurst?.score:preview?.score;
   const base=scoring?lastBurst?.base:preview?.base;
   const mult=scoring?lastBurst?.mult:preview?.mult;
-  area='<div class="arcade-tabletop">'+ruleBrief+'<div class="arena-header"><span class="eyebrow">SALVE O MUNDO / MESA DE TRIAGEM</span><span class="arena-round">CRISE '+(solo.stage+1)+' / '+stages.length+'</span></div>'+
-  '<div class="table-score"><div><small>SEUS PONTOS</small><strong>'+fmt(shownScore)+'</strong></div><div><small>'+(solo.bossRule?.kind==='double_hp'?'META ×2':'META')+'</small><strong>'+fmt(goal)+'</strong></div><div class="table-score-left"><small>FALTAM</small><strong>'+fmt(remaining)+'</strong></div></div>'+
+  const jokerRail='<div class="table-joker-rail" aria-label="Coringas equipados"><div class="table-joker-label"><strong>CORINGAS ATIVOS</strong><small>'+solo.jokers.length+' / 5</small></div><div class="table-joker-slots">'+Array.from({length:5},(_,i)=>{const joker=solo.jokers[i];return joker?'<div class="table-joker-slot joker-rarity-'+joker.rarity+'" title="'+esc(joker.name+' — '+joker.desc)+'">'+jokerArt(joker)+'<span>'+esc(joker.name)+'</span></div>':'<div class="table-joker-slot empty" aria-label="Espaço para coringa"><span>VAZIO</span></div>'}).join('')+'</div></div>';
+  area='<div class="arcade-tabletop balatro-table">'+ruleBrief+'<div class="arena-header"><span class="eyebrow">SALVE O MUNDO / MESA DE TRIAGEM</span><span class="arena-round">CRISE '+(solo.stage+1)+' / '+stages.length+'</span></div>'+
+  jokerRail+'<div class="table-score"><div><small>SEUS PONTOS</small><strong>'+fmt(shownScore)+'</strong></div><div><small>'+(solo.bossRule?.kind==='double_hp'?'META ×2':'META')+'</small><strong>'+fmt(goal)+'</strong></div><div class="table-score-left"><small>FALTAM</small><strong>'+fmt(remaining)+'</strong></div></div>'+
   '<div class="arena-scores"><div class="score-chip"><small>BASE</small><b>'+fmt(base||0)+'</b></div><div class="score-times">×</div><div class="score-chip magenta"><small>MULT</small><b>'+((mult||1).toFixed(2))+'</b></div><div class="score-equals">=</div><div class="score-chip total"><small>'+(scoring?'PONTUANDO':'PRÉVIA')+'</small><b>'+fmt(scoring?0:total||0)+'</b></div></div>'+
   '<div class="combo-readout">'+esc(scoring?lastBurst.type:preview?.type||'SELECIONE SUAS CARTAS')+'</div>'+
   '<div class="score-performance" id="scorePerformance" aria-live="polite">'+(scoring?'CALCULANDO COMBO…':'')+'</div>'+
   (scoring?'<div class="played-label">COMBINAÇÃO JOGADA</div><div class="cards played-cards">'+solo.playedCards.map(c=>cardHTML(c,false,true)).join('')+'</div>':'')+
-  '<div class="arena-hand-title"><strong>SUAS CARTAS</strong><span>SELECIONE ATÉ 5 · '+solo.selected.length+'/5</span></div><div class="cards arcade-hand">'+solo.hand.map(c=>{const html=cardHTML(c,solo.selected.includes(c.id),scoring);return blockedSuit&&c.suit===blockedSuit.id?html.replace('class="playing-card','class="playing-card boss-negated'):html}).join('')+'</div>'+ 
+  '<div class="arena-hand-title"><strong>SUA MÃO</strong><span>'+solo.hand.length+' CARTAS · '+solo.selected.length+'/5 SELECIONADAS</span></div><div class="cards arcade-hand" aria-label="Cartas na mão">'+solo.hand.map((c,i)=>{const fanTilt=((i-(solo.hand.length-1)/2)*1.65).toFixed(2)+'deg';const html=cardHTML(c,solo.selected.includes(c.id),scoring).replace('style="--card:','style="--fan-tilt:'+fanTilt+';--card:');return blockedSuit&&c.suit===blockedSuit.id?html.replace('class="playing-card','class="playing-card boss-negated'):html}).join('')+'</div>'+ 
   '<div class="actions arena-actions"><button class="btn arcade-play" id="playCards" '+(!solo.selected.length||scoring?'disabled':'')+'>JOGAR MÃO</button><button class="btn secondary" id="discardCards" '+(!solo.selected.length||!solo.discards||scoring?'disabled':'')+'>DESCARTAR</button></div></div>';
  } else if(solo.phase==='clear'){
   const p=solo.payout;
@@ -616,6 +617,7 @@ function render(){
  main.querySelectorAll('[data-buy]').forEach(el=>el.addEventListener('click',()=>buy(el.dataset.buy)));
  side.querySelectorAll('[data-sell]').forEach(el=>el.addEventListener('click',()=>sellJoker(el.dataset.sell)));
  side.querySelector('#muteAudio')?.addEventListener('change',e=>{muted=!e.target.checked;localStorage.setItem('ecocard-muted',muted?'1':'0')});
+ window.EcoOrientation?.sync(solo.phase==='play'||solo.phase==='scoring');
  saveSession();
 }
 
