@@ -175,11 +175,19 @@ function playNote(freq){
  }catch{}
 }
 function lesson(c){return c.name+' — '+c.desc}
+function isFinalLevel(index){return Math.floor(index/5)===LEVELS.length-1}
+function binsHTML(index){
+ const onlyColors=isFinalLevel(index);
+ return CATEGORIES.map(c=>{
+  const aria=onlyColors?'Lixeira '+({azul:'azul',vermelho:'vermelha',verde:'verde',amarelo:'amarela',marrom:'marrom'}[c.id]):'Lixeira de '+c.name;
+  return '<button type="button" class="kids-bin'+(onlyColors?' kids-bin-color-only':'')+'" style="--bin:'+c.color+'" data-bin="'+c.id+'" aria-label="'+aria+'"><span class="kids-bin-lid"></span><span class="kids-bin-body">'+(onlyColors?'':'<span class="kids-bin-mark" aria-hidden="true">ECO</span><strong>'+c.name+'</strong>')+'</span></button>';
+ }).join('');
+}
 function render(){
  const main=getMain(),side=getSide();if(!main||!side)return;
  if(!game)newGame();
  const data=game;
- side.innerHTML='<div class="kids-help"><h3>GUIA DA COLETA</h3><p>Observe do que cada objeto é feito. Toque na lixeira da categoria correta. Você pode tentar novamente sem perder pontos.</p><div class="kids-legend">'+CATEGORIES.map(c=>'<div><span style="--bin:'+c.color+'"></span><strong>'+c.name+'</strong><small>'+c.desc+'</small></div>').join('')+'</div><p>As regras de coleta variam conforme a cidade. Resíduos devem estar limpos e secos quando necessário. A compostagem também depende das condições locais.</p></div>';
+ side.innerHTML=isFinalLevel(data.index)&&data.phase!=='intro'?'<div class="kids-help kids-final-guide"><h3>DESAFIO FINAL</h3><p>Agora você já conhece as lixeiras. Nesta etapa, descubra a resposta usando apenas as cores.</p><p>Observe o objeto e escolha com atenção. Você pode tentar novamente.</p></div>':'<div class="kids-help"><h3>GUIA DA COLETA</h3><p>Observe do que cada objeto é feito. Toque na lixeira da categoria correta. Você pode tentar novamente sem perder pontos.</p><div class="kids-legend">'+CATEGORIES.map(c=>'<div><span style="--bin:'+c.color+'"></span><strong>'+c.name+'</strong><small>'+c.desc+'</small></div>').join('')+'</div><p>As regras de coleta variam conforme a cidade. Resíduos devem estar limpos e secos quando necessário. A compostagem também depende das condições locais.</p></div>';
  if(data.phase==='intro'){
   main.innerHTML='<div class="kids-intro"><span class="kids-kicker">ECOCARD / MODO INFANTIL</span><h2>MISSÃO COLETA</h2><p>Você consegue colocar cada objeto na lixeira correta?</p><div class="kids-intro-art" aria-hidden="true">'+CATEGORIES.map(c=>'<span style="--bin:'+c.color+'"></span>').join('')+'</div><p><strong>25 objetos · 5 etapas · Sem cronômetro</strong></p><p>Observe, escolha a lixeira e descubra o motivo da resposta. Errou? Pode tentar de novo.</p><button class="btn kids-primary" id="kidsBegin">COMEÇAR MISSÃO</button></div>';
   main.querySelector('#kidsBegin')?.addEventListener('click',begin);return;
@@ -198,11 +206,11 @@ function render(){
  '<div class="kids-progress"><span style="width:'+((data.index+1)/data.rounds.length*100)+'%"></span></div>'+
  '<div class="kids-item" role="group" aria-label="Objeto para separar"><span class="kids-label">ONDE DEVO COLOCAR?</span><div class="kids-illustration">'+illustration(item.shape)+'</div><h2>'+item.name+'</h2>'+(levelInfo.hint?'<p class="kids-item-tip">Dica: descubra qual é o material principal deste objeto.</p>':'<p class="kids-item-tip kids-item-tip-hard">DESAFIO: SEM PISTAS</p>')+'</div>'+
  (data.phase==='feedback'?'<section class="kids-answer '+(data.feedback.correct?'correct':'retry')+'" role="status"><h3>'+(data.feedback.correct?'ACERTOU!':'TENTE MAIS UMA VEZ')+'</h3><p>'+data.feedback.message+'</p><button class="btn kids-primary" id="kidsNext">'+(data.retry?'ESCOLHER OUTRA LIXEIRA':'PRÓXIMO OBJETO')+'</button></section>':
- '<h3 class="kids-question">ESCOLHA UMA LIXEIRA</h3><div class="kids-bins">'+CATEGORIES.map(c=>'<button type="button" class="kids-bin" style="--bin:'+c.color+'" data-bin="'+c.id+'" aria-label="Lixeira de '+c.name+'"><span class="kids-bin-lid"></span><span class="kids-bin-body"><span class="kids-bin-mark" aria-hidden="true">ECO</span><strong>'+c.name+'</strong></span></button>').join('')+'</div><p class="kids-hint">Toque na lixeira correta. Não existe limite de tempo.</p>')+
+ '<h3 class="kids-question">ESCOLHA UMA LIXEIRA</h3><div class="kids-bins">'+binsHTML(data.index)+'</div><p class="kids-hint">Toque na lixeira correta. Não existe limite de tempo.</p>')+
  '</div>';
  main.querySelector('#kidsNext')?.addEventListener('click',continueGame);
  main.querySelectorAll('[data-bin]').forEach(el=>el.addEventListener('click',()=>chooseBin(el.dataset.bin)));
 }
 function show(){if(!game)newGame();else render()}
-root.EcoKids={CATEGORIES,ITEMS,SHAPES,LEVELS,JOKES_CORRECT,JOKES_RETRY,illustration,createRound,scoreAnswer,newGame,begin,chooseBin,continueGame,startNextLevel,show,getState:()=>game};
+root.EcoKids={CATEGORIES,ITEMS,SHAPES,LEVELS,JOKES_CORRECT,JOKES_RETRY,isFinalLevel,binsHTML,illustration,createRound,scoreAnswer,newGame,begin,chooseBin,continueGame,startNextLevel,show,getState:()=>game};
 })(window);
