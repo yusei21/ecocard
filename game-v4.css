@@ -442,3 +442,36 @@ footer a{color:#d9ecab;text-decoration:underline;text-underline-offset:3px}
 #solo .deck-focus-actions button{flex:1 1 125px;min-height:42px;white-space:normal;padding:8px;font:800 11px 'IBM Plex Mono',monospace}
 #solo .deck-focus-shop>small{display:block;font:700 10px/1.55 'IBM Plex Mono',monospace;color:#c4e4c7}
 @media(max-width:590px){#solo .deck-focus-shop{padding:12px}#solo .deck-focus-stats{grid-template-columns:repeat(3,minmax(0,1fr))}#solo .deck-focus-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}#solo .deck-focus-actions button{min-width:0}}
+
+/* Object illustrations replace category-only symbols on every EcoCard playing card. */
+.playing-card .symbol{
+ display:flex;align-items:center;justify-content:center;
+ flex:1 1 auto;min-height:56px;padding:4px 0;
+}
+.playing-card .card-illustration{
+ display:grid;place-items:center;
+ width:100%;max-width:92px;height:80px;min-height:0;
+ border:2px solid #14332966;border-radius:8px;
+ background:linear-gradient(145deg,#fffaf0,#e9f5e9);
+ color:#204337;box-shadow:inset 0 1px 0 #fff9,0 2px 0 #0a211c24;
+}
+.playing-card .card-illustration svg{display:block;width:78%;height:78%;max-height:76px}
+.playing-card .card-caption{display:flex;flex-direction:column;gap:4px;min-height:34px}
+.playing-card .card-caption .name{font-weight:900;line-height:1.13;overflow-wrap:anywhere}
+.playing-card .card-caption .category{display:block;letter-spacing:.04em}
+#solo .arcade-hand .playing-card .card-illustration{height:clamp(47px,6vw,76px);max-width:90px;border-radius:6px}
+#solo .played-cards .playing-card .card-illustration{height:46px;border-width:1px}
+#solo .played-cards .playing-card .card-illustration svg{width:75%;height:75%}
+#solo .played-cards .playing-card .card-caption{gap:2px}
+#solo .played-cards .playing-card .card-caption .name{font-size:9px}
+@media(max-width:680px){
+ #solo .arcade-hand .playing-card .card-illustration{height:50px}
+ #solo .arcade-hand .playing-card .card-illustration svg{width:86%;height:86%}
+ #solo .arcade-hand .playing-card .card-caption{min-height:38px}
+ #solo .arcade-hand .playing-card .card-caption .name{font-size:10px}
+ #solo .arcade-hand .playing-card .card-caption .category{font-size:8px}
+}
+@media(max-width:390px){
+ #solo .arcade-hand .playing-card .card-illustration{height:43px}
+ #solo .arcade-hand .playing-card .card-caption .name{font-size:9px}
+}
