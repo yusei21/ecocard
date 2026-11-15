@@ -1,134 +1,159 @@
 # EcoCard — EcoResiduários Academy
 
-Plataforma web de jogo de cartas ambiental para demonstração em estande. A plataforma oferece **Salve o Mundo** (estratégia solo) e **Missão Coleta** (jogo infantil de classificação ambiental). Interface em português do Brasil, responsiva, com controles por toque, teclado e mouse.
+Plataforma de jogos educativos sobre resíduos sólidos, desenvolvida para uso em navegador, inclusive em celulares e em atividades de demonstração no IFMA. O projeto oferece dois jogos independentes:
 
-**[Abrir o jogo pelo GitHub Pages](https://yusei21.github.io/ecocard/)** (funciona após habilitar Pages para a branch `main`, pasta raiz).
+- **Salve o Mundo:** estratégia com cartas, combinações, coringas e campanhas progressivas.
+- **Missão Coleta:** classificação de resíduos em lixeiras coloridas, com etapas de aprendizado para crianças.
 
-## Jogo atual
+**Jogar:** https://yusei21.github.io/ecocard/
 
-### Missão Coleta (infantil)
+Não requer cadastro. A interface está em português do Brasil e não utiliza emojis: os objetos e elementos de jogo são desenhados com SVG e CSS.
 
-Jogo independente do Salve o Mundo, acessível pelo segundo botão na página inicial. Crianças aprendem a separar resíduos escolhendo uma das **cinco lixeiras coloridas** (papel, plástico, vidro, metal e orgânicos). O catálogo contém **40 objetos** (oito por categoria). Cada partida sorteia **25 objetos diferentes em cinco etapas**, com cinco materiais distintos por etapa. As três primeiras etapas apresentam objetos familiares; a quarta exige mais atenção e a **quinta mostra somente as cores das lixeiras, sem nomes dos materiais e sem a legenda de categorias**, para testar o que as crianças aprenderam. As lixeiras continuam identificadas por suas cores para leitores de tela. Há mensagens bem-humoradas e explicações educativas nas respostas, telas de passagem de nível e possibilidade de tentar novamente sem penalidade ou cronômetro. Cada acerto vale 100 pontos; concluir a quinta etapa libera a celebração final.
+## Missão Coleta — jogo infantil
 
-A interface usa **ilustrações vetoriais desenhadas no código**, texto em alto contraste, botões grandes e controles compatíveis com toque, mouse e teclado. O painel de ecofichas da loja do Salve o Mundo usa layout responsivo com saldo e juros em blocos separados, empilhados no celular para evitar texto espremido. Não exige conta, rede multiplayer ou bibliotecas externas. As explicações reconhecem que a coleta e a compostagem dependem das regras locais. Os arquivos são `kids-game.js` e `kids-game.css`, com testes em `tests/kids-game.test.cjs`.
+Na Missão Coleta, cada objeto ilustrado deve ser colocado na lixeira correta. O jogo trabalha com cinco categorias:
 
-### Cartas ilustradas e identidade sem emojis
+| Cor da lixeira | Material |
+| --- | --- |
+| Azul | Papel |
+| Vermelho | Plástico |
+| Verde | Vidro |
+| Amarelo | Metal |
+| Marrom | Orgânicos |
 
-Todas as **65 cartas ambientais** do Salve o Mundo exibem uma ilustração vetorial do objeto retratado, em vez de apenas um símbolo genérico da categoria. O arquivo `card-art.js` associa cada carta a um desenho de jornal, caixa, garrafa, lata, casca, frasco e outras silhuetas, preservando nome, valor e categoria para quem lê ou utiliza recursos de acessibilidade. A arte também acompanha a animação de pontuação e aparece em telas pequenas.
+O catálogo contém **40 objetos**, oito por categoria. Cada partida apresenta **25 objetos diferentes**, divididos em cinco etapas com cinco objetos cada. Cada resposta correta vale **100 pontos**; um erro permite outra tentativa, sem perda de pontos, cronômetro ou encerramento da partida. Há explicações educativas, respostas bem-humoradas e uma tela de passagem de etapa.
 
-**Não são usados emojis na interface do projeto.** Símbolos decorativos foram substituídos por tipografia e desenhos SVG, inclusive na tela inicial e no jogo infantil. Um teste automatizado verifica a presença dos desenhos nas 65 cartas e rejeita caracteres de emoji nos arquivos de código e documentação.
+### Progressão das cinco etapas
 
-### Salve o Mundo (solo)
+| Etapa | Nome | Desafio |
+| --- | --- | --- |
+| 1 | Primeiros Passos | Materiais familiares, com nomes nas lixeiras e dica |
+| 2 | Olho de Águia | Mais observação, ainda com nomes e dica |
+| 3 | Detetive da Coleta | Os nomes continuam; a dica do objeto é retirada |
+| 4 | Desafio dos Materiais | Objetos menos óbvios, com nomes nas lixeiras, sem dica |
+| 5 | Mestre da Separação | **Apenas as cores das lixeiras**, sem nomes dos materiais e sem legenda lateral |
 
-Roguelike de pontuação com cartas de cinco categorias de resíduos: **azul/papel**, **vermelho/plástico**, **verde/vidro**, **amarelo/metal**, **marrom/orgânicos**. São **65 cartas**, com **A, 2–10, J, Q, K** por categoria. A=1, J=11, Q=12, K=13 para sequências e pontuação. As combinações de 1–5 cartas recebem pontos base e multiplicadores, com ajustes dos coringas e dos chefes.
+A quinta etapa verifica o aprendizado das cores. Os controles continuam com descrições acessíveis para leitores de tela, usando o nome **da cor** de cada lixeira, sem revelar a categoria. Ao concluir as cinco etapas, aparece a tela de parabéns com os 25 acertos e a pontuação.
 
-- Etapas: Contaminação Cruzada, Descarte Irregular, Desperdício de Recursos, Crise dos Aterros, Poluição dos Oceanos, Consumo Desenfreado e Mudanças Climáticas.
-- Cada desafio tem meta crescente; o jogador dispõe de jogadas e descartes limitados.
-- Entre desafios, recebe ecofichas para adquirir coringas, até cinco simultâneos.
-- Coringas **Reduzir**, **Reutilizar** e **Reciclar** representam os 3 Rs; também existem Compostagem Viva, Força Coletiva e Educação Ambiental.
-- **Aventura Circular** é lendária: executa **duas vezes os efeitos de cada outro coringa equipado**, sem autorrecursão. Seu peso individual no sorteio é `0.0005`, inferior ao de todos os outros coringas; a probabilidade exata varia conforme o estoque de cartas elegíveis.
+O jogo utiliza ilustrações SVG locais, sem imagens externas ou dependência de conexão multiplayer. As recomendações sobre coleta seletiva têm caráter didático: o destino de um material pode variar segundo a infraestrutura e as orientações municipais.
 
-As regras de pontuação são originais para este projeto. O jogo usa o conceito geral de construção de combinações e progressão roguelike, sem reutilizar assets de Balatro.
+**Arquivos:** `kids-game.js`, `kids-game.css` e `tests/kids-game.test.cjs`.
 
+## Salve o Mundo — estratégia de cartas
+
+O Salve o Mundo combina formação de mãos, pontuação, gestão de ecofichas e construção de estratégias com coringas.
+
+### Baralho e pontuação
+
+- São **65 cartas**: 13 valores por cada uma das cinco categorias de resíduos.
+- Valores: **A (1), 2 a 10, J (11), Q (12), K (13)**.
+- Cada carta apresenta nome do objeto, categoria, valor e uma ilustração vetorial.
+- O jogador seleciona de uma a cinco cartas para formar combinações e somar pontos base e multiplicadores.
+- Há um tutorial visual antes de escolher a campanha, com exemplos de pares, trincas, sequências e mãos de uma só categoria.
+- Cada crise possui um limite de jogadas e descartes. A prévia de pontuação considera efeitos e restrições, incluindo jogadas anuladas.
+
+As combinações principais são **Separação Inicial**, **Materiais Equivalentes**, **Reaproveitamento**, **Fluxo Circular**, **Coleta Seletiva**, **Triagem Perfeita** e **Ciclo Completo**. O jogo também reconhece **Diversidade Ambiental** e **Mutirão Quádruplo**.
+
+### Quatro campanhas de sete crises
+
+O progresso é sequencial: **Fácil, Médio, Difícil e Extremo**. Cada campanha percorre as mesmas sete crises, com metas e recursos ajustados à dificuldade. Vencer a sétima crise desbloqueia a campanha seguinte.
+
+| Crise | Nome | Meta-base (Difícil) |
+| --- | --- | ---: |
+| 1 | Contaminação Cruzada | 850 |
+| 2 | Descarte Irregular | 2.200 |
+| 3 | Desperdício de Recursos | 4.000 |
+| 4 | Crise dos Aterros | 7.600 |
+| 5 | Poluição dos Oceanos | 12.000 |
+| 6 | Consumo Desenfreado | 18.500 |
+| 7 | Mudanças Climáticas | 150.000 |
+
+A meta da última crise, sem a regra de dobrar pontos, é **54.000 no Fácil**, **97.500 no Médio**, **150.000 no Difícil** e **240.000 no Extremo**. Os modificadores da campanha também ajustam a quantidade de jogadas, descartes e ecofichas iniciais.
+
+Da segunda à sétima crise, os chefes podem impor restrições aleatórias: anular uma categoria, exigir valores iguais ou categorias específicas, limitar a composição da mão ou dobrar a meta (**Crise agravada**). Cartas anuladas não participam dos efeitos dos coringas.
+
+São **28 crises ao todo** para zerar todas as campanhas. O **certificado de conclusão** e os recursos de compartilhar, copiar ou salvar a imagem de vitória aparecem **somente após concluir a sétima crise do Extremo**. As vitórias nas campanhas anteriores apenas permitem avançar.
 
 ### Coleção de 50 coringas
 
-O Salve o Mundo possui **50 coringas únicos**: **20 Comuns (verde), 15 Raros (azul), 10 Épicos (roxo) e 5 Lendários (dourado)**. A coleção mantém os 3 Rs e adiciona novas estratégias para cada categoria de resíduo, combinações de valores, sequências e bônus por diversidade de cores. Todos os novos coringas possuem um efeito funcional de pontuação, arte vetorial exclusiva e custo em ecofichas. A loja exibe três opções por visita, respeitando o limite de cinco coringas equipados.
+| Raridade | Quantidade | Cor |
+| --- | ---: | --- |
+| Comum | 20 | Verde |
+| Raro | 15 | Azul |
+| Épico | 10 | Roxo |
+| Lendário | 5 | Dourado |
+| **Total** | **50** | |
 
-Os lendários são: **Aventura Circular, Planeta Vivo, Renascimento Verde, Pacto Global e Guardiões da Terra**. Aventura Circular continua sendo o item de menor peso individual na loja. Os efeitos de pontuação são calculados apenas sobre cartas válidas após as restrições do chefe. Aventura Circular repete duas vezes cada outro coringa, incluindo épicos e lendários, sem ativar a si mesma.
+Cada coringa oferece uma habilidade própria de pontuação e uma ilustração vetorial. A loja apresenta três ofertas por visita, e o jogador pode equipar até **cinco coringas** simultaneamente. O sorteio é ponderado por raridade, e a **Aventura Circular** tem o menor peso individual da coleção. Seu efeito repete duas vezes os efeitos dos outros coringas equipados.
 
-A expansão adiciona dez coringas com arte e efeitos individuais: **Mutirão do Bairro**, **Retorno das Embalagens**, **Uso Consciente** e **Pequenos Reparos** (comuns); **Rota Limpa**, **Materiais em Parceria** e **Compostagem Coletiva** (raros); **Circuito de Valores** e **Ponte de Materiais** (épicos); e **Guardiões da Terra** (lendário, ×3,5 ao combinar as cinco categorias). Todos respondem às restrições dos chefes e são repetidos pela Aventura Circular quando ativados. A distribuição de pesos de raridade e o limite de cinco coringas equipados permanecem inalterados.
+Os cinco lendários são **Aventura Circular**, **Planeta Vivo**, **Renascimento Verde**, **Pacto Global** e **Guardiões da Terra**.
 
-A distribuição de sorteio é ponderada, não uniforme. A raridade não garante automaticamente um resultado melhor em qualquer situação: cartas mais raras exigem condições específicas de combinação.
+Sete coringas são **evolutivos**: Papel Recuperado, Retorno do Vidro, Valor do Metal, Coleta Integrada, Biofertilizante, Aliança dos Biomas e Usina Circular. Uma jogada válida que ativa a habilidade aumenta seu nível até o limite de **oito evoluções**, indicado por contador e barra no coringa. A prévia de pontuação e mãos anuladas não geram evolução; a Aventura Circular repete o efeito sem duplicar o avanço de nível.
 
-### Coringas evolutivos e certificado final
+### Loja, economia e especialização do baralho
 
-Sete dos 50 coringas agora são **evolutivos**: Papel Recuperado, Retorno do Vidro, Valor do Metal, Coleta Integrada, Biofertilizante, Aliança dos Biomas e Usina Circular. Eles começam com os bônus de origem e aumentam o efeito em cada jogada válida na qual a habilidade é ativada, até **8 evoluções**. O progresso aparece diretamente no coringa equipado, com contador e barra. Pré-visualizar cartas ou jogar uma mão anulada não aumenta o nível; a Aventura Circular continua repetindo o bônus, mas não duplica o avanço de nível. As evoluções pertencem ao coringa comprado e reiniciam numa nova campanha.
+Ao vencer uma crise, o jogador recebe ecofichas e acessa a loja para comprar ou vender coringas. Há juros por ecofichas guardadas, conforme as regras do jogo. No celular, o painel de **saldo** e **juros** é apresentado em blocos empilhados para evitar texto espremido.
 
-O **certificado de conclusão**, a imagem compartilhável e os botões para compartilhar ou copiar a vitória aparecem **somente depois da sétima crise da campanha Extremo**, isto é, depois das quatro campanhas (28 crises). Vencer Fácil, Médio ou Difícil apenas desbloqueia a próxima campanha. O certificado final mostra o feito de 28 crises vencidas e os pontos obtidos durante a campanha Extremo.
+Na loja, por **4 ecofichas**, é possível escolher uma categoria para **acrescentar duas cartas dela e retirar três de outras categorias**. São permitidos até **cinco ajustes por campanha**. A especialização passa a valer a partir da próxima crise, ajudando a construir baralhos alinhados aos coringas adquiridos.
 
-### Especialização do baralho e proteção contra recarregamentos
+### Progresso no celular
 
-Após vencer uma crise, a loja permite ajustar o baralho para uma estratégia específica. Por **4 ecofichas**, escolha **Papel, Plástico, Vidro, Metal ou Orgânicos**: entram **2 cartas** dessa categoria e saem **3 cartas de outras categorias**. São permitidos até **5 ajustes por campanha**; as mudanças valem nas crises seguintes e recomeçam com a próxima dificuldade. A loja apresenta a quantidade atual de cartas de cada categoria para ajudar nas decisões.
+O jogo utiliza `sessionStorage` para tentar recuperar campanha, crise, baralho, coringas, evoluções, pontuação e estado da loja quando a página é recarregada **na mesma aba**. O progresso pode deixar de estar disponível ao encerrar a sessão do navegador. O reinício explícito limpa a partida salva.
 
-Em dispositivos móveis, o estado da partida é armazenado em `sessionStorage` e recuperado quando a página recarrega na mesma aba. A recuperação preserva a campanha, crise, baralho, coringas, evoluções, pontos e loja. Se o recarregamento ocorrer durante a animação de pontos, o resultado já registrado é recuperado uma única vez. O progresso não depende de uma conta e pode desaparecer ao encerrar a sessão do navegador. O botão de reinício explícito limpa o estado salvo.
+A mão pode ser reorganizada arrastando cartas; a pontuação possui animação e sons curtos para cartas contabilizadas. O comportamento em navegadores e aparelhos específicos deve ser verificado com testes reais.
 
-### Campanhas de dificuldade (7 crises por nível)
+**Arquivos:** `solo-v2.js`, `card-art.js`, `hand-order.js`, `victory-share.js`, `game-v4.css` e folhas auxiliares de estilo.
 
-O jogo começa no **Fácil** e mostra um seletor com as campanhas **Fácil → Médio → Difícil → Extremo**. Cada campanha contém **as mesmas sete crises**, mantendo a progressão de metas dentro do nível escolhido. Ao concluir a sétima crise, o jogo desbloqueia a campanha seguinte e oferece um botão para avançar. Cada nova campanha começa com cartas, coringas e ecofichas novos, para evitar que a dificuldade seja trivializada por uma coleção pronta.
+## Executar localmente
 
-As metas de resistência do chefe da sétima crise são: Fácil **54.000**, Médio **97.500**, Difícil **150.000**, Extremo **240.000**. O chefe aleatório **Crise agravada** pode dobrar essas metas. Fácil tem uma jogada e um descarte extra por crise; Extremo reduz um de cada. Nenhuma campanha é desbloqueada automaticamente sem vencer as sete fases da anterior.
+Não há etapa de compilação, nem dependências JavaScript a instalar para jogar. Abra `index.html` em um navegador moderno. Para testes completos dos recursos de navegador (como compartilhamento e área de transferência), prefira um servidor local ou o endereço HTTPS do GitHub Pages.
 
-A partida e os desbloqueios são recuperados após **recarregar a página na mesma aba** (armazenamento de sessão). Fechar a aba pode encerrar a sessão; o botão Reiniciar continua disponível para começar novamente. Ainda falta validar a curva completa com partidas reais.
+Exemplo com Python instalado:
 
-### Escalada e regras rotativas (7 crises)
+```bash
+python3 -m http.server 8000
+```
 
-Agora a jornada contém **7 crises**: (1) Contaminação Cruzada — Fácil, 850 pontos, 5 mãos; (2) Descarte Irregular — Médio, 2.200 pontos, 4 mãos; (3) Desperdício de Recursos — Médio, 4.000 pontos, 4 mãos; (4) Crise dos Aterros — Difícil, 7.600 pontos, 4 mãos; (5) Poluição dos Oceanos — Difícil, 12.000 pontos, 4 mãos; (6) Consumo Desenfreado — Extremo, 18.500 pontos, 3 mãos; (7) Mudanças Climáticas — Final, 150.000 pontos, 3 mãos. A dificuldade é definida por fase, sem um multiplicador global escolhido pelo jogador.
+Depois abra `http://localhost:8000`.
 
-A primeira crise funciona como introdução. Da segunda à sétima, o jogo sorteia uma **restrição de chefe**, evitando repetir a imediatamente anterior. As possibilidades incluem: uma das cinco categorias anulada; **somente mãos com 3+ cartas da mesma categoria**; **somente mãos com 2+ valores iguais**; **mãos com exatamente 5 cartas valem zero**; **somente mãos de 3 cartas**; ou **Crise agravada, que dobra a meta de pontos do chefe**. Cada crise continua tendo também seu próprio bônus ou penalidade temática e um evento aleatório da rodada.
+Para publicar pelo GitHub Pages, use **Settings > Pages > Deploy from a branch > main > /(root)**, caso a publicação da branch ainda não esteja configurada.
 
-Uma carta de categoria anulada não conta na combinação, pontuação ou gatilho dos coringas. Se a mão não satisfizer a restrição, **a jogada vale 0**, mas ainda consome uma mão. A prévia exibe zero antes de jogar. Essas restrições são regras ficcionais de jogo, não orientações de descarte de resíduos.
+## Testes automatizados
 
-Não há seleção global de dificuldade. O tutorial leva diretamente à crise 1 e as metas aumentam conforme a jornada; eventos e chefes sorteados ainda alteram o desafio de cada fase. As metas precisam de testes práticos de balanceamento para confirmar que cada crise é vencível.
+O repositório usa **Node.js 22** na GitHub Actions, no arquivo `.github/workflows/test.yml`. Os testes verificam regras das combinações, coringas, baralhos, ordenação de cartas, ilustrações e jogabilidade infantil. Também existe uma verificação de ausência de caracteres de emoji nos arquivos-fonte e na documentação.
 
-### Tutorial de combinações antes da partida
+Para rodar os testes localmente, com Node.js instalado:
 
-Antes da escolha de dificuldade, o jogador vê sete exemplos com cartas ilustradas: Separação Inicial, Materiais Equivalentes (par), Reaproveitamento (trinca), Fluxo Circular (sequência), Coleta Seletiva (3 cartas da mesma categoria), Triagem Perfeita (5 da mesma categoria) e Ciclo Completo (5 consecutivas da mesma categoria). A explicação apresenta **pontos base × multiplicador** e avisa que certas regras de chefe zeram a mão. O botão **Entendi · Começar jornada** inicia diretamente a primeira crise.
+```bash
+node tests/card-art.test.cjs
+node tests/kids-game.test.cjs
+node tests/solo.test.cjs
+node tests/decks.test.cjs
+node tests/hand-order.test.cjs
+```
 
-A sétima crise tem meta-base de **150.000 pontos**. A regra aleatória **Crise agravada (×2)** dobra a meta já ajustada pela dificuldade: por exemplo, na sétima crise, 150.000 → 300.000. Essa é uma meta inicialmente experimental: deve-se testar a viabilidade real com diferentes coringas e combinações para evitar finais impossíveis.
+## Design, acessibilidade e instituições
 
-## Como executar
+A identidade visual utiliza tons de verde, tipografia editorial, as cinco cores de separação dos resíduos e desenhos vetoriais locais. As famílias tipográficas usadas incluem **Barlow Condensed**, **IBM Plex Sans** e **IBM Plex Mono**. As folhas de estilo incluem `identity-v3.css`, `mobile-v5.css`, `landing-v6.css` e `landing-v7.css`.
 
-Não há build nem dependências locais: abra `index.html` num navegador moderno. Para o estande, use HTTPS (recomendado: GitHub Pages). Para publicar: **Settings > Pages > Deploy from a branch > main > /(root)**. O endereço acima estará disponível somente após a publicação ser concluída.
+A interface conta com rótulos para leitores de tela em controles relevantes, indicação de seleção nas cartas, botões compatíveis com toque e teclado e estilos que consideram a preferência por movimento reduzido. O contraste e a disposição dos elementos devem continuar sendo avaliados em celulares reais.
 
-## Design
+O projeto exibe a marca do **Instituto Federal do Maranhão (IFMA)** e apresenta ligação com a **EcoResiduários Academy**. Antes de uso institucional ou de impressão, recomenda-se confirmar a versão oficial das marcas com as respectivas equipes.
 
-- Linguagem visual original inspirada em materiais naturais, impressão editorial e jogos de mesa.
-- Paleta verde-floresta, lima e rosa, combinada com as cinco cores normativas da coleta seletiva. **A paleta exata do Instagram não pôde ser validada**; deve ser substituída por tokens oficiais caso o projeto forneça seu guia de marca.
-- Cartas usam **cor, nome da categoria e símbolo** (não apenas cor), identificação do valor, seleção visível e efeito hover discreto. Respeita preferência por movimento reduzido.
-- A interface exibe a marca vetorial horizontal do IFMA; confirmar junto à comunicação institucional sua versão autorizada para o estande.
-- Link oficial do projeto: https://www.instagram.com/ecoresiduariosacademy/
+- Instagram da EcoResiduários Academy: https://www.instagram.com/ecoresiduariosacademy/
+- Referência da marca horizontal do IFMA: https://commons.wikimedia.org/wiki/File:Instituto_Federal_do_Maranhão_-_Marca_Horizontal_2015.svg
 
-## Precisão ambiental
+## Informação ambiental
 
-A **Resolução CONAMA 275/2001** estabelece o código de cores usado. O jogo trabalha com cinco das dez cores padronizadas, adequadas ao recorte didático de materiais comuns. As outras cores existem e não devem ser consideradas inexistentes (p.ex. laranja para resíduos perigosos; branco para resíduos de saúde; cinza para rejeitos). O descarte correto depende também das regras municipais, da contaminação e da infraestrutura disponível. Material ilustrativo **não é garantia de reciclabilidade local**. Cascas e restos vegetais podem ser compostados em condições adequadas.
+O jogo utiliza cinco das cores previstas pela **Resolução CONAMA 275/2001**. A norma contempla outras categorias além das cinco usadas nesta experiência. A separação e a possibilidade de reciclagem dependem do material, da contaminação, dos pontos de coleta e das regras municipais. Materiais orgânicos podem ser aproveitados em compostagem quando houver condições adequadas.
 
-**Fontes:**
-- CONAMA 275/2001: https://conama.mma.gov.br/images/conteudo/LivroConama.pdf
-- DNIT, guia de gestão de resíduos e cores: https://www.gov.br/dnit/pt-br/central-de-conteudos/atos-normativos/tipo/portarias/portaria-3412-2023-setsust-publ.pdf
-- Referência de sistemas de pontuação de roguelikes de cartas: https://teemo.dev/game-design/balatro/systems/game-overview/
-- Discussão de legibilidade/inspeção de cartas: https://www.reddit.com/r/IndieDev/comments/1crydcd/
-- Discussão de hierarquia e explicação de símbolos: https://www.reddit.com/r/IndieDev/comments/1ohn9p7/
-- Discussão sobre animações sutis: https://www.reddit.com/r/UI_Design/comments/1uask44/
+- [CONAMA — publicações e normas](https://conama.mma.gov.br/images/conteudo/LivroConama.pdf)
+- [DNIT — normas e orientações de gestão de resíduos](https://www.gov.br/dnit/pt-br/central-de-conteudos/atos-normativos/tipo/portarias/portaria-3412-2023-setsust-publ.pdf)
 
-## Próximos passos recomendados
+## Próximos passos
 
-1. Testar uma jornada completa do Salve o Mundo em celulares reais, incluindo chefes que anulam cartas.
-2. Medir taxas de vitória e ajustar a curva de dificuldade das cinco crises.
-3. Validar a identidade visual e os textos ambientais com a equipe do IFMA.
-4. Decidir separadamente um segundo jogo infantil de partidas rápidas para o estande.
+1. Testar os dois jogos em celulares reais, especialmente a loja do Salve o Mundo e a quinta etapa da Missão Coleta.
+2. Avaliar a dificuldade das 28 crises e a variedade de estratégias com os 50 coringas.
+3. Revisar os textos ambientais e a identidade visual com a equipe do projeto e do IFMA.
 
-Licença: consultar o arquivo `LICENSE` do repositório.
-
-## Identidade visual (v3)
-
-Interface editorial inspirada em sinalização de triagem, papel e tipografia impressa. Família **Barlow Condensed** para grandes títulos e valores, **IBM Plex Sans** para leitura e **IBM Plex Mono** para identificação técnica. Layout mantém a cor e um símbolo/texto em cada carta. Arquivo principal de tema: `identity-v3.css`.
-
-A marca institucional exibida é o SVG horizontal do **IFMA (manual de 2015)** disponível no Wikimedia Commons: https://commons.wikimedia.org/wiki/File:Instituto_Federal_do_Maranhão_-_Marca_Horizontal_2015.svg . Para impressão ou ações institucionais, confirmar a versão da marca com comunicação do IFMA.
-
-Referências usadas na revisão: https://www.reddit.com/r/SoloDevelopment/comments/1tf84yf/ ; https://www.reddit.com/r/IndieDev/comments/1wt9lwn/ ; https://www.reddit.com/r/godot/comments/1u5flj3/ ; https://www.reddit.com/r/BoardgameDesign/comments/12qj22f/ .
-
-## Controles e uso no celular
-
-No Salve o Mundo, a ordem da mão pode ser alterada **arrastando uma carta sobre outra**, sem botão adicional. A ordem é local para cada jogador e não altera as cartas recebidas nem as combinações válidas. O suporte a arrastar em navegadores móveis deve ser confirmado em dispositivos reais.
-
-O cabeçalho mobile-first prioriza a identidade do EcoCard, o acesso à EcoResiduários Academy e a marca vetorial do IFMA em uma área institucional com contraste controlado. A nova folha `mobile-v5.css` ajusta o topo e as mãos roláveis para dispositivos menores.
-
-## Abertura e áudio V7
-
-A página inicial usa um menu de videogame em uma mesa 2D, com acesso direto ao Salve o Mundo, marca do IFMA e link do projeto. O estilo está em `landing-v7.css`. O controle extra de organização foi removido; arrastar continua disponível. Os efeitos sonoros do modo solo foram amplificados, com ganho limitado no solo para reduzir distorção. O volume final depende das configurações e permissões do dispositivo.
-
-## Regras especiais dos chefes
-
-As fases 2–7 sorteiam uma regra da lista detalhada acima. O bloqueio de categoria é uma das regras possíveis; não está mais preso a uma fase específica. Cada regra aparece no topo da mesa. O jogador deve adaptar as cartas escolhidas para evitar jogadas anuladas.
-
+**Licença:** consulte o arquivo `LICENSE` do repositório.
