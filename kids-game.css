@@ -52,3 +52,33 @@
 /* Typographic marks instead of emoji-like symbols. */
 #kids .kids-bin-mark{font-size:clamp(14px,1.8vw,20px);letter-spacing:.06em}
 #kids .kids-finish-symbol{font-size:clamp(29px,5vw,48px);letter-spacing:-.05em}
+
+/* Brief level celebrations and readable challenge labels on small phones. */
+#kids .kids-levelup{
+ display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
+ gap:16px;min-height:480px;padding:clamp(20px,5vw,50px) 15px;
+ background:radial-gradient(circle at 50% 35%,#325848,#152e26 85%);
+ border:2px solid #b7de9e;border-radius:10px;
+}
+#kids .kids-levelup-number{
+ display:grid;place-items:center;width:116px;height:116px;border-radius:50%;
+ background:#dcf49f;color:#1e3b2b;border:5px solid #f4ffcf;
+ font:900 80px/1 'Barlow Condensed',sans-serif;box-shadow:5px 7px 0 #07180e;
+}
+#kids .kids-levelup h2{font:900 clamp(37px,7vw,72px)/.95 'Barlow Condensed',sans-serif;color:#f6ffe8;margin:0}
+#kids .kids-levelup p{font:600 16px/1.5 'IBM Plex Sans',sans-serif;color:#ebf7df;max-width:520px;margin:0}
+#kids .kids-levelup-progress{font:800 12px 'IBM Plex Mono',monospace;color:#d4e8b9}
+#kids .kids-item-tip{
+ margin:0;font:650 12px/1.45 'IBM Plex Sans',sans-serif;color:#f1f9df;text-align:center;
+}
+#kids .kids-item-tip-hard{font:900 12px 'IBM Plex Mono',monospace;color:#e1f4a2;letter-spacing:.05em}
+#kids .kids-answer{overflow-wrap:anywhere}
+@media(max-width:570px){
+ #kids .kids-levelup{min-height:380px;padding:26px 12px}
+ #kids .kids-levelup-number{width:95px;height:95px;font-size:64px}
+ #kids .kids-levelup h2{font-size:clamp(36px,10vw,58px)}
+ #kids .kids-arena{min-width:0}
+ #kids .kids-topline{font-size:10px}
+ #kids .kids-answer p{font-size:14px}
+ #kids .kids-item h2{font-size:clamp(30px,8vw,44px)}
+}
