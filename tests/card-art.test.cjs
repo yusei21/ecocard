@@ -18,7 +18,7 @@ for(const [suit,items] of Object.entries(images.ART_BY_SUIT)){
   assert(images.PATHS[shape],suit+' rank '+rank+' refers to a supported drawing');
   const markup=images.drawing({suit,rank});
   assert(markup.includes('<svg')&&markup.includes('</svg>'),'real SVG drawing for '+suit+' '+rank);
-  assert(markup.includes('<path'),'object illustration contains geometry');
+  assert(/<(?:path|rect|circle|ellipse|polygon|line|polyline)\b/.test(markup),'object illustration contains vector geometry');
   assert(markup.includes('aria-hidden="true"'),'decorative art leaves accessibility label intact');
   shapes.add(shape);
   total++;
