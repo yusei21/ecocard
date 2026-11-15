@@ -14,10 +14,18 @@ Roguelike de pontuação com cartas de cinco categorias de resíduos: **azul/pap
 - Cada desafio tem meta crescente; o jogador dispõe de jogadas e descartes limitados.
 - Entre desafios, recebe ecofichas para adquirir coringas, até cinco simultâneos.
 - Coringas **Reduzir**, **Reutilizar** e **Reciclar** representam os 3 Rs; também existem Compostagem Viva, Força Coletiva e Educação Ambiental.
-- **Aventura Circular** é lendária: executa **duas vezes os efeitos de cada outro coringa equipado**, sem autorrecursão. O peso relativo de aparição na loja é `0.002` contra `1` de cada coringa comum elegível; portanto, a chance exata depende do conjunto restante. É a menor chance individual da lista.
+- **Aventura Circular** é lendária: executa **duas vezes os efeitos de cada outro coringa equipado**, sem autorrecursão. Seu peso individual no sorteio é `0.0005`, inferior ao de todos os outros coringas; a probabilidade exata varia conforme o estoque de cartas elegíveis.
 
 As regras de pontuação são originais para este projeto. O jogo usa o conceito geral de construção de combinações e progressão roguelike, sem reutilizar assets de Balatro.
 
+
+### Coleção de 40 coringas
+
+O Salve o Mundo possui **40 coringas únicos**: **16 Comuns (verde), 12 Raros (azul), 8 Épicos (roxo) e 4 Lendários (dourado)**. A coleção mantém os 3 Rs e adiciona novas estratégias para cada categoria de resíduo, combinações de valores, sequências e bônus por diversidade de cores. Todos os novos coringas possuem um efeito funcional de pontuação, arte vetorial exclusiva e custo em ecofichas. A loja exibe três opções por visita, respeitando o limite de cinco coringas equipados.
+
+Os lendários são: **Aventura Circular, Planeta Vivo, Renascimento Verde e Pacto Global**. Aventura Circular continua sendo o item de menor peso individual na loja. Os efeitos de pontuação são calculados apenas sobre cartas válidas após as restrições do chefe. Aventura Circular repete duas vezes cada outro coringa, incluindo épicos e lendários, sem ativar a si mesma.
+
+A distribuição de sorteio é ponderada, não uniforme. A raridade não garante automaticamente um resultado melhor em qualquer situação: cartas mais raras exigem condições específicas de combinação.
 
 ### Escalada e regras rotativas (7 crises)
 
