@@ -66,6 +66,24 @@ Essa correspondência segue um recorte das cores da Resolução CONAMA 275/2001.
 5. Jogue a mão para contabilizar os pontos. Se necessário, descarte cartas respeitando o limite disponível.
 6. Ao atingir a meta, avance para a loja. Ao ficar sem jogadas antes de cumprir o objetivo, a crise é perdida.
 
+### Organizar a mão de cartas
+
+A ordem da mão pode ser alterada **sem gastar jogadas ou descartes**. Há três formas de reorganização:
+
+- **Arrastar:** no computador, arraste uma carta para a posição desejada. Em celulares compatíveis, também é possível arrastar com o dedo.
+- **Organizar Cartas:** pressione o botão acima da mão, toque na carta que deseja mover e depois toque na carta que receberá sua posição. Pressione **Sair da Organização** para voltar à seleção de cartas.
+- **Teclado:** mantenha **Alt** pressionado e use as setas para a esquerda ou para a direita sobre uma carta.
+
+Organizar a mão não muda os pontos diretamente. Selecione cartas normalmente após encerrar o modo de organização.
+
+### Interação dos coringas com as cartas
+
+Ao selecionar uma combinação, os coringas da parte superior mostram **Ativa agora** ou **Aguardando combo**, de acordo com a pontuação calculada pelo jogo. Cartas relacionadas aos bônus ativos ficam realçadas. A indicação é apenas uma prévia e **não consome nem evolui coringas**.
+
+Ao jogar, cada coringa ativado recebe um destaque na mesa, e as cartas às quais seu bônus se aplica também brilham. Os efeitos sonoros variam conforme a raridade; é possível desligá-los no controle **Efeitos sonoros**. A **Aventura Circular** sinaliza a repetição dos efeitos dos outros coringas.
+
+Esses elementos visuais não modificam a pontuação, os limites de cinco coringas ou as restrições dos chefes. Em caso de mão anulada, nenhum coringa é exibido como ativo.
+
 ### Formar uma combinação
 
 O jogo reconhece combinações como seleção simples, par, trinca, sequência, três ou cinco cartas da mesma categoria e sequência de cinco cartas da mesma categoria. As cartas apresentam **valor, categoria, nome e desenho**. Uma mão pode ganhar bônus dos coringas e de regras específicas da crise.
