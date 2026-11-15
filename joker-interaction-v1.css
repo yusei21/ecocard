@@ -1,0 +1,91 @@
+/* Feedback de coringas e organização da mão. Sem emojis e sem mudanças na matemática. */
+#solo .balatro-table .hand-reorder-tools{
+ display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;
+ gap:9px 14px;padding:10px 2px 6px;
+}
+#solo .balatro-table .hand-reorder-tools .hand-reorder-toggle{
+ min-height:42px;min-width:156px;flex:0 0 auto;padding:9px 12px;
+ border:2px solid #cce79a;border-radius:6px;background:#2a4636;
+ color:#f2ffd4;font:900 12px 'IBM Plex Sans',sans-serif;letter-spacing:.025em;
+}
+#solo .balatro-table .hand-reorder-tools .hand-reorder-toggle[aria-pressed="true"]{
+ background:#e3f7a3;color:#19352b;border-color:#fffdd8;
+ box-shadow:0 0 0 3px #d9f6a332;
+}
+#solo .balatro-table .hand-reorder-tools span{
+ flex:1 1 200px;font:600 12px/1.45 'IBM Plex Sans',sans-serif;color:#d8e8d0;
+}
+#solo .balatro-table .arcade-hand.reorder-active .playing-card{
+ cursor:crosshair;touch-action:manipulation;
+}
+#solo .balatro-table .arcade-hand .playing-card.reorder-source{
+ transform:translateY(-24px) rotate(0deg)!important;
+ z-index:4;outline:4px solid #f5ffab!important;outline-offset:2px;
+ box-shadow:0 0 0 5px #c9f68c55,3px 8px 0 #05120d!important;
+}
+#solo .balatro-table .arcade-hand .playing-card.dragging{
+ opacity:.8!important;filter:brightness(1.13);
+ outline:3px solid #f6ffb9;outline-offset:2px;z-index:5;
+}
+#solo .balatro-table .arcade-hand .playing-card.drag-over{
+ outline:4px dashed #e4f8a7!important;outline-offset:3px;
+}
+#solo .balatro-table .arcade-hand .playing-card.synergy-card{
+ box-shadow:0 0 0 2px #f4ffab,0 0 14px #d8f9a45e,3px 6px 0 #07120e!important;
+}
+#solo .table-joker-slot .joker-trigger-status{
+ display:block;text-align:center;min-height:14px;
+ font:900 9px/1.15 'IBM Plex Mono',monospace;letter-spacing:0;
+ color:#d4ddda;
+}
+#solo .table-joker-slot.joker-idle{filter:saturate(.62);opacity:.83}
+#solo .table-joker-slot.joker-ready{
+ border-width:3px;box-shadow:0 0 0 2px color-mix(in srgb,var(--rarity-color) 46%,transparent),0 0 20px color-mix(in srgb,var(--rarity-color) 35%,transparent);
+ filter:saturate(1.2);
+}
+#solo .table-joker-slot.joker-ready .joker-trigger-status{color:#f9ffdf}
+#solo .table-joker-slot.joker-triggering{
+ z-index:3;position:relative;
+ border-color:#fffdd1;outline:3px solid var(--rarity-color,#c2e893);
+ box-shadow:0 0 9px 2px var(--rarity-color,#c2e893),0 0 30px 6px color-mix(in srgb,var(--rarity-color) 45%,transparent);
+ transform:translateY(-7px) scale(1.08);
+}
+#solo .table-joker-slot.joker-triggering .joker-trigger-status{
+ font-size:10px;color:#fffbe0;
+}
+#solo .table-joker-slot.joker-trigger-replay{
+ animation:joker-hit .36s ease-out both;
+}
+@keyframes joker-hit{
+ 0%{filter:brightness(1);transform:translateY(0) scale(1)}
+ 40%{filter:brightness(1.85);transform:translateY(-12px) scale(1.12)}
+ 100%{filter:brightness(1.15);transform:translateY(-7px) scale(1.08)}
+}
+#solo .balatro-table .score-performance.joker-score-event{
+ border:2px solid #adf0bb;border-radius:7px;
+ background:#315341;color:#efffe5;
+ box-shadow:0 0 18px #a7f7a338;
+}
+#solo .balatro-table .score-performance.joker-score-event[data-rarity="uncommon"]{border-color:#68d2e8;background:#234b59}
+#solo .balatro-table .score-performance.joker-score-event[data-rarity="epic"]{border-color:#bb83fa;background:#422e5b}
+#solo .balatro-table .score-performance.joker-score-event[data-rarity="legend"]{
+ border-color:#f4c46e;background:#543e27;color:#fff3ca;box-shadow:0 0 22px #f4c46e66;
+}
+@media(max-width:650px){
+ #solo .balatro-table .hand-reorder-tools{gap:6px}
+ #solo .balatro-table .hand-reorder-tools .hand-reorder-toggle{width:100%;min-width:0}
+ #solo .balatro-table .hand-reorder-tools span{font-size:11px}
+ #solo .table-joker-slot .joker-trigger-status{font-size:7px;line-height:1.1}
+ #solo .table-joker-slot>span{font-size:8px}
+}
+@media(orientation:landscape) and (max-height:600px) and (max-width:1000px){
+ #solo .balatro-table .hand-reorder-tools{padding:5px 0 2px}
+ #solo .balatro-table .hand-reorder-tools .hand-reorder-toggle{min-height:32px;width:auto;padding:4px 9px;font-size:10px}
+ #solo .balatro-table .hand-reorder-tools span{font-size:10px}
+ #solo .table-joker-slot .joker-trigger-status{font-size:7px;min-height:10px}
+}
+@media(prefers-reduced-motion:reduce){
+ #solo .table-joker-slot.joker-trigger-replay{animation:none}
+ #solo .table-joker-slot.joker-triggering{transform:none}
+ #solo .balatro-table .arcade-hand .playing-card.reorder-source{transform:none!important}
+}
