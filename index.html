@@ -29,6 +29,7 @@ footer{border-top:1px solid var(--edge);display:flex;align-items:center;justify-
 <link rel="stylesheet" href="./landing-v6.css">
 <link rel="stylesheet" href="./landing-v7.css">
 <link rel="stylesheet" href="./kids-game.css?v=kids-colors-final-v3">
+<link rel="stylesheet" href="./tabletop-v1.css?v=table-landscape-1">
 </head>
 <body>
 <div class="shell">
@@ -68,7 +69,7 @@ footer{border-top:1px solid var(--edge);display:flex;align-items:center;justify-
 </div>
 </section>
 <section id="kids" class="hidden"><div class="game-top"><div><span class="eyebrow">Modo 02 · Aprender brincando</span><h1>Missão Coleta</h1></div><div class="game-top-actions"><button class="btn secondary" data-view="home">Voltar</button><button class="btn secondary" id="kidsReset" type="button">↻ Novo jogo</button></div></div><div class="game-layout"><div class="surface" id="kidsMain"></div><aside class="sidepanel" id="kidsSide"></aside></div></section>
-<section id="solo" class="hidden"><div class="game-top"><div><span class="eyebrow">Modo 01 · Estratégia solo</span><h1>Salve o Mundo</h1></div><div class="game-top-actions"><button class="btn secondary" data-view="home">Voltar</button><button class="btn secondary" id="helpEcoCard" type="button">? Como jogar</button><button class="btn secondary" id="resetEcoCard" type="button" aria-label="Recomeçar Salve o Mundo do zero">Reiniciar</button></div></div><div class="game-layout"><div class="surface" id="soloMain"></div><aside class="sidepanel" id="soloSide"></aside></div></section>
+<section id="solo" class="hidden"><div class="game-top"><div><span class="eyebrow">Modo 01 · Estratégia solo</span><h1>Salve o Mundo</h1></div><div class="game-top-actions"><button class="btn secondary" data-view="home">Voltar</button><button class="btn secondary" id="helpEcoCard" type="button">? Como jogar</button><button class="btn secondary" id="resetEcoCard" type="button" aria-label="Recomeçar Salve o Mundo do zero">Reiniciar</button></div></div><div id="soloRotateHint" class="rotate-hint" role="dialog" aria-labelledby="soloRotateTitle" aria-hidden="true"><div class="rotate-hint-card"><svg viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="22" y="37" width="74" height="45" rx="8"/><path d="M30 49h9M76 71h10M69 19a46 46 0 0 0-32 8M69 19l-6-10M69 19l-10 8M50 100a45 45 0 0 0 31-10M50 100l8 9M50 100l9-8"/></svg><h2 id="soloRotateTitle">GIRE O CELULAR</h2><p>Vire seu aparelho para a horizontal. Assim você consegue ver todas as cartas da mão ao mesmo tempo e escolher melhor sua jogada.</p><button type="button" class="btn arcade-play" id="soloRotateContinue" tabindex="-1">CONTINUAR NA VERTICAL</button></div></div><div class="game-layout"><div class="surface" id="soloMain"></div><aside class="sidepanel" id="soloSide"></aside></div></section>
 
 </main>
 <footer><span>EcoCard · Uma experiência de educação ambiental</span><span>IFMA · Universo IFMA · <a href="https://www.instagram.com/ecoresiduariosacademy/" target="_blank" rel="noopener noreferrer">EcoResiduários Academy </a></span><span>Feito para jogar, pensar e transformar.</span></footer>
@@ -115,6 +116,7 @@ document.querySelector('#resetEcoCard')?.addEventListener('click',()=>{if(window
 </script>
 <script src="./hand-order.js"></script>
 <script src="./victory-share.js?v=final-only"></script>
-<script src="./solo-v2.js?v=50jokers-20261115"></script>
+<script src="./orientation-hint.js?v=rotate-v1"></script>
+<script src="./solo-v2.js?v=table-landscape-1"></script>
 <script src="./kids-game.js?v=kids-colors-final-v3"></script>
 </body></html>
