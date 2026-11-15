@@ -44,7 +44,9 @@ assert.deepEqual([...onlyPaper],['a'],'specific card bonus highlights only contr
 assert.equal(highlightedCardIds(cards,[jokers[0]],[{active:false}]).size,0);
 const solo=fs.readFileSync('solo-v2.js','utf8'),html=fs.readFileSync('index.html','utf8');
 assert(solo.includes("const jokerStatuses=window.EcoJokerFeedback?.preview("),'game uses exact scoring preview');
-assert(solo.includes('highlightedCardIds(selected,solo.jokers,jokerStatuses)'),'selected cards receive live affinity');
+assert(solo.includes('highlightedCardIds(eligibleSelected,solo.jokers,jokerStatuses)'),'selected cards receive live affinity');
+assert(solo.includes('selected.filter(card=>card.suit!==preview.blockedSuit)'),'boss-blocked cards are excluded from preview glow');
+assert(solo.includes('solo.playedCards.filter(card=>card.suit!==result.blockedSuit)'),'boss-blocked cards cannot receive score animation glow');
 assert(solo.includes("card.classList.toggle('joker-boost-card'"),'scoring visually links joker and affected cards');
 assert(solo.includes("slot.classList.toggle('joker-triggering'"),'joker triggers animate per scoring event');
 assert(html.includes('joker-feedback.js?v=')&&html.includes('joker-interaction-v1.css?v='));
