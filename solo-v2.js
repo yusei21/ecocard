@@ -40,12 +40,12 @@ const upgradedJokers=[
  {id:'educacao',name:'Educação Ambiental',desc:'+60 pontos base em uma sequência.',rarity:'uncommon',price:7},
  {id:'catadores',name:'Rede de Catadores',desc:'+70 pontos base em Coleta Seletiva ou Triagem Perfeita.',rarity:'uncommon',price:7},
  {id:'logistica',name:'Logística Reversa',desc:'×1,35 se houver pelo menos 2 cartas de metal ou vidro.',rarity:'uncommon',price:8},
- {id:'biomas',name:'Aliança dos Biomas',desc:'×1,8 multiplicador com cartas de pelo menos 3 categorias.',rarity:'epic',price:11},
- {id:'usina',name:'Usina Circular',desc:'+150 pontos base em trincas ou sequências.',rarity:'epic',price:12},
+ {id:'biomas',name:'Aliança dos Biomas',desc:'Começa em ×1,8 com 3 categorias; cresce +0,12× por ativação (até 8).',rarity:'epic',price:11},
+ {id:'usina',name:'Usina Circular',desc:'Começa em +150 em trincas ou sequências; cresce +25 por ativação (até 8).',rarity:'epic',price:12},
  {id:'circular',name:'Aventura Circular',desc:'Ativa cada outro coringa equipado 2 vezes, na ordem. Nunca ativa a si própria.',rarity:'legend',price:15},
- {id:'papel_limpo',name:'Papel Recuperado',desc:'+18 pontos base por carta de papel.',rarity:'common',price:4},
- {id:'vidro_retorno',name:'Retorno do Vidro',desc:'+20 pontos base por carta de vidro.',rarity:'common',price:4},
- {id:'metal_valor',name:'Valor do Metal',desc:'+22 pontos base por carta de metal.',rarity:'common',price:5},
+ {id:'papel_limpo',name:'Papel Recuperado',desc:'Começa em +18 por papel; ganha +8 por papel a cada mão ativada (até 8 evoluções).',rarity:'common',price:4},
+ {id:'vidro_retorno',name:'Retorno do Vidro',desc:'Começa em +20 por vidro; ganha +9 por vidro a cada mão ativada (até 8 evoluções).',rarity:'common',price:4},
+ {id:'metal_valor',name:'Valor do Metal',desc:'Começa em +22 por metal; ganha +10 por metal a cada mão ativada (até 8 evoluções).',rarity:'common',price:5},
  {id:'plastico_responsavel',name:'Plástico Responsável',desc:'+18 pontos base por carta de plástico.',rarity:'common',price:4},
  {id:'horta_urbana',name:'Horta Urbana',desc:'+65 pontos base com pelo menos 2 orgânicos.',rarity:'common',price:5},
  {id:'separacao',name:'Triagem Especializada',desc:'+45 pontos base com cartas de uma só categoria.',rarity:'common',price:4},
@@ -58,8 +58,8 @@ const upgradedJokers=[
  {id:'vidro_circular',name:'Vidro Infinito',desc:'×1,4 com pelo menos 2 cartas de vidro.',rarity:'uncommon',price:8},
  {id:'metal_reuso',name:'Metal Reintegrado',desc:'×1,45 com pelo menos 2 cartas de metal.',rarity:'uncommon',price:8},
  {id:'plastico_engenharia',name:'Design sem Descarte',desc:'×1,35 com pelo menos 2 cartas de plástico.',rarity:'uncommon',price:7},
- {id:'biofertilizante',name:'Biofertilizante',desc:'×1,5 com pelo menos 2 cartas orgânicas.',rarity:'uncommon',price:9},
- {id:'coleta_integrada',name:'Coleta Integrada',desc:'×1,45 com pelo menos 3 categorias diferentes.',rarity:'uncommon',price:8},
+ {id:'biofertilizante',name:'Biofertilizante',desc:'Começa em ×1,5 com 2 orgânicos; cresce +0,08× por ativação (até 8).',rarity:'uncommon',price:9},
+ {id:'coleta_integrada',name:'Coleta Integrada',desc:'Começa em ×1,45 com 3 categorias; cresce +0,07× por ativação (até 8).',rarity:'uncommon',price:8},
  {id:'triagem_inteligente',name:'Triagem Inteligente',desc:'+120 pontos base com 3 valores iguais.',rarity:'uncommon',price:8},
  {id:'fluxo_devolucao',name:'Fluxo de Devolução',desc:'+95 pontos base em sequência.',rarity:'uncommon',price:8},
  {id:'reuso_de_agua',name:'Água em Ciclo',desc:'+80 pontos base com cartas de uma só categoria.',rarity:'uncommon',price:7},
@@ -73,6 +73,36 @@ const upgradedJokers=[
  {id:'renascimento',name:'Renascimento Verde',desc:'×3 na Coleta Seletiva, Triagem Perfeita ou Ciclo Completo.',rarity:'legend',price:18},
  {id:'pacto_global',name:'Pacto Global',desc:'×2,5 com 3 valores iguais e 2 categorias diferentes.',rarity:'legend',price:17}
 ];
+const EVOLUTION_RULES={
+ papel_limpo:{max:8,step:8,unit:'pontos por papel'},
+ vidro_retorno:{max:8,step:9,unit:'pontos por vidro'},
+ metal_valor:{max:8,step:10,unit:'pontos por metal'},
+ coleta_integrada:{max:8,step:.07,unit:'multiplicador'},
+ biofertilizante:{max:8,step:.08,unit:'multiplicador'},
+ biomas:{max:8,step:.12,unit:'multiplicador'},
+ usina:{max:8,step:25,unit:'pontos base'}
+};
+function evolutionCount(joker){
+ return Math.min(EVOLUTION_RULES[joker.id]?.max||0,Math.max(0,joker.growth||0));
+}
+function growthSummary(joker){
+ const rule=EVOLUTION_RULES[joker.id];if(!rule)return '';
+ const level=evolutionCount(joker);
+ return '<div class="joker-evolution"><strong>EVOLUTIVO · '+level+'/'+rule.max+'</strong><div class="evolution-track"><span style="width:'+(level/rule.max*100)+'%"></span></div><small>'+ (level===rule.max?'EVOLUÇÃO MÁXIMA':'Evolui ao pontuar com a habilidade')+'</small></div>';
+}
+function advanceEvolutions(jokers,result){
+ if(!result||result.score<=0)return [];
+ const activated=new Set(result.events.map(event=>event.label)),upgraded=[];
+ for(const joker of jokers){
+  const rule=EVOLUTION_RULES[joker.id];
+  if(!rule||!activated.has(joker.name))continue;
+  const old=evolutionCount(joker);
+  if(old>=rule.max)continue;
+  joker.growth=old+1;upgraded.push(joker.name);
+ }
+ return upgraded;
+}
+
 const ranks={common:1,uncommon:1.1,epic:.55,legend:.012};
 function jokerWeight(j){return j.id==='circular'?.0005:ranks[j.rarity]}
 const RARITY_INFO={
@@ -224,11 +254,11 @@ function evaluate(cards,stage,jokers,modifier=null,bossRule=null){
  if(joker.id==='educacao'&&c.straight)add('Educação Ambiental',()=>chips+=60);
  if(joker.id==='catadores'&&(['flush','straightflush'].includes(c.kind)))add('Rede de Catadores',()=>chips+=70);
  if(joker.id==='logistica'&&cards.filter(x=>['verde','amarelo'].includes(x.suit)).length>=2)add('Logística Reversa',()=>mult*=1.35);
- if(joker.id==='biomas'&&c.distinct>=3)add('Aliança dos Biomas',()=>mult*=1.8);
- if(joker.id==='usina'&&(c.straight||c.maxRank>=3))add('Usina Circular',()=>chips+=150);
- if(joker.id==='papel_limpo'&&(cards.filter(x=>x.suit==='azul').length>0))add('Papel Recuperado',()=>chips+=cards.filter(x=>x.suit==='azul').length*18);
- if(joker.id==='vidro_retorno'&&(cards.some(x=>x.suit==='verde')))add('Retorno do Vidro',()=>chips+=cards.filter(x=>x.suit==='verde').length*20);
- if(joker.id==='metal_valor'&&(cards.some(x=>x.suit==='amarelo')))add('Valor do Metal',()=>chips+=cards.filter(x=>x.suit==='amarelo').length*22);
+ if(joker.id==='biomas'&&c.distinct>=3)add('Aliança dos Biomas',()=>mult*=1.8+evolutionCount(joker)*.12);
+ if(joker.id==='usina'&&(c.straight||c.maxRank>=3))add('Usina Circular',()=>chips+=150+evolutionCount(joker)*25);
+ if(joker.id==='papel_limpo'&&(cards.filter(x=>x.suit==='azul').length>0))add('Papel Recuperado',()=>chips+=cards.filter(x=>x.suit==='azul').length*(18+evolutionCount(joker)*8));
+ if(joker.id==='vidro_retorno'&&(cards.some(x=>x.suit==='verde')))add('Retorno do Vidro',()=>chips+=cards.filter(x=>x.suit==='verde').length*(20+evolutionCount(joker)*9));
+ if(joker.id==='metal_valor'&&(cards.some(x=>x.suit==='amarelo')))add('Valor do Metal',()=>chips+=cards.filter(x=>x.suit==='amarelo').length*(22+evolutionCount(joker)*10));
  if(joker.id==='plastico_responsavel'&&(cards.some(x=>x.suit==='vermelho')))add('Plástico Responsável',()=>chips+=cards.filter(x=>x.suit==='vermelho').length*18);
  if(joker.id==='horta_urbana'&&(n>=2))add('Horta Urbana',()=>chips+=65);
  if(joker.id==='separacao'&&(c.distinct===1))add('Triagem Especializada',()=>chips+=45);
@@ -241,8 +271,8 @@ function evaluate(cards,stage,jokers,modifier=null,bossRule=null){
  if(joker.id==='vidro_circular'&&(cards.filter(x=>x.suit==='verde').length>=2))add('Vidro Infinito',()=>mult*=1.4);
  if(joker.id==='metal_reuso'&&(cards.filter(x=>x.suit==='amarelo').length>=2))add('Metal Reintegrado',()=>mult*=1.45);
  if(joker.id==='plastico_engenharia'&&(cards.filter(x=>x.suit==='vermelho').length>=2))add('Design sem Descarte',()=>mult*=1.35);
- if(joker.id==='biofertilizante'&&(n>=2))add('Biofertilizante',()=>mult*=1.5);
- if(joker.id==='coleta_integrada'&&(c.distinct>=3))add('Coleta Integrada',()=>mult*=1.45);
+ if(joker.id==='biofertilizante'&&(n>=2))add('Biofertilizante',()=>mult*=1.5+evolutionCount(joker)*.08);
+ if(joker.id==='coleta_integrada'&&(c.distinct>=3))add('Coleta Integrada',()=>mult*=1.45+evolutionCount(joker)*.07);
  if(joker.id==='triagem_inteligente'&&(c.maxRank>=3))add('Triagem Inteligente',()=>chips+=120);
  if(joker.id==='fluxo_devolucao'&&(c.straight))add('Fluxo de Devolução',()=>chips+=95);
  if(joker.id==='reuso_de_agua'&&(c.distinct===1))add('Água em Ciclo',()=>chips+=80);
@@ -313,8 +343,9 @@ function play(discard=false){
  }
  const result=evaluate(cards,solo.stage,solo.jokers,solo.modifier,solo.bossRule);
  solo.score+=result.score;solo.runScore+=result.score;solo.hands--;solo.played++;solo.comboChain++;
+ const evolved=advanceEvolutions(solo.jokers,result);
  solo.playedCards=cards;lastBurst=result;
- solo.message=result.type+' · '+fmt(result.score)+' pontos nesta jogada';
+ solo.message=result.type+' · '+fmt(result.score)+' pontos nesta jogada'+(evolved.length?' · EVOLUÇÃO: '+evolved.join(', '):'');
  solo.hand=solo.hand.filter(c=>!solo.selected.includes(c.id));solo.selected=[];fill(cards.length);
  const victory=solo.score>=target();
  solo.pendingPhase=victory?'clear':solo.hands<=0||!solo.hand.length?'lost':'play';
@@ -409,7 +440,7 @@ function animateScore(result,onDone){
  },frames.length*duration+(reduce?0:620)));
 }
 
-function buy(id){if(solo.phase!=='shop')return;const j=solo.offer.find(x=>x.id===id);if(!j||solo.jokers.length>=5||solo.coins<j.price)return;solo.coins-=j.price;solo.jokers.push(j);solo.offer=solo.offer.filter(x=>x.id!==id);solo.message=(j.rarity==='legend'?'LENDÁRIO ADQUIRIDO: ':'CORINGA ADQUIRIDO: ')+j.name+'!';beep(j.rarity==='legend'?1047:730,.27,'triangle');render()}
+function buy(id){if(solo.phase!=='shop')return;const j=solo.offer.find(x=>x.id===id);if(!j||solo.jokers.length>=5||solo.coins<j.price)return;solo.coins-=j.price;solo.jokers.push({...j,growth:0});solo.offer=solo.offer.filter(x=>x.id!==id);solo.message=(j.rarity==='legend'?'LENDÁRIO ADQUIRIDO: ':'CORINGA ADQUIRIDO: ')+j.name+'!';beep(j.rarity==='legend'?1047:730,.27,'triangle');render()}
 function reroll(){const cost=rerollCost();if(!solo||solo.phase!=='shop'||solo.coins<cost)return;solo.coins-=cost;solo.rerolls++;solo.offer=offers(solo.jokers);solo.message='Ofertas renovadas por '+cost+' ecofichas. Próxima troca: '+rerollCost()+'.';render()}
 function next(){if(solo.phase!=='shop')return;if(solo.stage===stages.length-1){solo.phase='won';unlockedCampaign=Math.max(unlockedCampaign,Math.min(CAMPAIGNS.length-1,(solo.campaign||0)+1));solo.message='CAMPANHA '+CAMPAIGNS[solo.campaign||0].name+' CONCLUÍDA! Sete crises superadas.'}else{solo.stage++;solo.score=0;solo.modifier=rollDifficultyModifier(solo.stage);solo.bossRule=drawBossRule(solo.stage,solo.bossRule);const rules=campaignRules(solo.campaign||0,solo.stage,solo.modifier.id,solo.bossRule);solo.hands=rules.hands;solo.discards=rules.discards;solo.hand=[];solo.deck=makeDeck();solo.selected=[];solo.phase='play';solo.comboChain=0;solo.payout=null;solo.playedCards=[];lastBurst=null;fill(8);solo.message='NOVO DESAFIO: '+stages[solo.stage].title+'!'}beep(570,.18);render()}
 function fmt(v){return Math.floor(v).toLocaleString('pt-BR')}
@@ -432,7 +463,7 @@ function render(){
  '<div class="arcade-level"><span class="label">'+headline+' · '+campaign.name+'</span><b>'+esc(stage.title)+'</b><p>'+esc(stage.desc)+'</p><small>'+esc(stage.hint)+'</small></div>'+
  '<div class="arcade-modifier"><span class="label">CONDIÇÃO DO DESAFIO</span><b>'+esc(solo.modifier.name)+'</b><small>'+esc(solo.modifier.desc)+'</small></div>'+
  '<div class="arcade-counters"><span>Fichas <b>'+fmt(solo.coins)+' ✦</b></span><span>Juros previstos <b>+'+Math.min(5,Math.floor(solo.coins/5))+' ✦</b></span><span>Jogadas restantes <b>'+solo.hands+'</b></span><span>Descartes <b>'+solo.discards+'</b></span><span>Monte <b>'+solo.deck.length+' cartas</b></span></div>'+
- '<h3>Coringas <span>'+solo.jokers.length+'/5</span></h3><div class="jokers">'+(solo.jokers.length?solo.jokers.map(j=>'<div class="joker joker-rarity-'+j.rarity+'"><span class="rarity-ribbon">'+rarityLabel(j)+'</span>'+jokerArt(j)+'<b>'+esc(j.name)+'</b><small>'+esc(j.desc)+'</small>'+(solo.phase==='shop'?'<button class="sell-joker" data-sell="'+j.id+'">Vender +'+Math.max(1,Math.floor(j.price/2))+' ✦</button>':'')+'</div>').join(''):'<p class="hint">Aproveite a loja após superar uma crise.</p>')+'</div>'+
+ '<h3>Coringas <span>'+solo.jokers.length+'/5</span></h3><div class="jokers">'+(solo.jokers.length?solo.jokers.map(j=>'<div class="joker joker-rarity-'+j.rarity+'"><span class="rarity-ribbon">'+rarityLabel(j)+'</span>'+jokerArt(j)+'<b>'+esc(j.name)+'</b><small>'+esc(j.desc)+'</small>'+growthSummary(j)+(solo.phase==='shop'?'<button class="sell-joker" data-sell="'+j.id+'">Vender +'+Math.max(1,Math.floor(j.price/2))+' ✦</button>':'')+'</div>').join(''):'<p class="hint">Aproveite a loja após superar uma crise.</p>')+'</div>'+
  '<label class="sound-control"><input type="checkbox" id="muteAudio" '+(!muted?'checked':'')+'> Efeitos sonoros</label>';
  let area='';
  if(solo.phase==='play'||scoring){
@@ -451,9 +482,9 @@ function render(){
   const p=solo.payout;
   area=ruleBrief+'<div class="run-result won-result"><div class="result-kicker">DESAFIO '+(solo.stage+1)+' / '+stages.length+' CONCLUÍDO</div><div class="result-symbol" aria-hidden="true">✓</div><h2>CRISE SUPERADA!</h2><p>Você ultrapassou a meta de <b>'+fmt(goal)+'</b> pontos.</p><div class="result-score"><small>PONTUAÇÃO DA RODADA</small><strong>'+fmt(solo.score)+'</strong></div><div class="payout-ledger"><div><span>Recompensa da crise</span><b>+'+p.base+' ✦</b></div><div><span>Jogadas não utilizadas</span><b>+'+p.saved+' ✦</b></div><div><span>Juros (1 para cada 5 fichas, máximo 5)</span><b>+'+p.interest+' ✦</b></div><div class="total"><span>RECEBER AGORA</span><b>+'+p.total+' ✦</b></div></div><button class="btn arcade-play" id="collectPayout">RESGATAR '+p.total+' FICHAS →</button></div>';
  } else if(solo.phase==='shop'){
-  area=ruleBrief+'<div class="arcade-shop"><span class="eyebrow">ENTRE CRISES / MERCADO CIRCULAR</span><h2>MONTE SUA ESTRATÉGIA.</h2><div class="shop-wallet"><strong>'+fmt(solo.coins)+' ✦</strong><span>EM CAIXA</span><span>Juros futuros: +'+Math.min(5,Math.floor(solo.coins/5))+' por crise<br>Guardar ou gastar? Você decide.</span></div><p class="hint">Até 5 coringas em jogo. Você pode vender um coringa por metade do preço.</p><div class="market">'+solo.offer.map(j=>'<div class="market-item rarity-card rarity-'+j.rarity+'"><div class="rarity-card-top"><span class="rarity-ribbon">'+rarityLabel(j)+'</span></div>'+jokerArt(j)+'<b>'+esc(j.name)+'</b><p>'+esc(j.desc)+'</p><button class="btn" data-buy="'+j.id+'" '+(solo.coins<j.price||solo.jokers.length>=5?'disabled':'')+'>COMPRAR · '+j.price+' ✦</button></div>').join('')+'</div><div class="actions shop-actions"><button class="btn secondary" id="rerollShop" '+(solo.coins<rerollCost()?'disabled':'')+'>NOVAS OFERTAS · '+rerollCost()+' ✦</button><button class="btn arcade-play" id="nextStage">'+(solo.stage===stages.length-1?'CONCLUIR JORNADA →':'PRÓXIMA CRISE →')+'</button></div></div>';
+  area=ruleBrief+'<div class="arcade-shop"><span class="eyebrow">ENTRE CRISES / MERCADO CIRCULAR</span><h2>MONTE SUA ESTRATÉGIA.</h2><div class="shop-wallet"><strong>'+fmt(solo.coins)+' ✦</strong><span>EM CAIXA</span><span>Juros futuros: +'+Math.min(5,Math.floor(solo.coins/5))+' por crise<br>Guardar ou gastar? Você decide.</span></div><p class="hint">Até 5 coringas em jogo. Você pode vender um coringa por metade do preço.</p><div class="market">'+solo.offer.map(j=>'<div class="market-item rarity-card rarity-'+j.rarity+'"><div class="rarity-card-top"><span class="rarity-ribbon">'+rarityLabel(j)+'</span></div>'+jokerArt(j)+'<b>'+esc(j.name)+'</b><p>'+esc(j.desc)+'</p>'+growthSummary(j)+'<button class="btn" data-buy="'+j.id+'" '+(solo.coins<j.price||solo.jokers.length>=5?'disabled':'')+'>COMPRAR · '+j.price+' ✦</button></div>').join('')+'</div><div class="actions shop-actions"><button class="btn secondary" id="rerollShop" '+(solo.coins<rerollCost()?'disabled':'')+'>NOVAS OFERTAS · '+rerollCost()+' ✦</button><button class="btn arcade-play" id="nextStage">'+(solo.stage===stages.length-1?'CONCLUIR JORNADA →':'PRÓXIMA CRISE →')+'</button></div></div>';
  } else {
-  area=ruleBrief+'<div class="run-result '+(solo.phase==='won'?'won-result':'lost-result')+'"><div class="result-kicker">'+(solo.phase==='won'?'7 DE 7 CRISES · '+campaign.name+'':'TENTATIVA ENCERRADA')+'</div><div class="result-symbol">'+(solo.phase==='won'?'✓':'×')+'</div><h2>'+(solo.phase==='won'?'CAMPANHA CONCLUÍDA!':'FIM DE JOGO')+'</h2><p>'+(solo.phase==='won'?'A jornada foi concluída. Agora leve essas decisões para o mundo real.':'A meta não foi alcançada. Experimente construir combinações mais fortes e reservar fichas para os juros.')+'</p><div class="result-score"><small>PONTUAÇÃO TOTAL DA JORNADA</small><strong>'+fmt(solo.runScore)+'</strong></div><div class="result-stats"><span>Crises superadas <b>'+solo.wonStages+'/'+stages.length+'</b></span><span>Jogadas realizadas <b>'+solo.played+'</b></span><span>Fichas finais <b>'+solo.coins+'</b></span></div>'+(solo.phase==='won'&&window.EcoVictory?window.EcoVictory.card(solo):'')+'<button class="btn arcade-play" id="restartSolo">'+(solo.phase==='won'&&solo.campaign<CAMPAIGNS.length-1?'AVANÇAR PARA '+CAMPAIGNS[solo.campaign+1].name+' →':solo.phase==='won'?'TODAS AS CAMPANHAS CONCLUÍDAS · REINICIAR':'TENTAR NOVAMENTE')+'</button></div>';
+  area=ruleBrief+'<div class="run-result '+(solo.phase==='won'?'won-result':'lost-result')+'"><div class="result-kicker">'+(solo.phase==='won'?'7 DE 7 CRISES · '+campaign.name+'':'TENTATIVA ENCERRADA')+'</div><div class="result-symbol">'+(solo.phase==='won'?'✓':'×')+'</div><h2>'+(solo.phase==='won'?'CAMPANHA CONCLUÍDA!':'FIM DE JOGO')+'</h2><p>'+(solo.phase==='won'?'A jornada foi concluída. Agora leve essas decisões para o mundo real.':'A meta não foi alcançada. Experimente construir combinações mais fortes e reservar fichas para os juros.')+'</p><div class="result-score"><small>PONTUAÇÃO TOTAL DA JORNADA</small><strong>'+fmt(solo.runScore)+'</strong></div><div class="result-stats"><span>Crises superadas <b>'+solo.wonStages+'/'+stages.length+'</b></span><span>Jogadas realizadas <b>'+solo.played+'</b></span><span>Fichas finais <b>'+solo.coins+'</b></span></div>'+(solo.phase==='won'&&solo.campaign===CAMPAIGNS.length-1&&window.EcoVictory?window.EcoVictory.card(solo):'')+'<button class="btn arcade-play" id="restartSolo">'+(solo.phase==='won'&&solo.campaign<CAMPAIGNS.length-1?'AVANÇAR PARA '+CAMPAIGNS[solo.campaign+1].name+' →':solo.phase==='won'?'TODAS AS CAMPANHAS CONCLUÍDAS · REINICIAR':'TENTAR NOVAMENTE')+'</button></div>';
  }
  main.classList.add('arcade-solo');main.innerHTML=area;
  main.querySelectorAll('.arcade-hand [data-card]').forEach(el=>el.addEventListener('click',()=>choose(el.dataset.card)));
@@ -463,7 +494,7 @@ function render(){
  main.querySelector('#collectPayout')?.addEventListener('click',collectPayout);
  main.querySelector('#nextStage')?.addEventListener('click',next);
  main.querySelector('#rerollShop')?.addEventListener('click',reroll);
- if(solo.phase==='won')window.EcoVictory?.attach(main,solo);
+ if(solo.phase==='won'&&solo.campaign===CAMPAIGNS.length-1)window.EcoVictory?.attach(main,solo);
  main.querySelector('#restartSolo')?.addEventListener('click',()=>{if(solo.phase==='won'&&solo.campaign<CAMPAIGNS.length-1)start(solo.campaign+1);else selectCampaign();});
  main.querySelectorAll('[data-buy]').forEach(el=>el.addEventListener('click',()=>buy(el.dataset.buy)));
  side.querySelectorAll('[data-sell]').forEach(el=>el.addEventListener('click',()=>sellJoker(el.dataset.sell)));
@@ -474,5 +505,5 @@ function render(){
 startSolo=showHandGuide;drawSolo=fill;combo=combination;scoreSolo=cards=>evaluate(cards,solo.stage,solo.jokers,solo.modifier,solo.bossRule);
 selectSolo=choose;playSolo=play;targetSolo=target;makeOffers=()=>offers(solo.jokers);
 buyJoker=buy;nextSolo=next;renderSolo=render;
-window.EcoCardSolo={combination,evaluate,offers,stages,jokers:upgradedJokers,MODIFIERS,rollModifier,payoutFor,rerollCost,difficultyRules,rollDifficultyModifier,BOSS_RULES,drawBossRule,bossInvalidReason,HAND_GUIDE,showHandGuide,selectCampaign,campaignRules,CAMPAIGNS,scoringFrames,RARITY_INFO,jokerArt,jokerWeight};
+window.EcoCardSolo={combination,evaluate,offers,stages,jokers:upgradedJokers,MODIFIERS,rollModifier,payoutFor,rerollCost,difficultyRules,rollDifficultyModifier,BOSS_RULES,drawBossRule,bossInvalidReason,HAND_GUIDE,showHandGuide,selectCampaign,campaignRules,CAMPAIGNS,EVOLUTION_RULES,advanceEvolutions,evolutionCount,growthSummary,scoringFrames,RARITY_INFO,jokerArt,jokerWeight};
 })();
