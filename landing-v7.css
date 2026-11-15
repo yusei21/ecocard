@@ -84,3 +84,12 @@ body:has(#home:not(.hidden)) footer{display:none!important}
  .landing-v7 .scene-button-content strong{font-size:21px}
  .landing-v7 .scene-button-arrow{width:30px;height:30px}
 }
+
+/* Two distinct playable modes in the main menu. */
+.landing-v7 .scene-button.scene-kids{background:linear-gradient(115deg,#443859,#272a46);border:2px solid #c8b1ed;color:#f7efff}
+.landing-v7 .scene-button.scene-kids:hover,.landing-v7 .scene-button.scene-kids:focus-visible{background:#524164;border-color:#eee0ff;color:#fff}
+.landing-v7 .scene-button.scene-kids .scene-button-index{color:#d6baff;opacity:1}
+.landing-v7 .scene-button.scene-kids .scene-button-arrow{border-color:#cab1ef;color:#e9d7ff}
+.landing-v7 .scene-nav{gap:13px}
+.landing-v7 .scene-text>p{margin-bottom:23px}
+@media(max-width:600px){.landing-v7 .scene-nav{width:100%}.landing-v7 .scene-button.scene-kids{min-height:80px}}
