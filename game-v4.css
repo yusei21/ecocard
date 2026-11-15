@@ -422,3 +422,11 @@ footer a{color:#d9ecab;text-decoration:underline;text-underline-offset:3px}
 #solo .victory-share-status{font:600 13px 'IBM Plex Sans',sans-serif;color:#e8f4d2;text-align:center}
 #solo .victory-share-fallback{width:100%;min-height:130px;padding:10px;background:#182b23;color:#f7ffea;border:1px solid #cdec91;font:13px/1.5 monospace}
 @media(max-width:480px){#solo .victory-certificate{padding:15px 11px}#solo .victory-certificate-stats{gap:8px}#solo .victory-share-actions{flex-direction:column}#solo .victory-share-actions button{width:100%}}
+
+/* Evolving jokers: progression remains visible after every valid scoring hand. */
+#solo .joker-evolution{display:flex;flex-direction:column;gap:5px;width:100%;margin-top:8px;border-top:1px solid #ffffff48;padding-top:8px}
+#solo .joker-evolution strong{font:900 10px/1.3 'IBM Plex Mono',monospace!important;letter-spacing:.05em;color:#e7ffaf!important}
+#solo .joker-evolution small{font:500 10px/1.3 'IBM Plex Sans',sans-serif;color:#e3ebdc}
+#solo .evolution-track{height:7px;border:1px solid #9cd89888;border-radius:4px;background:#0c2619;overflow:hidden}
+#solo .evolution-track span{display:block;height:100%;background:linear-gradient(90deg,#b9f180,#e4ffaf);transition:width .25s ease}
+#solo .arcade-shop .joker-evolution{margin:0 0 8px}
