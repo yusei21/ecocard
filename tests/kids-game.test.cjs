@@ -7,20 +7,23 @@ vm.runInNewContext(source,{window,document:{querySelector:()=>null},console,Math
 const kids=window.EcoKids;
 assert(kids,'children mode should expose a playable API');
 assert.equal(kids.CATEGORIES.length,5);
-assert.equal(kids.ITEMS.length,25);
-assert.equal(new Set(kids.ITEMS.map(x=>x.id)).size,25,'unique educational objects');
+assert.equal(kids.ITEMS.length,40);
+assert.equal(kids.LEVELS.length,5,'five progression levels');
+assert.equal(kids.JOKES_CORRECT.length,5);
+assert.equal(kids.JOKES_RETRY.length,5);
+assert.equal(new Set(kids.ITEMS.map(x=>x.id)).size,40,'unique educational objects');
 for(const cat of kids.CATEGORIES){
- assert.equal(kids.ITEMS.filter(item=>item.category===cat.id).length,5,'five items per category');
+ assert.equal(kids.ITEMS.filter(item=>item.category===cat.id).length,8,'eight different items per category');
  assert(cat.color.startsWith('#'));
 }
 const round=kids.createRound(()=>.27);
-assert.equal(round.length,15,'three levels of five objects');
-assert.equal(new Set(round.map(item=>item.id)).size,15,'no repeated objects in the campaign');
-for(let l=0;l<3;l++){
+assert.equal(round.length,25,'five levels of five objects');
+assert.equal(new Set(round.map(item=>item.id)).size,25,'no repeated objects in the campaign');
+for(let l=0;l<5;l++){
  const level=round.slice(l*5,l*5+5);
  assert.equal(new Set(level.map(item=>item.category)).size,5,'each level teaches the five categories');
 }
-assert.deepEqual(Object.keys(kids.SHAPES).sort(),['bag','bottle','box','can','cap','cup','glass','jar','leaf','pan','paper'].sort());
+assert.equal(Object.keys(kids.SHAPES).length,23,'expanded illustration collection');
 for(const item of kids.ITEMS){
  assert(kids.SHAPES[item.shape],'illustration exists for '+item.name);
  assert(kids.illustration(item.shape).includes('<svg'));
@@ -43,16 +46,23 @@ assert.equal(state.index,0);
 kids.continueGame();
 assert.equal(state.phase,'playing');
 assert.equal(state.index,0,'retry does not skip object');
-for(let n=0;n<15;n++){
+for(let n=0;n<25;n++){
  const item=state.rounds[n];
  assert.equal(kids.chooseBin(item.category),true,'right bin accepts item '+n);
  assert.equal(state.phase,'feedback');
  kids.continueGame();
+ if((n+1)%5===0&&n!==24){
+  assert.equal(state.phase,'levelup','a level change is shown after five objects');
+  assert.equal(state.levelsCompleted,(n+1)/5);
+  kids.startNextLevel();
+  assert.equal(state.phase,'playing');
+ }
 }
 assert.equal(state.phase,'complete','children can finish all levels');
-assert.equal(state.correct,15);
-assert.equal(state.points,1500);
-assert.equal(state.index,15);
+assert.equal(state.correct,25);
+assert.equal(state.levelsCompleted,5);
+assert.equal(state.points,2500);
+assert.equal(state.index,25);
 assert.equal(kids.chooseBin('azul'),false,'no new submissions after finish');
 const html=fs.readFileSync('index.html','utf8');
 assert(html.includes('id="kidsMain"')&&html.includes('id="kidsSide"'));
@@ -61,4 +71,6 @@ assert(html.includes("if(id==='kids')window.EcoKids?.show()"),'navigation render
 assert(html.includes('kids-game.js?v=')&&html.includes('kids-game.css?v='));
 assert(html.includes('data-view="solo"'),'main solo game remains playable');
 assert(!html.includes('data-view="multi"'),'unwanted Trinca mode remains removed');
-console.log('✓ Missão Coleta: five bins, fifteen unique objects, retry and completion passed');
+assert(source.includes('JOKES_CORRECT[')&&source.includes('JOKES_RETRY['),'different jokes appear after answers');
+assert(source.includes('kids-levelup'),'inter-level celebration is displayed');
+console.log('Missão Coleta: 40 possible objects, 25 per run, five progressive levels and retries passed');
