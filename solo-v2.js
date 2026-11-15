@@ -438,12 +438,29 @@ function selectCampaign(){
 }
 function start(campaign=0){if(campaign>unlockedCampaign)return;clearQueue();const modifier=rollDifficultyModifier(0),rules=campaignRules(campaign,0,modifier.id);solo={stage:0,campaign,score:0,coins:rules.coins,hand:[],deck:makeDeck(),deckPlan:emptyDeckPlan(),selected:[],jokers:[],hands:rules.hands,discards:rules.discards,phase:'play',message:'Escolha de 1 a 5 cartas. Descubra combinações, supere crises e evolua sua estratégia.',runScore:0,comboChain:0,played:0,modifier,rerolls:0,wonStages:0,payout:null,playedCards:[],pendingPhase:null,bossRule:drawBossRule(0)};lastBurst=null;fill(8);render();beep(420,.09)}
 function target(){return campaignRules(solo.campaign||0,solo.stage,solo.modifier.id,solo.bossRule).goal}
+let reorderMode=false,reorderSource=null,handDragController=null;
+function toggleReorder(){
+ if(!solo||solo.phase!=='play'||busy)return;
+ reorderMode=!reorderMode;reorderSource=null;beep(430,.045,'sine');render();
+}
 function moveSolo(from,to){
  if(!solo||solo.phase!=='play'||busy)return;
- solo.hand=window.EcoHandOrder.move(solo.hand,from,to);render();
+ if(from===to)return;
+ solo.hand=window.EcoHandOrder.move(solo.hand,from,to);reorderSource=null;
+ beep(580,.065,'triangle');render();
 }
-function choose(id){if(!solo||solo.phase!=='play'||busy)return;
- let i=solo.selected.indexOf(id);if(i>=0)solo.selected.splice(i,1);else if(solo.selected.length<5)solo.selected.push(id);beep(i>=0?310:540,.045,'triangle');render()}
+function choose(id){
+ if(!solo||solo.phase!=='play'||busy)return;
+ if(reorderMode){
+  if(reorderSource===null){reorderSource=id;beep(390,.05,'sine');render();return}
+  if(id===reorderSource){reorderSource=null;render();return}
+  moveSolo(reorderSource,id);return;
+ }
+ let i=solo.selected.indexOf(id);
+ if(i>=0)solo.selected.splice(i,1);
+ else if(solo.selected.length<5)solo.selected.push(id);
+ beep(i>=0?310:540,.045,'triangle');render();
+}
 function payoutFor(state){
  const base=3+state.stage;
  const saved=state.hands;
@@ -526,6 +543,14 @@ function animateScore(result,onDone){
  frames.forEach((frame,i)=>{
   queue.push(setTimeout(()=>{
    zone.textContent=frame.name+' · '+frame.detail;
+   const activeJoker=frame.kind==='effect'?solo.jokers.find(j=>j.name===frame.name):null;
+   board.querySelectorAll('.table-joker-slot[data-joker-name]').forEach(slot=>{
+    const triggering=!!activeJoker&&slot.dataset.jokerName===frame.name;
+    slot.classList.toggle('joker-triggering',triggering);
+    if(triggering){slot.classList.remove('joker-trigger-replay');void slot.offsetWidth;slot.classList.add('joker-trigger-replay')}
+   });
+   zone.classList.toggle('joker-score-event',!!activeJoker);
+   zone.dataset.rarity=activeJoker?.rarity||'';
    zone.classList.remove('score-step');void zone.offsetWidth;zone.classList.add('score-step');
    const animated=startPoints+Math.floor(result.score*(i+1)/frames.length);
    const scoreboard=board.querySelector('.table-score strong');if(scoreboard)scoreboard.textContent=fmt(animated);
@@ -542,8 +567,10 @@ function animateScore(result,onDone){
    if(frame.kind==='card'){
     const count=frames.slice(0,i+1).filter(f=>f.kind==='card').length;
     beep(480+(count-1)*95,.11,'sine',.034);
-   }else if(frame.kind==='effect')beep(690,.085,'triangle',.018);
-   else if(frame.kind==='total')beep(930,.15,'triangle',.032);
+   }else if(frame.kind==='effect'){
+    const pitch=activeJoker?({common:610,uncommon:720,epic:850,legend:1050}[activeJoker.rarity]||690):690;
+    beep(pitch,.13,activeJoker?.rarity==='legend'?'sine':'triangle',activeJoker?.rarity==='legend'?.045:.025);
+   }else if(frame.kind==='total')beep(930,.15,'triangle',.032);
    if(i===frames.length-1){
     zone.classList.add('score-finish');board.classList.add('score-victory');
     if(!reduce){const fx=document.createElement('div');fx.className='score-particles';
@@ -571,6 +598,8 @@ function render(){
  const selected=solo.hand.filter(c=>solo.selected.includes(c.id));
  const scoring=solo.phase==='scoring';
  const preview=selected.length?evaluate(selected,solo.stage,solo.jokers,solo.modifier,solo.bossRule):null;
+ const jokerStatuses=window.EcoJokerFeedback?.preview(solo.jokers,scoring?lastBurst:preview,scoring||selected.length>0)||[];
+ const highlighted=(!scoring&&preview&&preview.score>0)?window.EcoJokerFeedback?.highlightedCardIds(selected,solo.jokers,jokerStatuses):null;
  const progress=Math.min(100,Math.round(100*shownScore/goal));
  const headline=solo.phase==='won'?'JORNADA VENCIDA':solo.phase==='clear'?'CRISE SUPERADA':solo.phase==='lost'?'FIM DA JORNADA':'MISSÃO '+(solo.stage+1)+' DE '+stages.length;
  const blockedSuit=solo.bossRule?.kind==='block'?SUITS.find(item=>item.id===solo.bossRule.suit):null;
@@ -588,14 +617,17 @@ function render(){
   const total=scoring?lastBurst?.score:preview?.score;
   const base=scoring?lastBurst?.base:preview?.base;
   const mult=scoring?lastBurst?.mult:preview?.mult;
-  const jokerRail='<div class="table-joker-rail" aria-label="Coringas equipados"><div class="table-joker-label"><strong>CORINGAS ATIVOS</strong><small>'+solo.jokers.length+' / 5</small></div><div class="table-joker-slots">'+Array.from({length:5},(_,i)=>{const joker=solo.jokers[i];return joker?'<div class="table-joker-slot joker-rarity-'+joker.rarity+'" title="'+esc(joker.name+' — '+joker.desc)+'">'+jokerArt(joker)+'<span>'+esc(joker.name)+'</span></div>':'<div class="table-joker-slot empty" aria-label="Espaço para coringa"><span>VAZIO</span></div>'}).join('')+'</div></div>';
+  const activated=jokerStatuses.filter(j=>j.active).length;
+  const jokerRail='<div class="table-joker-rail" aria-label="Coringas equipados"><div class="table-joker-label"><strong>SEUS CORINGAS</strong><small>'+(selected.length||scoring?activated+' ATIVOS AGORA':solo.jokers.length+' / 5 EQUIPADOS')+'</small></div><div class="table-joker-slots">'+Array.from({length:5},(_,i)=>{const joker=solo.jokers[i];const status=jokerStatuses[i];return joker?'<div class="table-joker-slot joker-rarity-'+joker.rarity+(status?.active?' joker-ready':' joker-idle')+'" data-joker-name="'+esc(joker.name)+'" title="'+esc(joker.desc)+'">'+jokerArt(joker)+'<span>'+esc(joker.name)+'</span><small class="joker-trigger-status">'+esc(status?.message||'SELECIONE CARTAS')+'</small></div>':'<div class="table-joker-slot empty" aria-label="Espaço para coringa"><span>VAZIO</span></div>'}).join('')+'</div></div>';
   area='<div class="arcade-tabletop balatro-table">'+ruleBrief+'<div class="arena-header"><span class="eyebrow">SALVE O MUNDO / MESA DE TRIAGEM</span><span class="arena-round">CRISE '+(solo.stage+1)+' / '+stages.length+'</span></div>'+
   jokerRail+'<div class="table-score"><div><small>SEUS PONTOS</small><strong>'+fmt(shownScore)+'</strong></div><div><small>'+(solo.bossRule?.kind==='double_hp'?'META ×2':'META')+'</small><strong>'+fmt(goal)+'</strong></div><div class="table-score-left"><small>FALTAM</small><strong>'+fmt(remaining)+'</strong></div></div>'+
   '<div class="arena-scores"><div class="score-chip"><small>BASE</small><b>'+fmt(base||0)+'</b></div><div class="score-times">×</div><div class="score-chip magenta"><small>MULT</small><b>'+((mult||1).toFixed(2))+'</b></div><div class="score-equals">=</div><div class="score-chip total"><small>'+(scoring?'PONTUANDO':'PRÉVIA')+'</small><b>'+fmt(scoring?0:total||0)+'</b></div></div>'+
   '<div class="combo-readout">'+esc(scoring?lastBurst.type:preview?.type||'SELECIONE SUAS CARTAS')+'</div>'+
   '<div class="score-performance" id="scorePerformance" aria-live="polite">'+(scoring?'CALCULANDO COMBO…':'')+'</div>'+
   (scoring?'<div class="played-label">COMBINAÇÃO JOGADA</div><div class="cards played-cards">'+solo.playedCards.map(c=>cardHTML(c,false,true)).join('')+'</div>':'')+
-  '<div class="arena-hand-title"><strong>SUA MÃO</strong><span>'+solo.hand.length+' CARTAS · '+solo.selected.length+'/5 SELECIONADAS</span></div><div class="cards arcade-hand" aria-label="Cartas na mão">'+solo.hand.map((c,i)=>{const fanTilt=((i-(solo.hand.length-1)/2)*1.65).toFixed(2)+'deg';const html=cardHTML(c,solo.selected.includes(c.id),scoring).replace('style="--card:','style="--fan-tilt:'+fanTilt+';--card:');return blockedSuit&&c.suit===blockedSuit.id?html.replace('class="playing-card','class="playing-card boss-negated'):html}).join('')+'</div>'+ 
+  '<div class="arena-hand-title"><strong>SUA MÃO</strong><span>'+solo.hand.length+' CARTAS · '+solo.selected.length+'/5 SELECIONADAS</span></div>'+
+  '<div class="hand-reorder-tools"><button type="button" class="btn secondary hand-reorder-toggle" id="handReorderToggle" aria-pressed="'+reorderMode+'" '+(scoring?'disabled':'')+'>'+(reorderMode?'SAIR DA ORGANIZAÇÃO':'ORGANIZAR CARTAS')+'</button><span role="status">'+(reorderMode?(reorderSource?'Agora toque na carta que receberá a posição.':'Toque primeiro na carta que deseja mover.'):'Arraste as cartas ou use Organizar Cartas no celular.')+'</span></div>'+
+  '<div class="cards arcade-hand'+(reorderMode?' reorder-active':'')+'" aria-label="Cartas na mão">'+solo.hand.map((c,i)=>{const fanTilt=((i-(solo.hand.length-1)/2)*1.65).toFixed(2)+'deg';let html=cardHTML(c,solo.selected.includes(c.id),scoring).replace('style="--card:','style="--fan-tilt:'+fanTilt+';--card:');if(highlighted?.has(c.id))html=html.replace('class="playing-card','class="playing-card synergy-card');if(reorderMode&&reorderSource===c.id)html=html.replace('class="playing-card','class="playing-card reorder-source');return blockedSuit&&c.suit===blockedSuit.id?html.replace('class="playing-card','class="playing-card boss-negated'):html}).join('')+'</div>'+ 
   '<div class="actions arena-actions"><button class="btn arcade-play" id="playCards" '+(!solo.selected.length||scoring?'disabled':'')+'>JOGAR MÃO</button><button class="btn secondary" id="discardCards" '+(!solo.selected.length||!solo.discards||scoring?'disabled':'')+'>DESCARTAR</button></div></div>';
  } else if(solo.phase==='clear'){
   const p=solo.payout;
@@ -606,8 +638,18 @@ function render(){
   area=ruleBrief+'<div class="run-result '+(solo.phase==='won'?'won-result':'lost-result')+'"><div class="result-kicker">'+(solo.phase==='won'?'7 DE 7 CRISES · '+campaign.name+'':'TENTATIVA ENCERRADA')+'</div><div class="result-symbol">'+(solo.phase==='won'?'OK':'X')+'</div><h2>'+(solo.phase==='won'?'CAMPANHA CONCLUÍDA!':'FIM DE JOGO')+'</h2><p>'+(solo.phase==='won'?'A jornada foi concluída. Agora leve essas decisões para o mundo real.':'A meta não foi alcançada. Experimente construir combinações mais fortes e reservar fichas para os juros.')+'</p><div class="result-score"><small>PONTUAÇÃO TOTAL DA JORNADA</small><strong>'+fmt(solo.runScore)+'</strong></div><div class="result-stats"><span>Crises superadas <b>'+solo.wonStages+'/'+stages.length+'</b></span><span>Jogadas realizadas <b>'+solo.played+'</b></span><span>Fichas finais <b>'+solo.coins+'</b></span></div>'+(solo.phase==='won'&&solo.campaign===CAMPAIGNS.length-1&&window.EcoVictory?window.EcoVictory.card(solo):'')+'<button class="btn arcade-play" id="restartSolo">'+(solo.phase==='won'&&solo.campaign<CAMPAIGNS.length-1?'AVANÇAR PARA '+CAMPAIGNS[solo.campaign+1].name+'':solo.phase==='won'?'TODAS AS CAMPANHAS CONCLUÍDAS · REINICIAR':'TENTAR NOVAMENTE')+'</button></div>';
  }
  main.classList.add('arcade-solo');main.innerHTML=area;
- main.querySelectorAll('.arcade-hand [data-card]').forEach(el=>el.addEventListener('click',()=>choose(el.dataset.card)));
- if(solo.phase==='play')window.EcoHandOrder.drag(main.querySelector('.arcade-hand'),moveSolo);
+ handDragController=null;
+ main.querySelectorAll('.arcade-hand [data-card]').forEach(el=>{
+  el.addEventListener('click',()=>{if(handDragController?.consumeClick?.())return;choose(el.dataset.card)});
+  el.addEventListener('keydown',ev=>{
+   if(!ev.altKey||!['ArrowLeft','ArrowRight'].includes(ev.key)||solo.phase!=='play')return;
+   ev.preventDefault();const index=solo.hand.findIndex(card=>card.id===el.dataset.card);
+   const other=solo.hand[index+(ev.key==='ArrowLeft'?-1:1)];
+   if(other)moveSolo(el.dataset.card,other.id);
+  });
+ });
+ main.querySelector('#handReorderToggle')?.addEventListener('click',toggleReorder);
+ if(solo.phase==='play')handDragController=window.EcoHandOrder.drag(main.querySelector('.arcade-hand'),moveSolo,{isReorderMode:()=>reorderMode});
  main.querySelector('#playCards')?.addEventListener('click',()=>play(false));
  main.querySelector('#discardCards')?.addEventListener('click',()=>play(true));
  main.querySelector('#collectPayout')?.addEventListener('click',collectPayout);
