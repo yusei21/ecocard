@@ -1,10 +1,16 @@
 # EcoCard — EcoResiduários Academy
 
-Plataforma web de jogo de cartas ambiental para demonstração em estande. A experiência principal é **Salve o Mundo**. Interface em português do Brasil, responsiva, com controles por toque, teclado e mouse.
+Plataforma web de jogo de cartas ambiental para demonstração em estande. A plataforma oferece **Salve o Mundo** (estratégia solo) e **Missão Coleta** (jogo infantil de classificação ambiental). Interface em português do Brasil, responsiva, com controles por toque, teclado e mouse.
 
 **[Abrir o jogo pelo GitHub Pages](https://yusei21.github.io/ecocard/)** (funciona após habilitar Pages para a branch `main`, pasta raiz).
 
 ## Jogo atual
+
+### Missão Coleta (infantil)
+
+Jogo independente do Salve o Mundo, acessível pelo segundo botão na página inicial. Crianças aprendem a separar resíduos escolhendo uma das **cinco lixeiras coloridas** (papel, plástico, vidro, metal e orgânicos). Possui **15 objetos diferentes em três etapas**, com cinco objetos de categorias distintas em cada etapa. Cada resposta correta rende 100 pontos e uma explicação; respostas incorretas dão nova oportunidade, sem cronômetro nem derrota automática. Ao acertar os 15 objetos, surge a celebração de conclusão e a opção de jogar novamente.
+
+A interface usa **ilustrações vetoriais desenhadas no código**, texto em alto contraste, botões grandes e controles compatíveis com toque, mouse e teclado. Não exige conta, rede multiplayer ou bibliotecas externas. As explicações reconhecem que a coleta e a compostagem dependem das regras locais. Os arquivos são `kids-game.js` e `kids-game.css`, com testes em `tests/kids-game.test.cjs`.
 
 ### Salve o Mundo (solo)
 
