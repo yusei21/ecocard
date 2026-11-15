@@ -13,6 +13,8 @@ jobs:
           node-version: '22'
       - name: Validar sintaxe
         run: |
+          node --check card-art.js
+          node --check tests/card-art.test.cjs
           node --check kids-game.js
           node --check tests/kids-game.test.cjs
           node --check solo-v2.js
@@ -22,6 +24,7 @@ jobs:
           node --check tests/hand-order.test.cjs
       - name: Executar testes de combos e coringas
         run: |
+          node tests/card-art.test.cjs
           node tests/kids-game.test.cjs
           node tests/solo.test.cjs
           node tests/decks.test.cjs
