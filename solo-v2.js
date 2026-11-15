@@ -595,6 +595,7 @@ function next(){if(solo.phase!=='shop')return;if(solo.stage===stages.length-1){s
 function fmt(v){return Math.floor(v).toLocaleString('pt-BR')}
 function render(){
  if(!solo)return;
+ if(solo.phase!=='play'&&reorderMode){reorderMode=false;reorderSource=null}
  const main=document.querySelector('#soloMain'),side=document.querySelector('#soloSide');
  if(!main||!side)return;
  side.style.display='';
@@ -643,8 +644,9 @@ function render(){
  }
  main.classList.add('arcade-solo');main.innerHTML=area;
  handDragController=null;
+ let thisHandDrag=null;
  main.querySelectorAll('.arcade-hand [data-card]').forEach(el=>{
-  el.addEventListener('click',()=>{if(handDragController?.consumeClick?.())return;choose(el.dataset.card)});
+  el.addEventListener('click',()=>{if(thisHandDrag?.consumeClick?.())return;choose(el.dataset.card)});
   el.addEventListener('keydown',ev=>{
    if(!ev.altKey||!['ArrowLeft','ArrowRight'].includes(ev.key)||solo.phase!=='play')return;
    ev.preventDefault();const index=solo.hand.findIndex(card=>card.id===el.dataset.card);
@@ -653,7 +655,10 @@ function render(){
   });
  });
  main.querySelector('#handReorderToggle')?.addEventListener('click',toggleReorder);
- if(solo.phase==='play')handDragController=window.EcoHandOrder.drag(main.querySelector('.arcade-hand'),moveSolo,{isReorderMode:()=>reorderMode});
+ if(solo.phase==='play'){
+  thisHandDrag=window.EcoHandOrder.drag(main.querySelector('.arcade-hand'),moveSolo,{isReorderMode:()=>reorderMode});
+  handDragController=thisHandDrag;
+ }
  main.querySelector('#playCards')?.addEventListener('click',()=>play(false));
  main.querySelector('#discardCards')?.addEventListener('click',()=>play(true));
  main.querySelector('#collectPayout')?.addEventListener('click',collectPayout);
