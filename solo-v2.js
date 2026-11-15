@@ -42,9 +42,39 @@ const upgradedJokers=[
  {id:'logistica',name:'Logística Reversa',desc:'×1,35 se houver pelo menos 2 cartas de metal ou vidro.',rarity:'uncommon',price:8},
  {id:'biomas',name:'Aliança dos Biomas',desc:'×1,8 multiplicador com cartas de pelo menos 3 categorias.',rarity:'epic',price:11},
  {id:'usina',name:'Usina Circular',desc:'+150 pontos base em trincas ou sequências.',rarity:'epic',price:12},
- {id:'circular',name:'Aventura Circular',desc:'Ativa cada outro coringa equipado 2 vezes, na ordem. Nunca ativa a si própria.',rarity:'legend',price:15}
+ {id:'circular',name:'Aventura Circular',desc:'Ativa cada outro coringa equipado 2 vezes, na ordem. Nunca ativa a si própria.',rarity:'legend',price:15},
+ {id:'papel_limpo',name:'Papel Recuperado',desc:'+18 pontos base por carta de papel.',rarity:'common',price:4},
+ {id:'vidro_retorno',name:'Retorno do Vidro',desc:'+20 pontos base por carta de vidro.',rarity:'common',price:4},
+ {id:'metal_valor',name:'Valor do Metal',desc:'+22 pontos base por carta de metal.',rarity:'common',price:5},
+ {id:'plastico_responsavel',name:'Plástico Responsável',desc:'+18 pontos base por carta de plástico.',rarity:'common',price:4},
+ {id:'horta_urbana',name:'Horta Urbana',desc:'+65 pontos base com pelo menos 2 orgânicos.',rarity:'common',price:5},
+ {id:'separacao',name:'Triagem Especializada',desc:'+45 pontos base com cartas de uma só categoria.',rarity:'common',price:4},
+ {id:'diversidade',name:'Mosaico Ambiental',desc:'+15 pontos base por categoria diferente.',rarity:'common',price:5},
+ {id:'sequencia_curta',name:'Caminho da Reciclagem',desc:'+40 pontos base em sequência.',rarity:'common',price:5},
+ {id:'dupla_vida',name:'Segunda Utilidade',desc:'+55 pontos base com valores repetidos.',rarity:'common',price:5},
+ {id:'coleta_rapida',name:'Coleta Expressa',desc:'+30 pontos base com 1 ou 2 cartas.',rarity:'common',price:4},
+ {id:'reparo',name:'Oficina de Reparos',desc:'+2 de multiplicador por carta de valor 10 ou maior.',rarity:'common',price:6},
+ {id:'papel_reciclado',name:'Ciclo do Papel',desc:'×1,35 com pelo menos 2 cartas de papel.',rarity:'uncommon',price:7},
+ {id:'vidro_circular',name:'Vidro Infinito',desc:'×1,4 com pelo menos 2 cartas de vidro.',rarity:'uncommon',price:8},
+ {id:'metal_reuso',name:'Metal Reintegrado',desc:'×1,45 com pelo menos 2 cartas de metal.',rarity:'uncommon',price:8},
+ {id:'plastico_engenharia',name:'Design sem Descarte',desc:'×1,35 com pelo menos 2 cartas de plástico.',rarity:'uncommon',price:7},
+ {id:'biofertilizante',name:'Biofertilizante',desc:'×1,5 com pelo menos 2 cartas orgânicas.',rarity:'uncommon',price:9},
+ {id:'coleta_integrada',name:'Coleta Integrada',desc:'×1,45 com pelo menos 3 categorias diferentes.',rarity:'uncommon',price:8},
+ {id:'triagem_inteligente',name:'Triagem Inteligente',desc:'+120 pontos base com 3 valores iguais.',rarity:'uncommon',price:8},
+ {id:'fluxo_devolucao',name:'Fluxo de Devolução',desc:'+95 pontos base em sequência.',rarity:'uncommon',price:8},
+ {id:'reuso_de_agua',name:'Água em Ciclo',desc:'+80 pontos base com cartas de uma só categoria.',rarity:'uncommon',price:7},
+ {id:'parque_solar',name:'Parque Solar',desc:'×2 com pelo menos 2 cartas de metal.',rarity:'epic',price:12},
+ {id:'economia_azul',name:'Economia Azul',desc:'×2 com pelo menos 3 cartas de papel.',rarity:'epic',price:12},
+ {id:'carbono_positivo',name:'Solo Regenerado',desc:'×1,9 com pelo menos 3 cartas orgânicas.',rarity:'epic',price:12},
+ {id:'cidade_circular',name:'Cidade Circular',desc:'×1,75 com 4 ou mais categorias diferentes.',rarity:'epic',price:12},
+ {id:'laboratorio_verde',name:'Laboratório Verde',desc:'+240 pontos base com 3 cartas da mesma categoria.',rarity:'epic',price:11},
+ {id:'rede_regenerativa',name:'Rede Regenerativa',desc:'×2,1 no Ciclo Completo.',rarity:'epic',price:13},
+ {id:'planeta_vivo',name:'Planeta Vivo',desc:'×3 com 4 ou mais categorias diferentes.',rarity:'legend',price:17},
+ {id:'renascimento',name:'Renascimento Verde',desc:'×3 na Coleta Seletiva, Triagem Perfeita ou Ciclo Completo.',rarity:'legend',price:18},
+ {id:'pacto_global',name:'Pacto Global',desc:'×2,5 com 3 valores iguais e 2 categorias diferentes.',rarity:'legend',price:17}
 ];
-const ranks={common:1,uncommon:1.1,epic:.55,legend:.015};
+const ranks={common:1,uncommon:1.1,epic:.55,legend:.012};
+function jokerWeight(j){return j.id==='circular'?.0005:ranks[j.rarity]}
 const RARITY_INFO={
  common:{label:'COMUM'},
  uncommon:{label:'RARO'},
@@ -63,7 +93,36 @@ const JOKER_ART={
  logistica:'<rect x="7" y="17" width="27" height="23" rx="2"/><path d="M34 24h9l7 9v7H34M11 12h25M41 12l-5-5M41 12l-5 5"/><circle cx="17" cy="42" r="4"/><circle cx="42" cy="42" r="4"/>',
  biomas:'<circle cx="28" cy="28" r="18"/><path d="M28 10v36M10 28h36M17 15l22 26M39 15 17 41"/><circle cx="28" cy="28" r="6"/>',
  usina:'<path d="M7 44h42V24L36 32V20L22 29V12H11v32M15 19h4M16 35h4M30 38h4M41 38h4"/>',
- circular:'<circle cx="28" cy="28" r="18"/><circle cx="28" cy="28" r="9"/><path d="m28 3 6 9-10 2M53 28l-9 6-2-10M28 53l-6-9 10-2M3 28l9-6 2 10"/>'
+ circular:'<circle cx="28" cy="28" r="18"/><circle cx="28" cy="28" r="9"/><path d="m28 3 6 9-10 2M53 28l-9 6-2-10M28 53l-6-9 10-2M3 28l9-6 2 10"/>',
+ papel_limpo:'<path d="M10 18h36v23H10zM16 12h24M18 24h20M18 31h15"/>',
+ vidro_retorno:'<path d="M28 6v43M19 14h18M15 21h26M19 44h18"/>',
+ metal_valor:'<path d="M9 15h38M14 15v26h28V15M18 25h20M20 33h16"/>',
+ plastico_responsavel:'<path d="M12 12h32v31H12zM20 18h16M20 27h16M20 36h16"/>',
+ horta_urbana:'<path d="M28 47V16M28 29c-13-2-16-12-14-18 12 0 19 6 14 18M28 37c12-3 17-11 15-18-13 1-18 9-15 18"/>',
+ separacao:'<path d="M8 28h40M28 8v40M13 13l30 30M43 13 13 43"/>',
+ diversidade:'<path d="M12 18l16-11 16 11v22H12zM20 27h16M22 34h12"/>',
+ sequencia_curta:'<path d="M7 42l14-18 10 8 18-23M35 9h14v14"/>',
+ dupla_vida:'<path d="M8 17h40v22H8zM17 17v22M30 17v22M11 12h34"/>',
+ coleta_rapida:'<path d="M8 30l12-13 11 13 15-15M13 44h32"/>',
+ reparo:'<path d="M12 14h32v28H12zM19 23h18M19 31h18M29 14v28"/>',
+ papel_reciclado:'<path d="M11 13h34v30H11zM18 20h20M18 28h20M18 36h13"/>',
+ vidro_circular:'<path d="M14 9h28v38H14zM20 16h16M20 26h16M20 36h12"/>',
+ metal_reuso:'<path d="M8 16h40M13 16v25h30V16M18 36h20M22 25h12"/>',
+ plastico_engenharia:'<path d="M12 12l32 32M44 12 12 44M16 27h24"/>',
+ biofertilizante:'<path d="M28 8l18 12v18L28 48 10 38V20zM19 28h18"/>',
+ coleta_integrada:'<path d="M10 22h36M14 22l14-13 14 13M15 33h26M21 41h14"/>',
+ triagem_inteligente:'<path d="M9 42l15-30 9 16 14-12M11 44h36"/>',
+ fluxo_devolucao:'<path d="M28 9a19 19 0 1 0 0 38a19 19 0 1 0 0-38M28 18v20M18 28h20"/>',
+ reuso_de_agua:'<path d="M10 12h36v32H10zM18 18h20M18 26h20M18 34h20"/>',
+ parque_solar:'<path d="M8 45 28 9 48 45M15 36h26M21 27h14"/>',
+ economia_azul:'<path d="M10 12h36v30H10zM18 17v20M28 17v20M38 17v20"/>',
+ carbono_positivo:'<path d="M28 7v42M15 19l13-11 13 11M16 35l12 13 12-13"/>',
+ cidade_circular:'<path d="M28 6l20 16-7 25H15L8 22zM17 29h22"/>',
+ laboratorio_verde:'<path d="M12 12h32v32H12zM21 21h14v14H21zM12 28h9M35 28h9"/>',
+ rede_regenerativa:'<path d="M28 7l19 14v17L28 49 9 38V21zM19 22h18M19 32h18"/>',
+ planeta_vivo:'<path d="M28 7l9 16 17 5-17 7-9 15-9-15-17-7 17-5z"/>',
+ renascimento:'<path d="M11 28a17 17 0 0 1 34 0M11 28a17 17 0 0 0 34 0M28 11v34"/>',
+ pacto_global:'<path d="M28 5l19 13v20L28 51 9 38V18zM20 19h16v18H20z"/>'
 };
 function jokerArt(j){
  const drawing=JOKER_ART[j.id]||JOKER_ART.reutilizar;
@@ -158,6 +217,35 @@ function evaluate(cards,stage,jokers,modifier=null,bossRule=null){
  if(joker.id==='logistica'&&cards.filter(x=>['verde','amarelo'].includes(x.suit)).length>=2)add('Logística Reversa',()=>mult*=1.35);
  if(joker.id==='biomas'&&c.distinct>=3)add('Aliança dos Biomas',()=>mult*=1.8);
  if(joker.id==='usina'&&(c.straight||c.maxRank>=3))add('Usina Circular',()=>chips+=150);
+ if(joker.id==='papel_limpo'&&(cards.filter(x=>x.suit==='azul').length>0))add('Papel Recuperado',()=>chips+=cards.filter(x=>x.suit==='azul').length*18);
+ if(joker.id==='vidro_retorno'&&(cards.some(x=>x.suit==='verde')))add('Retorno do Vidro',()=>chips+=cards.filter(x=>x.suit==='verde').length*20);
+ if(joker.id==='metal_valor'&&(cards.some(x=>x.suit==='amarelo')))add('Valor do Metal',()=>chips+=cards.filter(x=>x.suit==='amarelo').length*22);
+ if(joker.id==='plastico_responsavel'&&(cards.some(x=>x.suit==='vermelho')))add('Plástico Responsável',()=>chips+=cards.filter(x=>x.suit==='vermelho').length*18);
+ if(joker.id==='horta_urbana'&&(n>=2))add('Horta Urbana',()=>chips+=65);
+ if(joker.id==='separacao'&&(c.distinct===1))add('Triagem Especializada',()=>chips+=45);
+ if(joker.id==='diversidade'&&(true))add('Mosaico Ambiental',()=>chips+=c.distinct*15);
+ if(joker.id==='sequencia_curta'&&(c.straight))add('Caminho da Reciclagem',()=>chips+=40);
+ if(joker.id==='dupla_vida'&&(c.maxRank>=2))add('Segunda Utilidade',()=>chips+=55);
+ if(joker.id==='coleta_rapida'&&(cards.length<=2))add('Coleta Expressa',()=>chips+=30);
+ if(joker.id==='reparo'&&(cards.some(x=>x.rank>=10)))add('Oficina de Reparos',()=>mult+=cards.filter(x=>x.rank>=10).length*2);
+ if(joker.id==='papel_reciclado'&&(cards.filter(x=>x.suit==='azul').length>=2))add('Ciclo do Papel',()=>mult*=1.35);
+ if(joker.id==='vidro_circular'&&(cards.filter(x=>x.suit==='verde').length>=2))add('Vidro Infinito',()=>mult*=1.4);
+ if(joker.id==='metal_reuso'&&(cards.filter(x=>x.suit==='amarelo').length>=2))add('Metal Reintegrado',()=>mult*=1.45);
+ if(joker.id==='plastico_engenharia'&&(cards.filter(x=>x.suit==='vermelho').length>=2))add('Design sem Descarte',()=>mult*=1.35);
+ if(joker.id==='biofertilizante'&&(n>=2))add('Biofertilizante',()=>mult*=1.5);
+ if(joker.id==='coleta_integrada'&&(c.distinct>=3))add('Coleta Integrada',()=>mult*=1.45);
+ if(joker.id==='triagem_inteligente'&&(c.maxRank>=3))add('Triagem Inteligente',()=>chips+=120);
+ if(joker.id==='fluxo_devolucao'&&(c.straight))add('Fluxo de Devolução',()=>chips+=95);
+ if(joker.id==='reuso_de_agua'&&(c.distinct===1))add('Água em Ciclo',()=>chips+=80);
+ if(joker.id==='parque_solar'&&(cards.filter(x=>x.suit==='amarelo').length>=2))add('Parque Solar',()=>mult*=2);
+ if(joker.id==='economia_azul'&&(cards.filter(x=>x.suit==='azul').length>=3))add('Economia Azul',()=>mult*=2);
+ if(joker.id==='carbono_positivo'&&(n>=3))add('Solo Regenerado',()=>mult*=1.9);
+ if(joker.id==='cidade_circular'&&(c.distinct>=4))add('Cidade Circular',()=>mult*=1.75);
+ if(joker.id==='laboratorio_verde'&&(c.maxColor>=3))add('Laboratório Verde',()=>chips+=240);
+ if(joker.id==='rede_regenerativa'&&(c.kind==='straightflush'))add('Rede Regenerativa',()=>mult*=2.1);
+ if(joker.id==='planeta_vivo'&&(c.distinct>=4))add('Planeta Vivo',()=>mult*=3);
+ if(joker.id==='renascimento'&&(c.kind==='flush'||c.kind==='straightflush'))add('Renascimento Verde',()=>mult*=3);
+ if(joker.id==='pacto_global'&&(c.maxRank>=3&&c.distinct>=2))add('Pacto Global',()=>mult*=2.5);
  }
  }
  const score=Math.max(0,Math.floor(chips*mult));
@@ -166,8 +254,8 @@ function evaluate(cards,stage,jokers,modifier=null,bossRule=null){
 function offers(exclude,rng=Math.random){
  const pool=upgradedJokers.filter(j=>!exclude.some(x=>x.id===j.id)),chosen=[];
  function pickWeighted(options){
-  let total=options.reduce((sum,j)=>sum+ranks[j.rarity],0),roll=rng()*total,ix=0;
-  for(;ix<options.length-1;ix++){roll-=ranks[options[ix].rarity];if(roll<0)break}
+  let total=options.reduce((sum,j)=>sum+jokerWeight(j),0),roll=rng()*total,ix=0;
+  for(;ix<options.length-1;ix++){roll-=jokerWeight(options[ix]);if(roll<0)break}
   return options[ix];
  }
  while(chosen.length<3&&pool.length){
@@ -304,7 +392,7 @@ function animateScore(result,onDone){
  },frames.length*duration+(reduce?0:620)));
 }
 
-function buy(id){if(solo.phase!=='shop')return;const j=solo.offer.find(x=>x.id===id);if(!j||solo.jokers.length>=5||solo.coins<j.price)return;solo.coins-=j.price;solo.jokers.push(j);solo.offer=solo.offer.filter(x=>x.id!==id);solo.message=j.rarity==='legend'?'✦ LENDÁRIO DESBLOQUEADO: AVENTURA CIRCULAR!':j.name+' adicionado à sua estratégia.';beep(j.rarity==='legend'?1047:730,.27,'triangle');render()}
+function buy(id){if(solo.phase!=='shop')return;const j=solo.offer.find(x=>x.id===id);if(!j||solo.jokers.length>=5||solo.coins<j.price)return;solo.coins-=j.price;solo.jokers.push(j);solo.offer=solo.offer.filter(x=>x.id!==id);solo.message=(j.rarity==='legend'?'LENDÁRIO ADQUIRIDO: ':'CORINGA ADQUIRIDO: ')+j.name+'!';beep(j.rarity==='legend'?1047:730,.27,'triangle');render()}
 function reroll(){const cost=rerollCost();if(!solo||solo.phase!=='shop'||solo.coins<cost)return;solo.coins-=cost;solo.rerolls++;solo.offer=offers(solo.jokers);solo.message='Ofertas renovadas por '+cost+' ecofichas. Próxima troca: '+rerollCost()+'.';render()}
 function next(){if(solo.phase!=='shop')return;if(solo.stage===stages.length-1){solo.phase='won';solo.message='JORNADA CONCLUÍDA! Você venceu as sete crises ambientais.'}else{solo.stage++;solo.score=0;solo.modifier=rollDifficultyModifier(solo.stage);solo.bossRule=drawBossRule(solo.stage,solo.bossRule);const rules=difficultyRules(solo.stage,solo.modifier.id,solo.bossRule);solo.hands=rules.hands;solo.discards=rules.discards;solo.hand=[];solo.deck=makeDeck();solo.selected=[];solo.phase='play';solo.comboChain=0;solo.payout=null;solo.playedCards=[];lastBurst=null;fill(8);solo.message='NOVO DESAFIO: '+stages[solo.stage].title+'!'}beep(570,.18);render()}
 function fmt(v){return Math.floor(v).toLocaleString('pt-BR')}
@@ -368,5 +456,5 @@ function render(){
 startSolo=showHandGuide;drawSolo=fill;combo=combination;scoreSolo=cards=>evaluate(cards,solo.stage,solo.jokers,solo.modifier,solo.bossRule);
 selectSolo=choose;playSolo=play;targetSolo=target;makeOffers=()=>offers(solo.jokers);
 buyJoker=buy;nextSolo=next;renderSolo=render;
-window.EcoCardSolo={combination,evaluate,offers,stages,jokers:upgradedJokers,MODIFIERS,rollModifier,payoutFor,rerollCost,difficultyRules,rollDifficultyModifier,BOSS_RULES,drawBossRule,bossInvalidReason,HAND_GUIDE,showHandGuide,scoringFrames,RARITY_INFO,jokerArt};
+window.EcoCardSolo={combination,evaluate,offers,stages,jokers:upgradedJokers,MODIFIERS,rollModifier,payoutFor,rerollCost,difficultyRules,rollDifficultyModifier,BOSS_RULES,drawBossRule,bossInvalidReason,HAND_GUIDE,showHandGuide,scoringFrames,RARITY_INFO,jokerArt,jokerWeight};
 })();
