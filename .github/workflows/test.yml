@@ -17,6 +17,8 @@ jobs:
           node --check tests/card-art.test.cjs
           node --check kids-game.js
           node --check tests/kids-game.test.cjs
+          node --check orientation-hint.js
+          node --check tests/orientation-hint.test.cjs
           node --check solo-v2.js
           node --check tests/solo.test.cjs
           node --check tests/decks.test.cjs
@@ -26,6 +28,7 @@ jobs:
         run: |
           node tests/card-art.test.cjs
           node tests/kids-game.test.cjs
+          node tests/orientation-hint.test.cjs
           node tests/solo.test.cjs
           node tests/decks.test.cjs
           node tests/hand-order.test.cjs
