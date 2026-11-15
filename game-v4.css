@@ -475,3 +475,36 @@ footer a{color:#d9ecab;text-decoration:underline;text-underline-offset:3px}
  #solo .arcade-hand .playing-card .card-illustration{height:43px}
  #solo .arcade-hand .playing-card .card-caption .name{font-size:9px}
 }
+
+/* Shop wallet: independent responsive columns, no squeezed vertical text. */
+#solo .arcade-shop .shop-wallet{
+ box-sizing:border-box;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+ gap:clamp(12px,3vw,24px);align-items:stretch;width:100%;min-width:0;
+ padding:clamp(14px,3vw,22px);border:2px solid #849e7f;border-radius:8px;
+ background:linear-gradient(120deg,#203e32,#172b26);overflow-wrap:normal;
+}
+#solo .shop-wallet-balance,#solo .shop-wallet-details{
+ box-sizing:border-box;display:flex;flex-direction:column;justify-content:center;
+ align-items:flex-start;min-width:0;width:100%;gap:5px;
+}
+#solo .shop-wallet-balance{padding-right:14px;border-right:1px solid #638b70}
+#solo .shop-wallet-caption{
+ display:block;color:#d5eac9;font:800 11px/1.35 'IBM Plex Mono',monospace;
+ letter-spacing:.04em;overflow-wrap:break-word;
+}
+#solo .shop-wallet-balance>strong{
+ display:block;grid-row:auto;font:900 clamp(43px,7vw,72px)/.93 'Barlow Condensed',sans-serif;
+ color:#e6ff9c;white-space:normal;overflow-wrap:break-word;
+}
+#solo .shop-wallet-unit{display:block;color:#e6ff9c;font:800 16px 'IBM Plex Sans',sans-serif}
+#solo .shop-wallet-details>strong{
+ display:block;grid-row:auto;color:#e6ff9c;font:900 clamp(18px,2.5vw,25px)/1.2 'Barlow Condensed',sans-serif;
+ white-space:normal;overflow-wrap:break-word;
+}
+#solo .shop-wallet-details>p{margin:5px 0 0;color:#e3ebdc;font:500 13px/1.48 'IBM Plex Sans',sans-serif}
+@media(max-width:640px){
+ #solo .arcade-shop .shop-wallet{grid-template-columns:minmax(0,1fr);gap:12px;padding:14px}
+ #solo .shop-wallet-balance{padding:0 0 12px;border-right:0;border-bottom:1px solid #638b70}
+ #solo .shop-wallet-balance>strong{font-size:clamp(44px,13vw,68px)}
+ #solo .shop-wallet-details>strong{font-size:23px}
+}
