@@ -71,7 +71,17 @@ const upgradedJokers=[
  {id:'rede_regenerativa',name:'Rede Regenerativa',desc:'×2,1 no Ciclo Completo.',rarity:'epic',price:13},
  {id:'planeta_vivo',name:'Planeta Vivo',desc:'×3 com 4 ou mais categorias diferentes.',rarity:'legend',price:17},
  {id:'renascimento',name:'Renascimento Verde',desc:'×3 na Coleta Seletiva, Triagem Perfeita ou Ciclo Completo.',rarity:'legend',price:18},
- {id:'pacto_global',name:'Pacto Global',desc:'×2,5 com 3 valores iguais e 2 categorias diferentes.',rarity:'legend',price:17}
+ {id:'pacto_global',name:'Pacto Global',desc:'×2,5 com 3 valores iguais e 2 categorias diferentes.',rarity:'legend',price:17},
+ {id:'mutirao_bairro',name:'Mutirão do Bairro',desc:'+35 pontos base ao jogar 3 ou mais cartas.',rarity:'common',price:5},
+ {id:'retorno_embalagens',name:'Retorno das Embalagens',desc:'+12 pontos base por carta de valor par.',rarity:'common',price:5},
+ {id:'uso_consciente',name:'Uso Consciente',desc:'+4 de multiplicador ao jogar 1 ou 2 cartas.',rarity:'common',price:5},
+ {id:'pequenos_reparos',name:'Pequenos Reparos',desc:'+18 pontos base por carta de valor 1 a 5.',rarity:'common',price:5},
+ {id:'rota_limpa',name:'Rota Limpa',desc:'×1,55 com 4 ou mais cartas de pelo menos 3 categorias.',rarity:'uncommon',price:8},
+ {id:'materiais_pares',name:'Materiais em Parceria',desc:'+110 pontos base quando houver valores repetidos.',rarity:'uncommon',price:8},
+ {id:'compostagem_coletiva',name:'Compostagem Coletiva',desc:'+140 pontos base com 2 orgânicos e 1 papel.',rarity:'uncommon',price:9},
+ {id:'circuito_valores',name:'Circuito de Valores',desc:'×2 com 4 ou mais valores diferentes.',rarity:'epic',price:12},
+ {id:'ponte_materiais',name:'Ponte de Materiais',desc:'×2,2 com 4 ou mais cartas de exatamente 2 categorias.',rarity:'epic',price:13},
+ {id:'guardioes_terra',name:'Guardiões da Terra',desc:'×3,5 ao jogar as 5 categorias diferentes.',rarity:'legend',price:19}
 ];
 const EVOLUTION_RULES={
  papel_limpo:{max:8,step:8,unit:'pontos por papel'},
@@ -152,7 +162,17 @@ const JOKER_ART={
  rede_regenerativa:'<path d="M28 7l19 14v17L28 49 9 38V21zM19 22h18M19 32h18"/>',
  planeta_vivo:'<path d="M28 7l9 16 17 5-17 7-9 15-9-15-17-7 17-5z"/>',
  renascimento:'<path d="M11 28a17 17 0 0 1 34 0M11 28a17 17 0 0 0 34 0M28 11v34"/>',
- pacto_global:'<path d="M28 5l19 13v20L28 51 9 38V18zM20 19h16v18H20z"/>'
+ pacto_global:'<path d="M28 5l19 13v20L28 51 9 38V18zM20 19h16v18H20z"/>',
+ mutirao_bairro:'<path d="M11 43h34M17 43V20h22v23M23 20V12h10v8M22 29h12M27 20v23"/>',
+ retorno_embalagens:'<path d="M10 28h36M37 18l9 10-9 10M46 28H16M19 18l-9 10 9 10M10 28h28"/>',
+ uso_consciente:'<path d="M12 13h32v30H12zM19 22h18M19 30h18M25 37h6"/>',
+ pequenos_reparos:'<path d="M11 43l13-26 11 26M18 32h26M33 12l11 11M44 12 33 23"/>',
+ rota_limpa:'<path d="M11 17h34M17 17v25M39 17v25M11 42h34M23 10l-6 7 6 7M33 35l6 7-6 7"/>',
+ materiais_pares:'<path d="M12 15h32v26H12zM21 20v16M35 20v16M15 28h26"/>',
+ compostagem_coletiva:'<path d="M28 8v40M11 18h34M15 39h26M16 18l12-10 12 10M19 28h18"/>',
+ circuito_valores:'<path d="M13 12h30v30H13zM20 20h16M20 28h16M20 36h12M43 21l7 7-7 7"/>',
+ ponte_materiais:'<path d="M9 30h38M13 15l15 15-15 15M43 15 28 30l15 15M28 12v36"/>',
+ guardioes_terra:'<path d="M28 4l8 15 16 3-11 12 2 17-15-8-15 8 2-17L4 22l16-3zM28 18v18M19 28h18"/>'
 };
 function jokerArt(j){
  const drawing=JOKER_ART[j.id]||JOKER_ART.reutilizar;
@@ -325,6 +345,16 @@ function evaluate(cards,stage,jokers,modifier=null,bossRule=null){
  if(joker.id==='planeta_vivo'&&(c.distinct>=4))add('Planeta Vivo',()=>mult*=3);
  if(joker.id==='renascimento'&&(c.kind==='flush'||c.kind==='straightflush'))add('Renascimento Verde',()=>mult*=3);
  if(joker.id==='pacto_global'&&(c.maxRank>=3&&c.distinct>=2))add('Pacto Global',()=>mult*=2.5);
+ if(joker.id==='mutirao_bairro'&&cards.length>=3)add('Mutirão do Bairro',()=>chips+=35);
+ if(joker.id==='retorno_embalagens'&&cards.some(x=>x.rank%2===0))add('Retorno das Embalagens',()=>chips+=cards.filter(x=>x.rank%2===0).length*12);
+ if(joker.id==='uso_consciente'&&cards.length<=2)add('Uso Consciente',()=>mult+=4);
+ if(joker.id==='pequenos_reparos'&&cards.some(x=>x.rank<=5))add('Pequenos Reparos',()=>chips+=cards.filter(x=>x.rank<=5).length*18);
+ if(joker.id==='rota_limpa'&&cards.length>=4&&c.distinct>=3)add('Rota Limpa',()=>mult*=1.55);
+ if(joker.id==='materiais_pares'&&c.maxRank>=2)add('Materiais em Parceria',()=>chips+=110);
+ if(joker.id==='compostagem_coletiva'&&n>=2&&cards.some(x=>x.suit==='azul'))add('Compostagem Coletiva',()=>chips+=140);
+ if(joker.id==='circuito_valores'&&new Set(cards.map(x=>x.rank)).size>=4)add('Circuito de Valores',()=>mult*=2);
+ if(joker.id==='ponte_materiais'&&cards.length>=4&&c.distinct===2)add('Ponte de Materiais',()=>mult*=2.2);
+ if(joker.id==='guardioes_terra'&&c.distinct===5)add('Guardiões da Terra',()=>mult*=3.5);
  }
  }
  const score=Math.max(0,Math.floor(chips*mult));
