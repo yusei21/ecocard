@@ -551,6 +551,10 @@ function animateScore(result,onDone){
    });
    zone.classList.toggle('joker-score-event',!!activeJoker);
    zone.dataset.rarity=activeJoker?.rarity||'';
+   const bonusCards=activeJoker?new Set(window.EcoJokerFeedback?.relatedCards(solo.playedCards,activeJoker)||[]):null;
+   board.querySelectorAll('.played-cards .playing-card').forEach((card,j)=>{
+    card.classList.toggle('joker-boost-card',!!bonusCards?.has(solo.playedCards[j]?.id));
+   });
    zone.classList.remove('score-step');void zone.offsetWidth;zone.classList.add('score-step');
    const animated=startPoints+Math.floor(result.score*(i+1)/frames.length);
    const scoreboard=board.querySelector('.table-score strong');if(scoreboard)scoreboard.textContent=fmt(animated);
