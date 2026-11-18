@@ -18,8 +18,8 @@ O projeto foi pensado para uso em navegadores de computador e celular, inclusive
 | Objetivo | Superar metas de pontuação em crises ambientais | Associar objetos às cores das lixeiras |
 | Mecânica | Combinações de cartas, coringas, economia e chefes | Escolher entre cinco lixeiras, com explicações |
 | Conteúdo | 65 cartas e 50 coringas | Catálogo de 40 objetos |
-| Progressão | Quatro campanhas com sete crises cada | Cinco etapas, 25 objetos por partida |
-| Conclusão | Certificado após vencer a campanha Extremo | Tela de parabéns após a quinta etapa |
+| Progressão | Quatro campanhas com sete crises cada | Duas etapas, 10 perguntas difíceis |
+| Conclusão | Certificado após vencer a campanha Extremo | Tela de parabéns após a décima pergunta |
 
 ### Salve o Mundo
 
@@ -32,9 +32,9 @@ O projeto foi pensado para uso em navegadores de computador e celular, inclusive
 ### Missão Coleta
 
 - **Cinco lixeiras** identificadas pelas cores azul, vermelho, verde, amarelo e marrom.
-- **40 objetos ilustrados** no catálogo; cada partida seleciona 25, sem repetir objetos.
-- **Cinco etapas de cinco objetos**, respostas educativas, mensagens de incentivo e possibilidade de corrigir erros.
-- Na **quinta etapa**, as lixeiras mostram **somente as cores**, sem nome do material nem legenda lateral; as descrições acessíveis dos botões identificam a cor, sem entregar a resposta.
+- **40 objetos ilustrados** no catálogo; cada partida seleciona 10 objetos difíceis, sem repetição.
+- **Duas etapas de cinco objetos**, respostas educativas, mensagens de incentivo e possibilidade de corrigir erros.
+- Em **toda a partida**, as lixeiras mostram **somente as cores**, sem nomes de materiais nem legenda lateral; as descrições acessíveis dos botões identificam a cor, sem entregar a resposta.
 
 ## Início rápido
 
@@ -85,7 +85,7 @@ docs/                      Documentação detalhada
 
 ## Qualidade e testes
 
-O projeto usa testes automatizados em **Node.js 22** no GitHub Actions. Eles cobrem combos, efeitos de coringas, progressão, ordenação de cartas, ilustrações e jogabilidade infantil, incluindo a última etapa apenas com cores.
+O projeto usa testes automatizados em **Node.js 22** no GitHub Actions. Eles cobrem combos, efeitos de coringas, progressão, ordenação de cartas, ilustrações e jogabilidade infantil, incluindo as duas etapas apenas com cores.
 
 Para executar os testes na raiz do repositório:
 
