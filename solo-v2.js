@@ -37,11 +37,11 @@ const upgradedJokers=[
  {id:'reciclar',name:'Reciclar',desc:'×1,5 multiplicador se houver 3 ou mais cartas de uma cor.',rarity:'common',price:6},
  {id:'compostagem',name:'Compostagem Viva',desc:'+22 pontos base por carta orgânica.',rarity:'common',price:5},
  {id:'cooperativa',name:'Força Coletiva',desc:'+3 de multiplicador por cor diferente.',rarity:'common',price:5},
- {id:'educacao',name:'Educação Ambiental',desc:'+60 pontos base em uma sequência.',rarity:'uncommon',price:7},
+ {id:'educacao',name:'Educação Ambiental',desc:'+60 pontos base com pelo menos 3 categorias diferentes.',rarity:'uncommon',price:7},
  {id:'catadores',name:'Rede de Catadores',desc:'+70 pontos base em Coleta Seletiva ou Triagem Perfeita.',rarity:'uncommon',price:7},
  {id:'logistica',name:'Logística Reversa',desc:'×1,35 se houver pelo menos 2 cartas de metal ou vidro.',rarity:'uncommon',price:8},
  {id:'biomas',name:'Aliança dos Biomas',desc:'Começa em ×1,8 com 3 categorias; cresce +0,12× por ativação (até 8).',rarity:'epic',price:11},
- {id:'usina',name:'Usina Circular',desc:'Começa em +150 em trincas ou sequências; cresce +25 por ativação (até 8).',rarity:'epic',price:12},
+ {id:'usina',name:'Usina Circular',desc:'Começa em +150 ao combinar 3 cartas de pelo menos 2 categorias; cresce +25 por ativação (até 8).',rarity:'epic',price:12},
  {id:'circular',name:'Aventura Circular',desc:'Ativa cada outro coringa equipado 2 vezes, na ordem. Nunca ativa a si própria.',rarity:'legend',price:15},
  {id:'papel_limpo',name:'Papel Recuperado',desc:'Começa em +18 por papel; ganha +8 por papel a cada mão ativada (até 8 evoluções).',rarity:'common',price:4},
  {id:'vidro_retorno',name:'Retorno do Vidro',desc:'Começa em +20 por vidro; ganha +9 por vidro a cada mão ativada (até 8 evoluções).',rarity:'common',price:4},
@@ -50,7 +50,7 @@ const upgradedJokers=[
  {id:'horta_urbana',name:'Horta Urbana',desc:'+65 pontos base com pelo menos 2 orgânicos.',rarity:'common',price:5},
  {id:'separacao',name:'Triagem Especializada',desc:'+45 pontos base com cartas de uma só categoria.',rarity:'common',price:4},
  {id:'diversidade',name:'Mosaico Ambiental',desc:'+15 pontos base por categoria diferente.',rarity:'common',price:5},
- {id:'sequencia_curta',name:'Caminho da Reciclagem',desc:'+40 pontos base em sequência.',rarity:'common',price:5},
+ {id:'sequencia_curta',name:'Caminho da Reciclagem',desc:'+40 pontos base com 3 cartas de valores diferentes.',rarity:'common',price:5},
  {id:'dupla_vida',name:'Segunda Utilidade',desc:'+55 pontos base com valores repetidos.',rarity:'common',price:5},
  {id:'coleta_rapida',name:'Coleta Expressa',desc:'+30 pontos base com 1 ou 2 cartas.',rarity:'common',price:4},
  {id:'reparo',name:'Oficina de Reparos',desc:'+2 de multiplicador por carta de valor 10 ou maior.',rarity:'common',price:6},
@@ -61,14 +61,14 @@ const upgradedJokers=[
  {id:'biofertilizante',name:'Biofertilizante',desc:'Começa em ×1,5 com 2 orgânicos; cresce +0,08× por ativação (até 8).',rarity:'uncommon',price:9},
  {id:'coleta_integrada',name:'Coleta Integrada',desc:'Começa em ×1,45 com 3 categorias; cresce +0,07× por ativação (até 8).',rarity:'uncommon',price:8},
  {id:'triagem_inteligente',name:'Triagem Inteligente',desc:'+120 pontos base com 3 valores iguais.',rarity:'uncommon',price:8},
- {id:'fluxo_devolucao',name:'Fluxo de Devolução',desc:'+95 pontos base em sequência.',rarity:'uncommon',price:8},
+ {id:'fluxo_devolucao',name:'Fluxo de Devolução',desc:'+95 pontos base ao combinar papel, plástico e metal.',rarity:'uncommon',price:8},
  {id:'reuso_de_agua',name:'Água em Ciclo',desc:'+80 pontos base com cartas de uma só categoria.',rarity:'uncommon',price:7},
  {id:'parque_solar',name:'Parque Solar',desc:'×2 com pelo menos 2 cartas de metal.',rarity:'epic',price:12},
  {id:'economia_azul',name:'Economia Azul',desc:'×2 com pelo menos 3 cartas de papel.',rarity:'epic',price:12},
  {id:'carbono_positivo',name:'Solo Regenerado',desc:'×1,9 com pelo menos 3 cartas orgânicas.',rarity:'epic',price:12},
  {id:'cidade_circular',name:'Cidade Circular',desc:'×1,75 com 4 ou mais categorias diferentes.',rarity:'epic',price:12},
  {id:'laboratorio_verde',name:'Laboratório Verde',desc:'+240 pontos base com 3 cartas da mesma categoria.',rarity:'epic',price:11},
- {id:'rede_regenerativa',name:'Rede Regenerativa',desc:'×2,1 no Ciclo Completo.',rarity:'epic',price:13},
+ {id:'rede_regenerativa',name:'Rede Regenerativa',desc:'×2,1 com 5 cartas de uma mesma categoria.',rarity:'epic',price:13},
  {id:'planeta_vivo',name:'Planeta Vivo',desc:'×3 com 4 ou mais categorias diferentes.',rarity:'legend',price:17},
  {id:'renascimento',name:'Renascimento Verde',desc:'×3 na Coleta Seletiva, Triagem Perfeita ou Ciclo Completo.',rarity:'legend',price:18},
  {id:'pacto_global',name:'Pacto Global',desc:'×2,5 com 3 valores iguais e 2 categorias diferentes.',rarity:'legend',price:17},
@@ -312,11 +312,11 @@ function evaluate(cards,stage,jokers,modifier=null,bossRule=null){
  if(joker.id==='reciclar'&&c.maxColor>=3)add('Reciclar',()=>mult*=1.5);
  if(joker.id==='compostagem'&&n)add('Compostagem Viva',()=>chips+=n*22);
  if(joker.id==='cooperativa')add('Força Coletiva',()=>mult+=c.distinct*3);
- if(joker.id==='educacao'&&c.straight)add('Educação Ambiental',()=>chips+=60);
+ if(joker.id==='educacao'&&c.distinct>=3)add('Educação Ambiental',()=>chips+=60);
  if(joker.id==='catadores'&&(['flush','straightflush'].includes(c.kind)))add('Rede de Catadores',()=>chips+=70);
  if(joker.id==='logistica'&&cards.filter(x=>['verde','amarelo'].includes(x.suit)).length>=2)add('Logística Reversa',()=>mult*=1.35);
  if(joker.id==='biomas'&&c.distinct>=3)add('Aliança dos Biomas',()=>mult*=1.8+evolutionCount(joker)*.12);
- if(joker.id==='usina'&&(c.straight||c.maxRank>=3))add('Usina Circular',()=>chips+=150+evolutionCount(joker)*25);
+ if(joker.id==='usina'&&(cards.length>=3&&c.distinct>=2))add('Usina Circular',()=>chips+=150+evolutionCount(joker)*25);
  if(joker.id==='papel_limpo'&&(cards.filter(x=>x.suit==='azul').length>0))add('Papel Recuperado',()=>chips+=cards.filter(x=>x.suit==='azul').length*(18+evolutionCount(joker)*8));
  if(joker.id==='vidro_retorno'&&(cards.some(x=>x.suit==='verde')))add('Retorno do Vidro',()=>chips+=cards.filter(x=>x.suit==='verde').length*(20+evolutionCount(joker)*9));
  if(joker.id==='metal_valor'&&(cards.some(x=>x.suit==='amarelo')))add('Valor do Metal',()=>chips+=cards.filter(x=>x.suit==='amarelo').length*(22+evolutionCount(joker)*10));
@@ -324,7 +324,7 @@ function evaluate(cards,stage,jokers,modifier=null,bossRule=null){
  if(joker.id==='horta_urbana'&&(n>=2))add('Horta Urbana',()=>chips+=65);
  if(joker.id==='separacao'&&(c.distinct===1))add('Triagem Especializada',()=>chips+=45);
  if(joker.id==='diversidade'&&(true))add('Mosaico Ambiental',()=>chips+=c.distinct*15);
- if(joker.id==='sequencia_curta'&&(c.straight))add('Caminho da Reciclagem',()=>chips+=40);
+ if(joker.id==='sequencia_curta'&&(new Set(cards.map(card=>card.rank)).size>=3))add('Caminho da Reciclagem',()=>chips+=40);
  if(joker.id==='dupla_vida'&&(c.maxRank>=2))add('Segunda Utilidade',()=>chips+=55);
  if(joker.id==='coleta_rapida'&&(cards.length<=2))add('Coleta Expressa',()=>chips+=30);
  if(joker.id==='reparo'&&(cards.some(x=>x.rank>=10)))add('Oficina de Reparos',()=>mult+=cards.filter(x=>x.rank>=10).length*2);
@@ -335,14 +335,14 @@ function evaluate(cards,stage,jokers,modifier=null,bossRule=null){
  if(joker.id==='biofertilizante'&&(n>=2))add('Biofertilizante',()=>mult*=1.5+evolutionCount(joker)*.08);
  if(joker.id==='coleta_integrada'&&(c.distinct>=3))add('Coleta Integrada',()=>mult*=1.45+evolutionCount(joker)*.07);
  if(joker.id==='triagem_inteligente'&&(c.maxRank>=3))add('Triagem Inteligente',()=>chips+=120);
- if(joker.id==='fluxo_devolucao'&&(c.straight))add('Fluxo de Devolução',()=>chips+=95);
+ if(joker.id==='fluxo_devolucao'&&(['azul','vermelho','amarelo'].every(suit=>cards.some(card=>card.suit===suit))))add('Fluxo de Devolução',()=>chips+=95);
  if(joker.id==='reuso_de_agua'&&(c.distinct===1))add('Água em Ciclo',()=>chips+=80);
  if(joker.id==='parque_solar'&&(cards.filter(x=>x.suit==='amarelo').length>=2))add('Parque Solar',()=>mult*=2);
  if(joker.id==='economia_azul'&&(cards.filter(x=>x.suit==='azul').length>=3))add('Economia Azul',()=>mult*=2);
  if(joker.id==='carbono_positivo'&&(n>=3))add('Solo Regenerado',()=>mult*=1.9);
  if(joker.id==='cidade_circular'&&(c.distinct>=4))add('Cidade Circular',()=>mult*=1.75);
  if(joker.id==='laboratorio_verde'&&(c.maxColor>=3))add('Laboratório Verde',()=>chips+=240);
- if(joker.id==='rede_regenerativa'&&(c.kind==='straightflush'))add('Rede Regenerativa',()=>mult*=2.1);
+ if(joker.id==='rede_regenerativa'&&(cards.length===5&&c.maxColor===5))add('Rede Regenerativa',()=>mult*=2.1);
  if(joker.id==='planeta_vivo'&&(c.distinct>=4))add('Planeta Vivo',()=>mult*=3);
  if(joker.id==='renascimento'&&(c.kind==='flush'||c.kind==='straightflush'))add('Renascimento Verde',()=>mult*=3);
  if(joker.id==='pacto_global'&&(c.maxRank>=3&&c.distinct>=2))add('Pacto Global',()=>mult*=2.5);
