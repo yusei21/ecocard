@@ -25,21 +25,18 @@ A interface é voltada para navegadores modernos. Para evitar interrupções em 
 4. Se acertar, leia a explicação e pressione **Próximo objeto**; o acerto vale **100 pontos**.
 5. Se errar, leia a mensagem e pressione **Escolher outra lixeira**. O jogo permite corrigir a resposta sem descontar pontos.
 6. Ao terminar os cinco objetos da etapa, pressione **Continuar Missão** para avançar.
-7. Conclua as cinco etapas para ver a tela de parabéns.
+7. Conclua as duas etapas (10 perguntas) para ver a tela de parabéns.
 
-### As cinco etapas
+### Duas etapas, dez desafios
 
 | Etapa | Objetivo | Ajuda disponível |
 | --- | --- | --- |
-| Primeiros Passos | Reconhecer resíduos conhecidos | Nome do material e dica |
-| Olho de Águia | Observar o objeto com atenção | Nome do material e dica |
-| Detetive da Coleta | Identificar o material sem pista adicional | Nome do material |
-| Desafio dos Materiais | Separar objetos menos óbvios | Nome do material |
-| Mestre da Separação | Demonstrar que aprendeu as cores | **Somente a cor das lixeiras** |
+| Desafio das Cores | Reconhecer materiais de objetos menos óbvios | Somente a cor das lixeiras |
+| Mestre da Separação | Resolver mais cinco classificações difíceis | Somente a cor das lixeiras |
 
-**Importante:** na quinta etapa, os nomes Papel, Plástico, Vidro, Metal e Orgânicos não aparecem nas lixeiras, e o guia lateral de correspondências é ocultado. Para tecnologia assistiva, os botões mantêm o nome **da cor** da lixeira.
+**Durante toda a Missão Coleta**, as cinco lixeiras exibem apenas as cores. Não há nomes dos materiais, símbolos ou legenda lateral com respostas. A descrição acessível dos botões anuncia somente a cor.
 
-O catálogo contém **40 objetos** (oito por categoria); cada partida utiliza **25 objetos diferentes**. Não há cronômetro nem pontuação negativa.
+O catálogo continua com **40 objetos** (oito por categoria), mas cada partida escolhe aleatoriamente **10 dos objetos avançados**, dois por categoria, sem repetir itens. Os participantes podem corrigir respostas e aprender com o feedback após cada acerto. Não há cronômetro nem pontuação negativa.
 
 ### Correspondência de cores
 
@@ -115,17 +112,17 @@ O Salve o Mundo tenta recuperar a partida após um recarregamento da **mesma aba
 
 - Apresente as cinco categorias e associe cada cor a exemplos do cotidiano.
 - Na Missão Coleta, estimule a criança a explicar **por que** escolheu uma lixeira antes de confirmar.
-- Use a última etapa, sem nomes de materiais, como exercício de recordação. A ausência de pistas faz parte do desafio, não é defeito.
+- Como as lixeiras aparecem somente com cores desde a primeira pergunta, converse sobre as associações entre cores e materiais antes ou depois da partida.
 - No Salve o Mundo, discuta a relação entre planejamento, consumo consciente, reaproveitamento e cooperação.
 - Ao final, pergunte quais regras de descarte da comunidade são diferentes das simplificações do jogo.
 
 ## Dúvidas frequentes
 
-**A Missão Coleta está repetindo objetos?** Uma partida sorteia 25 objetos diferentes do catálogo de 40. Em uma nova partida, alguns itens podem reaparecer.
+**A Missão Coleta está repetindo objetos?** Uma partida sorteia 10 objetos avançados do catálogo de 40. Em uma nova partida, alguns itens podem reaparecer.
 
 **Errei uma lixeira. Perdi pontos?** Não. Você pode tentar novamente.
 
-**As lixeiras perderam o nome?** Na quinta etapa, isso é intencional: o jogo exige reconhecer as cores.
+**As lixeiras perderam o nome?** Isso é intencional em todas as perguntas: o jogo exige reconhecer as cores.
 
 **Por que minha mão marcou zero no Salve o Mundo?** Um chefe pode anular cartas ou exigir uma combinação específica. Consulte a regra atual e a prévia.
 
