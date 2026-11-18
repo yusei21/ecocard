@@ -16,7 +16,7 @@ O EcoCard utiliza jogos de curta duração e desafios progressivos para apoiar c
 
 O projeto contém duas propostas complementares:
 
-**Missão Coleta:** exige escolher a lixeira apropriada para um objeto ilustrado. O desenho torna a tarefa visual, a resposta comentada fornece feedback e a possibilidade de corrigir o erro reduz barreiras para quem está aprendendo. A quinta etapa retira os nomes dos materiais e a legenda lateral para que a criança tente recordar a associação das cores sem essa pista.
+**Missão Coleta:** exige escolher a lixeira apropriada para um objeto ilustrado. O desenho torna a tarefa visual, a resposta comentada fornece feedback e a possibilidade de corrigir o erro reduz barreiras para quem está aprendendo. Em todas as dez perguntas as lixeiras aparecem somente com cores, sem nomes dos materiais nem legenda lateral. A criança precisa recuperar de memória as associações entre cores e categorias.
 
 **Salve o Mundo:** transforma categorias e ações ambientais em decisões estratégicas. A formação de combinações, os coringas e os limites de recursos proporcionam oportunidades de discutir planejamento, trade-offs e adaptação a restrições. **Essas regras são ficcionais e não representam processos físicos de reciclagem.**
 
@@ -50,7 +50,7 @@ Uma sequência sugerida de atividades, a adaptar à turma:
 
 1. **Antes de jogar:** apresente cinco objetos reais ou desenhos e pergunte de que material cada um é feito.
 2. **Durante Missão Coleta:** convide os participantes a explicar oralmente suas escolhas. Em caso de erro, incentive uma nova hipótese em vez de fornecer imediatamente a resposta.
-3. **Na última etapa:** avise que as lixeiras estarão apenas coloridas. Observe se a criança recorda as correspondências praticadas.
+3. **Antes de começar:** explique que todas as dez perguntas apresentam lixeiras somente coloridas. Observe quais associações de cores precisam de reforço, e retome-as depois do jogo.
 4. **Após jogar:** compare as soluções oferecidas pelo jogo com o serviço de coleta disponível no bairro, na escola ou no município.
 5. **Com grupos mais experientes:** use o Salve o Mundo para discutir como escolhas de consumo, cooperação e gestão de recursos podem afetar resultados, distinguindo a metáfora de jogo dos processos ambientais reais.
 
