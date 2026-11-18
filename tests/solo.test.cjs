@@ -57,6 +57,25 @@ for(const [rarity,count] of Object.entries(expectedRarities)){
  assert.equal(jokers.filter(j=>j.rarity===rarity).length,count,'correct '+rarity+' distribution');
 }
 assert.equal(jokers.filter(j=>j.id==='circular').length,1,'Aventura Circular remains unique');
+
+for(const joker of jokers){
+ assert(!/trincas?|sequ[eê]ncias?/i.test(joker.desc),
+  'joker descriptions must not reference trinca or sequência: '+joker.id);
+}
+const changedJokerRules={
+ educacao:{qualifies:[make('azul',2),make('verde',7),make('marrom',10)],fails:[make('azul',2),make('azul',3),make('azul',4)]},
+ usina:{qualifies:[make('azul',2),make('verde',7),make('verde',10)],fails:[make('azul',2),make('azul',3),make('azul',4)]},
+ sequencia_curta:{qualifies:[make('azul',2),make('azul',7),make('azul',10)],fails:[make('azul',2),make('verde',2),make('marrom',2)]},
+ fluxo_devolucao:{qualifies:[make('azul',2),make('vermelho',7),make('amarelo',10)],fails:[make('azul',2),make('verde',7),make('marrom',10)]},
+ rede_regenerativa:{qualifies:[make('azul',2),make('azul',4),make('azul',7),make('azul',9),make('azul',11)],fails:[make('azul',2),make('vermelho',3),make('verde',4),make('amarelo',5),make('marrom',6)]}
+};
+for(const [id,cases] of Object.entries(changedJokerRules)){
+ const joker=jokers.find(j=>j.id===id);
+ const activation=cards=>evaluate(cards,0,[joker]).events.some(e=>e.label===joker.name);
+ assert(activation(cases.qualifies),'environmental rule should activate '+id);
+ assert(!activation(cases.fails),'nonqualifying environmental hand must not activate '+id);
+}
+
 const {jokerWeight}=sandbox.window.EcoCardSolo;
 assert(jokerWeight(jokers.find(j=>j.id==='circular'))<
  Math.min(...jokers.filter(j=>j.id!=='circular').map(jokerWeight)),
@@ -71,6 +90,7 @@ const hands={
  green3:[make('verde',3),make('verde',4),make('verde',5)],
  brown3:[make('marrom',3),make('marrom',4),make('marrom',5)],
  mixed3:[make('azul',3),make('verde',4),make('marrom',5)],
+ blueRedYellow:[make('azul',3),make('vermelho',5),make('amarelo',7)],
  mixed4:[make('azul',3),make('verde',4),make('marrom',5),make('amarelo',6)],
  pair:[make('azul',3),make('verde',3)],
  triple:[make('azul',3),make('verde',3),make('marrom',3)],
@@ -86,7 +106,7 @@ const triggerCases={
  coleta_rapida:'single',reparo:'high',papel_reciclado:'blue2',
  vidro_circular:'green2',metal_reuso:'yellow2',plastico_engenharia:'red2',
  biofertilizante:'brown2',coleta_integrada:'mixed3',triagem_inteligente:'triple',
- fluxo_devolucao:'mixed3',reuso_de_agua:'blue3',parque_solar:'yellow2',
+ fluxo_devolucao:'blueRedYellow',reuso_de_agua:'blue3',parque_solar:'yellow2',
  economia_azul:'blue3',carbono_positivo:'brown3',cidade_circular:'mixed4',
  laboratorio_verde:'green3',rede_regenerativa:'straightflush',
  planeta_vivo:'mixed4',renascimento:'flush',pacto_global:'triple'
