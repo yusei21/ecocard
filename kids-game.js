@@ -87,11 +87,8 @@ const shuffle=(array,rng=Math.random)=>{
  return out;
 };
 const LEVELS=[
- {name:'Primeiros Passos',description:'Comece pelos materiais mais conhecidos.',hint:true},
- {name:'Olho de Águia',description:'Agora olhe com atenção para cada objeto.',hint:true},
- {name:'Detetive da Coleta',description:'Mais materiais, menos pistas.',hint:false},
- {name:'Desafio dos Materiais',description:'Objetos que parecem de uma categoria, mas são de outra.',hint:false},
- {name:'Mestre da Separação',description:'A etapa final reúne materiais que exigem atenção.',hint:false}
+ {name:'Desafio das Cores',description:'Observe o objeto e escolha somente pela cor.',hint:false},
+ {name:'Mestre da Separação',description:'Mais cinco objetos difíceis. Sem nomes nas lixeiras.',hint:false}
 ];
 const JOKES_CORRECT=[
  'Missão cumprida! Até a lixeira ficou orgulhosa.',
@@ -108,16 +105,14 @@ const JOKES_RETRY=[
  'Opa! Nem toda garrafa é de plástico. Observe bem.'
 ];
 function createRound(rng=Math.random){
- // 25 different items: three introductory and two advanced objects per category.
- const byCategory=CATEGORIES.map(cat=>{
-  const items=ITEMS.filter(item=>item.category===cat.id);
-  return [...shuffle(items.slice(0,5),rng).slice(0,3),...shuffle(items.slice(5),rng).slice(0,2)];
- });
- const rounds=[];
+ // Select ten challenging items, two per category, from the three advanced
+ // illustrations added to each category (indices 5, 6 and 7).
+ const choices=CATEGORIES.map(cat=>shuffle(ITEMS.filter(item=>item.category===cat.id).slice(5),rng).slice(0,2));
+ const result=[];
  for(let level=0;level<LEVELS.length;level++){
-  rounds.push(...shuffle(byCategory.map(items=>items[level]),rng));
+  result.push(...shuffle(choices.map(items=>items[level]),rng));
  }
- return rounds;
+ return result;
 }
 function scoreAnswer(item,chosen){
  const ok=item?.category===chosen;
@@ -175,25 +170,24 @@ function playNote(freq){
  }catch{}
 }
 function lesson(c){return c.name+' — '+c.desc}
-function isFinalLevel(index){return Math.floor(index/5)===LEVELS.length-1}
-function binsHTML(index){
- const onlyColors=isFinalLevel(index);
+function isFinalLevel(index){return index>=0}
+function binsHTML(){
  return CATEGORIES.map(c=>{
-  const aria=onlyColors?'Lixeira '+({azul:'azul',vermelho:'vermelha',verde:'verde',amarelo:'amarela',marrom:'marrom'}[c.id]):'Lixeira de '+c.name;
-  return '<button type="button" class="kids-bin'+(onlyColors?' kids-bin-color-only':'')+'" style="--bin:'+c.color+'" data-bin="'+c.id+'" aria-label="'+aria+'"><span class="kids-bin-lid"></span><span class="kids-bin-body">'+(onlyColors?'':'<span class="kids-bin-mark" aria-hidden="true">ECO</span><strong>'+c.name+'</strong>')+'</span></button>';
+  const colorName={azul:'azul',vermelho:'vermelha',verde:'verde',amarelo:'amarela',marrom:'marrom'}[c.id];
+  return '<button type="button" class="kids-bin kids-bin-color-only" style="--bin:'+c.color+'" data-bin="'+c.id+'" aria-label="Lixeira '+colorName+'"><span class="kids-bin-lid"></span><span class="kids-bin-body"></span></button>';
  }).join('');
 }
 function render(){
  const main=getMain(),side=getSide();if(!main||!side)return;
  if(!game)newGame();
  const data=game;
- side.innerHTML=isFinalLevel(data.index)&&data.phase!=='intro'?'<div class="kids-help kids-final-guide"><h3>DESAFIO FINAL</h3><p>Agora você já conhece as lixeiras. Nesta etapa, descubra a resposta usando apenas as cores.</p><p>Observe o objeto e escolha com atenção. Você pode tentar novamente.</p></div>':'<div class="kids-help"><h3>GUIA DA COLETA</h3><p>Observe do que cada objeto é feito. Toque na lixeira da categoria correta. Você pode tentar novamente sem perder pontos.</p><div class="kids-legend">'+CATEGORIES.map(c=>'<div><span style="--bin:'+c.color+'"></span><strong>'+c.name+'</strong><small>'+c.desc+'</small></div>').join('')+'</div><p>As regras de coleta variam conforme a cidade. Resíduos devem estar limpos e secos quando necessário. A compostagem também depende das condições locais.</p></div>';
+ side.innerHTML='<div class="kids-help kids-final-guide"><h3>DESAFIO DAS CORES</h3><p>Observe o objeto e escolha uma lixeira apenas pela cor. Os nomes dos materiais não aparecem durante o desafio.</p><p>Errou? Pode tentar novamente, sem perder pontos.</p><p>As orientações reais de coleta variam conforme a cidade.</p></div>';
  if(data.phase==='intro'){
-  main.innerHTML='<div class="kids-intro"><span class="kids-kicker">ECOCARD / MODO INFANTIL</span><h2>MISSÃO COLETA</h2><p>Você consegue colocar cada objeto na lixeira correta?</p><div class="kids-intro-art" aria-hidden="true">'+CATEGORIES.map(c=>'<span style="--bin:'+c.color+'"></span>').join('')+'</div><p><strong>25 objetos · 5 etapas · Sem cronômetro</strong></p><p>Observe, escolha a lixeira e descubra o motivo da resposta. Errou? Pode tentar de novo.</p><button class="btn kids-primary" id="kidsBegin">COMEÇAR MISSÃO</button></div>';
+  main.innerHTML='<div class="kids-intro"><span class="kids-kicker">ECOCARD / MODO INFANTIL</span><h2>MISSÃO COLETA</h2><p>Você consegue colocar cada objeto na lixeira correta?</p><div class="kids-intro-art" aria-hidden="true">'+CATEGORIES.map(c=>'<span style="--bin:'+c.color+'"></span>').join('')+'</div><p><strong>10 perguntas · 2 etapas · Apenas as cores</strong></p><p>Observe, escolha a lixeira e descubra o motivo da resposta. Errou? Pode tentar de novo.</p><button class="btn kids-primary" id="kidsBegin">COMEÇAR MISSÃO</button></div>';
   main.querySelector('#kidsBegin')?.addEventListener('click',begin);return;
  }
  if(data.phase==='complete'){
-  main.innerHTML='<section class="kids-finish"><span class="kids-kicker">MISSÃO CONCLUÍDA</span><div class="kids-finish-symbol" aria-hidden="true">25/25</div><h2>PARABÉNS, GUARDIÃO!</h2><p>Você separou 25 objetos e completou as cinco etapas da missão.</p><div class="kids-final-score"><strong>'+data.points.toLocaleString('pt-BR')+'</strong><span>PONTOS</span><strong>'+data.correct+'/25</strong><span>ACERTOS</span></div><p>O próximo passo é aprender onde os resíduos são coletados na sua cidade.</p><button class="btn kids-primary" id="kidsAgain">JOGAR OUTRA VEZ</button></section>';
+  main.innerHTML='<section class="kids-finish"><span class="kids-kicker">MISSÃO CONCLUÍDA</span><div class="kids-finish-symbol" aria-hidden="true">10/10</div><h2>PARABÉNS, GUARDIÃO!</h2><p>Você separou os 10 objetos desafiadores e concluiu a missão.</p><div class="kids-final-score"><strong>'+data.points.toLocaleString('pt-BR')+'</strong><span>PONTOS</span><strong>'+data.correct+'/10</strong><span>ACERTOS</span></div><p>O próximo passo é aprender onde os resíduos são coletados na sua cidade.</p><button class="btn kids-primary" id="kidsAgain">JOGAR OUTRA VEZ</button></section>';
   main.querySelector('#kidsAgain')?.addEventListener('click',newGame);return;
  }
  if(data.phase==='levelup'){
@@ -201,12 +195,12 @@ function render(){
   main.innerHTML='<section class="kids-levelup"><span class="kids-kicker">ETAPA '+(level+1)+' / '+LEVELS.length+'</span><div class="kids-levelup-number">'+(level+1)+'</div><h2>'+LEVELS[level].name.toUpperCase()+'</h2><p>'+LEVELS[level].description+'</p><div class="kids-levelup-progress">'+level+' de '+LEVELS.length+' etapas concluídas</div><button type="button" class="btn kids-primary" id="kidsContinueLevel">CONTINUAR MISSÃO</button></section>';
   main.querySelector('#kidsContinueLevel')?.addEventListener('click',startNextLevel);return;
  }
- const item=data.rounds[data.index],cat=category(item.category),at=data.index+1,level=Math.ceil(at/5),levelInfo=LEVELS[level-1];
+ const item=data.rounds[data.index],at=data.index+1,level=Math.ceil(at/5);
  main.innerHTML='<div class="kids-arena"><div class="kids-topline"><span>ETAPA '+level+' / '+LEVELS.length+'</span><span>OBJETO '+at+' / '+data.rounds.length+'</span><span>'+data.points.toLocaleString('pt-BR')+' PTS</span></div>'+
  '<div class="kids-progress"><span style="width:'+((data.index+1)/data.rounds.length*100)+'%"></span></div>'+
- '<div class="kids-item" role="group" aria-label="Objeto para separar"><span class="kids-label">ONDE DEVO COLOCAR?</span><div class="kids-illustration">'+illustration(item.shape)+'</div><h2>'+item.name+'</h2>'+(levelInfo.hint?'<p class="kids-item-tip">Dica: descubra qual é o material principal deste objeto.</p>':'<p class="kids-item-tip kids-item-tip-hard">DESAFIO: SEM PISTAS</p>')+'</div>'+
+ '<div class="kids-item" role="group" aria-label="Objeto para separar"><span class="kids-label">ONDE DEVO COLOCAR?</span><div class="kids-illustration">'+illustration(item.shape)+'</div><h2>'+item.name+'</h2><p class="kids-item-tip kids-item-tip-hard">ESCOLHA APENAS PELA COR</p></div>'+
  (data.phase==='feedback'?'<section class="kids-answer '+(data.feedback.correct?'correct':'retry')+'" role="status"><h3>'+(data.feedback.correct?'ACERTOU!':'TENTE MAIS UMA VEZ')+'</h3><p>'+data.feedback.message+'</p><button class="btn kids-primary" id="kidsNext">'+(data.retry?'ESCOLHER OUTRA LIXEIRA':'PRÓXIMO OBJETO')+'</button></section>':
- '<h3 class="kids-question">ESCOLHA UMA LIXEIRA</h3><div class="kids-bins">'+binsHTML(data.index)+'</div><p class="kids-hint">Toque na lixeira correta. Não existe limite de tempo.</p>')+
+ '<h3 class="kids-question">ESCOLHA UMA LIXEIRA</h3><div class="kids-bins">'+binsHTML()+'</div><p class="kids-hint">Toque na lixeira correta. Não existe limite de tempo.</p>')+
  '</div>';
  main.querySelector('#kidsNext')?.addEventListener('click',continueGame);
  main.querySelectorAll('[data-bin]').forEach(el=>el.addEventListener('click',()=>chooseBin(el.dataset.bin)));
