@@ -90,15 +90,17 @@ O certificado final é disponibilizado apenas quando o jogador conclui a **séti
 | --- | --- |
 | Categorias | 5 |
 | Objetos cadastrados | 40 (8 por categoria) |
-| Objetos por partida | 25, sem repetição |
-| Etapas | 5, com 5 objetos cada |
+| Objetos por partida | 10, sem repetição, escolhidos entre os avançados |
+| Etapas | 2, com 5 objetos cada |
 | Pontos por acerto | 100 |
 | Pontos por erro | 0, com nova tentativa |
-| Pontuação máxima | 2.500 |
+| Pontuação máxima | 1.000 |
 | Tempo limite | Não há |
-| Tela de conclusão | Após 25 classificações corretas |
+| Tela de conclusão | Após 10 classificações corretas |
 
-Nas etapas 1 e 2 há dica e nome do material. Nas etapas 3 e 4 as dicas são retiradas, mas os nomes permanecem. Na etapa 5, **somente as cores** aparecem nas lixeiras; a legenda lateral de materiais fica oculta. Botões acessíveis identificam a cor, sem anunciar o material.
+As duas etapas apresentam somente as cores das lixeiras. Nenhuma delas exibe o nome do material, a legenda lateral ou dicas que revelem o significado da cor. Os rótulos acessíveis identificam a cor do coletor.
+
+As dez perguntas são sorteadas das três opções avançadas disponíveis em cada uma das cinco categorias, duas por categoria, distribuídas igualmente entre as etapas.
 
 Os objetos são sorteados de uma coleção em `kids-game.js` e desenhados com SVG local. Uma nova partida pode repetir itens usados em partidas anteriores, embora não os repita na mesma partida.
 
