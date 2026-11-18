@@ -37,7 +37,7 @@ Navegador
 | --- | --- |
 | `index.html` | Estrutura das telas, carregamento dos scripts e navegação entre jogos |
 | `solo-v2.js` | Pontuação, combinações, chefes, campanhas, loja, sorteio de coringas e estado do modo solo |
-| `kids-game.js` | Catálogo ilustrado, seleção de objetos, validação de respostas, progresso em cinco etapas |
+| `kids-game.js` | Catálogo ilustrado, seleção de objetos, validação de respostas, progresso em duas etapas |
 | `card-art.js` | SVGs das cartas e associação entre categoria/valor e desenhos |
 | `hand-order.js` | Ordenação local da mão por interação do usuário |
 | `victory-share.js` | Cartão de conquista, compartilhamento nativo, cópia e geração de imagem |
@@ -61,11 +61,11 @@ O estado de uma campanha é mantido em memória durante a execução. O jogo tam
 
 ## Fluxo da Missão Coleta
 
-O módulo contém `CATEGORIES`, `ITEMS` e ilustrações SVG em `SHAPES`. A função `createRound` seleciona 25 objetos, distribuindo uma categoria por posição em cada uma das cinco etapas. O jogo mantém os estados de apresentação, escolha, feedback, transição de nível e conclusão.
+O módulo contém `CATEGORIES`, `ITEMS` e ilustrações SVG em `SHAPES`. A função `createRound` escolhe dez objetos entre os mais difíceis (dois por categoria), distribuindo uma categoria por etapa. O jogo mantém os estados de apresentação, escolha, feedback, transição de nível e conclusão.
 
 A função `scoreAnswer` compara a categoria do objeto à lixeira selecionada. Uma resposta correta vale 100 pontos; uma resposta incorreta exige nova tentativa antes do avanço. Após cada grupo de cinco objetos há uma passagem de etapa.
 
-Na quinta etapa, `isFinalLevel` e `binsHTML` removem os nomes visíveis dos materiais. O painel lateral também oculta a legenda de categorias, mas os botões mantêm rótulos acessíveis baseados **somente na cor**.
+Em toda a partida, `binsHTML` desenha apenas as lixeiras coloridas. O painel lateral não exibe a legenda de categorias; os botões mantêm rótulos acessíveis baseados **somente na cor**.
 
 ## Interface e acessibilidade
 
